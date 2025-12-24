@@ -1,13 +1,13 @@
 // src/lib/auth.ts
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { NextAuthOptions } from "next-auth"
+import {PrismaAdapter} from "@auth/prisma-adapter"
+import {NextAuthOptions} from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { compare } from "bcryptjs"
-import { prisma } from "./db"
+import {compare} from "bcryptjs"
+import {prisma} from "./db"
 
 export const authOptions: NextAuthOptions = {
-    adapter: PrismaAdapter(prisma),
+    adapter: PrismaAdapter(prisma) as any,
     session: {
         strategy: "jwt",
     },

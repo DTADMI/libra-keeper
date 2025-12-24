@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/db"
-import { z } from "zod"
-import { sendLoanStatusEmail } from "@/lib/mail"
+import {NextResponse} from "next/server"
+import {getServerSession} from "next-auth"
+import {authOptions} from "@/lib/auth"
+import {prisma} from "@/lib/db"
+import {z} from "zod"
+import {sendLoanStatusEmail} from "@/lib/mail"
 
 const updateLoanSchema = z.object({
     status: z.enum(["APPROVED", "REJECTED", "RETURNED"]),
@@ -12,9 +12,10 @@ const updateLoanSchema = z.object({
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { id: string } }
+    {params}: { params: Promise<{ id: string }> }
 ) {
     try {
+        const {id} = await params
         const session = await getServerSession(authOptions)
         if (!session?.user || session.user.role !== "ADMIN") {
             return new NextResponse("Unauthorized", { status: 401 })
@@ -24,7 +25,7 @@ export async function PATCH(
         const { status, dueAt } = updateLoanSchema.parse(json)
 
         const loan = await prisma.loan.findUnique({
-            where: { id: params.id },
+            where: {id},
             include: { item: true, user: true },
         })
 
@@ -33,7 +34,7 @@ export async function PATCH(
         }
 
         const updatedLoan = await prisma.loan.update({
-            where: { id: params.id },
+            where: {id},
             data: {
                 status,
                 dueAt: dueAt ? new Date(dueAt) : undefined,

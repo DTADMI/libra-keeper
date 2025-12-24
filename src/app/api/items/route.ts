@@ -1,11 +1,11 @@
 // src/app/api/items/route.ts
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { z } from "zod"
+import {NextResponse} from "next/server"
+import {getServerSession} from "next-auth"
+import {z} from "zod"
 
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/db"
-import { logger } from "@/lib/logger"
+import {authOptions} from "@/lib/auth"
+import {prisma} from "@/lib/db"
+import {logger} from "@/lib/logger"
 
 const itemSchema = z.object({
     title: z.string().min(1),
@@ -18,7 +18,7 @@ const itemSchema = z.object({
     publisher: z.string().optional().nullable(),
     publishedAt: z.string().datetime().optional().nullable(),
     tags: z.array(z.string()).optional(),
-    metadata: z.record(z.any()).optional().nullable(),
+    metadata: z.record(z.string(), z.any()).optional().nullable(),
 })
 
 export async function POST(req: Request) {
@@ -31,13 +31,14 @@ export async function POST(req: Request) {
         const json = await req.json()
         const body = itemSchema.parse(json)
 
-        const { tags, ...itemData } = body
+        const {tags, metadata, ...itemData} = body
 
         logger.info(`Creating new item: ${body.title}`)
 
         const item = await prisma.item.create({
             data: {
                 ...itemData,
+                metadata: metadata || {},
                 tags: {
                     connectOrCreate: tags?.map(tag => ({
                         where: { name: tag },

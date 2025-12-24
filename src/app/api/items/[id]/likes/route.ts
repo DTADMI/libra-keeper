@@ -1,13 +1,13 @@
 // src/app/api/items/[id]/likes/route.ts
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
+import {NextResponse} from "next/server"
+import {getServerSession} from "next-auth"
 
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/db"
+import {authOptions} from "@/lib/auth"
+import {prisma} from "@/lib/db"
 
 export async function POST(
   req: Request,
-  { params }: { params: { id: string } }
+  {params}: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
@@ -15,7 +15,7 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    const { id } = params
+      const {id} = await params
 
     const existingLike = await prisma.like.findUnique({
       where: {
@@ -50,11 +50,11 @@ export async function POST(
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  {params}: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions)
-    const { id } = params
+      const {id} = await params
 
     const [likesCount, userLike] = await Promise.all([
       prisma.like.count({

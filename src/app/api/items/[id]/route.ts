@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-import { z } from "zod"
+import {NextResponse} from "next/server"
+import {getServerSession} from "next-auth"
+import {z} from "zod"
 
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/db"
+import {authOptions} from "@/lib/auth"
+import {prisma} from "@/lib/db"
 
 const itemSchema = z.object({
     title: z.string().min(1),
@@ -16,16 +16,17 @@ const itemSchema = z.object({
     publisher: z.string().optional().nullable(),
     publishedAt: z.string().datetime().optional().nullable(),
     tags: z.array(z.string()).optional(),
-    metadata: z.record(z.any()).optional().nullable(),
+    metadata: z.record(z.string(), z.any()).optional().nullable(),
 })
 
 export async function GET(
     req: Request,
-    { params }: { params: { id: string } }
+    {params}: { params: Promise<{ id: string }> }
 ) {
     try {
+        const {id} = await params
         const item = await prisma.item.findUnique({
-            where: { id: params.id },
+            where: {id},
             include: {
                 tags: true,
                 loans: {
@@ -54,9 +55,10 @@ export async function GET(
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { id: string } }
+    {params}: { params: Promise<{ id: string }> }
 ) {
     try {
+        const {id} = await params
         const session = await getServerSession(authOptions)
         if (!session?.user || session.user.role !== "ADMIN") {
             return new NextResponse("Unauthorized", { status: 401 })
@@ -65,12 +67,13 @@ export async function PATCH(
         const json = await req.json()
         const body = itemSchema.parse(json)
 
-        const { tags, ...itemData } = body
+        const {tags, metadata, ...itemData} = body
 
         const item = await prisma.item.update({
-            where: { id: params.id },
+            where: {id},
             data: {
                 ...itemData,
+                metadata: metadata || {},
                 tags: {
                     set: [],
                     connectOrCreate: tags?.map(tag => ({
@@ -95,16 +98,17 @@ export async function PATCH(
 
 export async function DELETE(
     req: Request,
-    { params }: { params: { id: string } }
+    {params}: { params: Promise<{ id: string }> }
 ) {
     try {
+        const {id} = await params
         const session = await getServerSession(authOptions)
         if (!session?.user || session.user.role !== "ADMIN") {
             return new NextResponse("Unauthorized", { status: 401 })
         }
 
         await prisma.item.delete({
-            where: { id: params.id },
+            where: {id},
         })
 
         return new NextResponse(null, { status: 204 })
