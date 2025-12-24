@@ -1,0 +1,8 @@
+{
+  "HomePage": {
+    "title": "Welcome to LibraKeeper",
+    "description": "Manage your personal library, track borrowed items, and connect with friends who borrow your books.",
+    "getStarted": "Get Started",
+    "learnMore": "Learn more"
+  }
+}
