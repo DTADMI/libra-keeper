@@ -1,14 +1,196 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+// prisma/schema.prisma
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          Role      @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  loans         Loan[]
+  comments      Comment[]
+  likes         Like[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
+  itemRequests  ItemRequest[] @relation("RequestedItems")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Item {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  type        ItemType
+  status      ItemStatus @default(AVAILABLE)
+  coverImage  String?
+  isbn        String?
+  author      String?
+  publisher   String?
+  publishedAt DateTime?
+  metadata    Json?      @default("{}")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  tags        Tag[]      @relation("ItemTags")
+  loans       Loan[]
+  comments    Comment[]
+  likes       Like[]
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  items Item[] @relation("ItemTags")
+}
+
+model Loan {
+  id          String   @id @default(cuid())
+  itemId      String
+  item        Item     @relation(fields: [itemId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  status      LoanStatus @default(PENDING)
+  requestedAt DateTime @default(now())
+  approvedAt  DateTime?
+  dueAt       DateTime?
+  returnedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([itemId, userId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  content   String
+  senderId  String
+  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId String
+  receiver  User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ItemRequest {
+  id            String      @id @default(cuid())
+  requestedById String
+  requestedBy   User        @relation("RequestedItems", fields: [requestedById], references: [id])
+  processedById String?
+  type          RequestType @default(SUGGESTION)
+  status        RequestStatus @default(PENDING)
+  title         String
+  description   String?
+  author        String?
+  isbn          String?
+  purchaseInfo  Json?       @default("{}")
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ItemType {
+  BOOK
+  MUSIC
+  MOVIE
+  GAME
+  TOY
+  OTHER
+}
+
+enum ItemStatus {
+  AVAILABLE
+  BORROWED
+  RESERVED
+  UNAVAILABLE
+  GIVEN_AWAY
+  LOST
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  RETURNED
+  OVERDUE
+  LOST
+}
+
+enum RequestType {
+  BORROWED_ITEM
+  SUGGESTION
+}
+
+enum RequestStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  REJECTED
 }

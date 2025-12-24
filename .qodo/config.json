@@ -1,0 +1,36 @@
+{
+  "project": {
+    "name": "LibraKeeper",
+    "version": "0.1.0",
+    "description": "A personal library management system for tracking books and other items",
+    "main": "src/app/page.tsx",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "next lint",
+      "prisma:generate": "prisma generate",
+      "prisma:migrate": "prisma migrate dev",
+      "prisma:studio": "prisma studio"
+    }
+  },
+  "style": {
+    "tailwind": true,
+    "css": "src/app/globals.css",
+    "postcss": true
+  },
+  "lint": {
+    "eslint": true,
+    "prettier": true
+  },
+  "git": {
+    "hooks": {
+      "pre-commit": "pnpm lint && pnpm test"
+    }
+  },
+  "testing": {
+    "unit": "jest",
+    "e2e": "cypress",
+    "coverage": true
+  }
+}

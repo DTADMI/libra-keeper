@@ -17,27 +17,57 @@ A personal library management system that helps you track your books and other i
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 15+ (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS with CSS variables for theming
+- **Styling**: Tailwind CSS 4
 - **UI Components**: shadcn/ui (Radix UI + Tailwind)
-- **State Management**: React Query + Zustand
-- **Form Handling**: React Hook Form + Zod
 - **i18n**: next-intl
-- **Testing**: Jest, React Testing Library, Cypress
+- **Authentication**: NextAuth.js
+- **Forms**: React Hook Form + Zod
 
 ### Backend
-- **Runtime**: Node.js (Next.js API Routes)
+- **Runtime**: Node.js
 - **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js
 - **Validation**: Zod
-- **Email**: Resend
 
 ## Prerequisites
 
 - Node.js 18+
 - PostgreSQL 14+
 - pnpm (recommended)
+
+## Project structure
+
+```
+libra-keeper/
+├── .github/
+│   └── workflows/     # CI/CD pipelines
+├── docs/              # Detailed documentation
+├── e2e/               # Playwright E2E tests
+├── prisma/
+│   └── schema.prisma  # Database schema
+├── public/            # Static assets
+└── src/
+    ├── app/
+    │   ├── (protected)/ # Authenticated routes
+    │   │   ├── admin/   # Admin management
+    │   │   ├── dashboard/
+    │   │   ├── items/   # Item details and editing
+    │   │   ├── loans/   # User loans
+    │   │   ├── messages/# Messaging system
+    │   │   ├── profile/ # User profile
+    │   │   └── suggestions/ # User suggestions
+    │   ├── api/         # Backend API routes
+    │   ├── auth/        # Auth pages (login/register)
+    │   └── globals.css
+    ├── components/    # React components
+    │   ├── ui/        # shadcn/ui components
+    │   └── activity/  # Activity feed components
+    ├── hooks/         # Custom React hooks
+    ├── lib/           # Utility functions, configs, logger
+    ├── types/         # TypeScript type definitions
+    └── messages/      # i18n translation files
+```
 
 ## Getting Started
 
@@ -80,6 +110,34 @@ A personal library management system that helps you track your books and other i
    ```
 
 6. **Open [http://localhost:3000](http://localhost:3000)** in your browser
+
+## Testing
+
+LibraKeeper uses Jest and React Testing Library for unit and integration testing, and Playwright for E2E testing.
+
+```bash
+# Run unit and integration tests
+pnpm test
+
+# Run E2E tests
+pnpm test:e2e
+```
+
+## CI/CD
+
+The project includes a GitHub Actions workflow for continuous integration. On every push or pull request to the `main` branch, the workflow:
+1. Installs dependencies
+2. Generates Prisma client
+3. Runs linter
+4. Runs unit and integration tests
+5. Verifies the build
+
+## Documentation
+
+Comprehensive documentation can be found in the `docs` folder:
+- [User Guide](docs/user-guide.md)
+- [Admin Guide](docs/admin-guide.md)
+- [API Reference](docs/api-reference.md)
 
 ## Development
 
