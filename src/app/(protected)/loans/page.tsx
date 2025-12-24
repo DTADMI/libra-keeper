@@ -1,8 +1,8 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { prisma } from "@/lib/db"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import {getServerSession} from "next-auth"
+import {authOptions} from "@/lib/auth"
+import {prisma} from "@/lib/db"
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
+import {Badge} from "@/components/ui/badge"
 
 export default async function MyLoansPage() {
     const session = await getServerSession(authOptions)
@@ -61,7 +61,7 @@ export default async function MyLoansPage() {
                 ))}
                 
                 {loans.length === 0 && (
-                    <p className="text-center py-10 text-muted-foreground">You haven't borrowed any items yet.</p>
+                    <p className="text-center py-10 text-muted-foreground">You haven&apos;t borrowed any items yet.</p>
                 )}
             </div>
         </div>

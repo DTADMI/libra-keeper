@@ -1,71 +1,61 @@
 // src/app/(protected)/items/[id]/like-button.tsx
 "use client"
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
-import { cn } from "@/lib/utils"
-import { toast } from "sonner"
+import {useEffect, useState} from "react"
+import {Button} from "@/components/ui/button"
+import {Icons} from "@/components/icons"
+import {cn} from "@/lib/utils"
+import {toast} from "sonner"
 
 interface LikeButtonProps {
-  itemId: string
+    itemId: string
 }
 
 export function LikeButton({ itemId }: LikeButtonProps) {
-  const [isLiked, setIsLiked] = useState(false)
-  const [count, setCount] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+    const [isLiked, setIsLiked] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [likesCount, setLikesCount] = useState(0)
 
-  useEffect(() => {
-    fetchLikes()
-  }, [itemId])
+    useEffect(() => {
+        fetch(`/api/items/${itemId}/likes`)
+            .then(res => res.json())
+            .then(data => {
+                setIsLiked(data.isLiked)
+                setLikesCount(data.count)
+            })
+            .catch(() => {
+            })
+    }, [itemId])
 
-  async function fetchLikes() {
-    try {
-      const response = await fetch(`/api/items/${itemId}/likes`)
-      if (response.ok) {
-        const data = await response.json()
-        setIsLiked(data.isLiked)
-        setCount(data.count)
-      }
-    } catch (error) {
-      console.error("Failed to fetch likes", error)
-    } finally {
-      setIsLoading(false)
+    async function onLike() {
+        setIsLoading(true)
+        try {
+            const response = await fetch(`/api/items/${itemId}/likes`, {
+                method: "POST",
+            })
+
+            if (!response.ok) throw new Error("Failed to update like")
+
+            const data = await response.json()
+            setIsLiked(data.isLiked)
+            setLikesCount(data.count)
+        } catch (error: any) {
+            toast.error("Failed to update like")
+        } finally {
+            setIsLoading(false)
+        }
     }
-  }
 
-  async function toggleLike() {
-    if (isLoading) return
-
-    try {
-      const response = await fetch(`/api/items/${itemId}/likes`, {
-        method: "POST",
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setIsLiked(data.liked)
-        setCount((prev) => (data.liked ? prev + 1 : prev - 1))
-      }
-    } catch (error) {
-      toast.error("Failed to update like")
-    }
-  }
-
-  return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className={cn(
-        "flex items-center gap-2",
-        isLiked && "text-red-500 hover:text-red-600"
-      )}
-      onClick={toggleLike}
-      disabled={isLoading}
-    >
-      <Icons.heart className={cn("h-5 w-5", isLiked && "fill-current")} />
-      <span>{count}</span>
-    </Button>
-  )
+    return (
+        <Button
+            variant="outline"
+            size="sm"
+            onClick={onLike}
+            disabled={isLoading}
+            className={cn("gap-2", isLiked && "text-red-500 border-red-200 bg-red-50")}
+        >
+            <Icons.heart className={cn("h-4 w-4", isLiked && "fill-current")}/>
+            <span>{likesCount}</span>
+        </Button>
+    )
 }

@@ -1,14 +1,14 @@
 // src/app/auth/signin/page.tsx
 "use client"
 
-import { useState } from "react"
-import { signIn } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
+import {useState} from "react"
+import {signIn} from "next-auth/react"
+import {useRouter} from "next/navigation"
+import {Button} from "@/components/ui/button"
+import {Icons} from "@/components/icons"
+import {Input} from "@/components/ui/input"
+import {Label} from "@/components/ui/label"
+import {toast} from "sonner"
 import Link from "next/link"
 
 export default function SignInPage() {
@@ -87,7 +87,7 @@ export default function SignInPage() {
                     </Button>
                 </div>
                 <p className="text-center text-sm text-muted-foreground">
-                    Don't have an account?{" "}
+                    Don&apos;t have an account?{" "}
                     <Link href="/auth/register" className="text-primary hover:underline">
                         Register
                     </Link>

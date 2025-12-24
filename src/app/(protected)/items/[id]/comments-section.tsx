@@ -1,121 +1,102 @@
 // src/app/(protected)/items/[id]/comments-section.tsx
 "use client"
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { Separator } from "@/components/ui/separator"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { formatDistanceToNow } from "date-fns"
+import {useEffect, useState} from "react"
+import {Button} from "@/components/ui/button"
+import {Textarea} from "@/components/ui/textarea"
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
+import {toast} from "sonner"
+import {formatDistanceToNow} from "date-fns"
 
-type Comment = {
-  id: string
-  content: string
-  createdAt: string
-  user: {
-    name: string | null
-    image: string | null
-  }
+interface Comment {
+    id: string
+    content: string
+    createdAt: string
+    user: {
+        name: string
+        image: string
+    }
 }
 
 interface CommentsSectionProps {
-  itemId: string
+    itemId: string
 }
 
 export function CommentsSection({ itemId }: CommentsSectionProps) {
-  const [comments, setComments] = useState<Comment[]>([])
-  const [newComment, setNewComment] = useState("")
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+    const [comments, setComments] = useState<Comment[]>([])
+    const [newComment, setNewComment] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    fetchComments()
-  }, [itemId])
+    useEffect(() => {
+        fetch(`/api/items/${itemId}/comments`)
+            .then(res => res.json())
+            .then(data => setComments(data))
+            .catch(() => {
+            })
+    }, [itemId])
 
-  async function fetchComments() {
-    try {
-      const response = await fetch(`/api/items/${itemId}/comments`)
-      if (response.ok) {
-        const data = await response.json()
-        setComments(data)
-      }
-    } catch (error) {
-      console.error("Failed to fetch comments", error)
-    } finally {
-      setIsLoading(false)
+    async function onSubmit() {
+        if (!newComment.trim()) return
+
+        setIsLoading(true)
+        try {
+            const response = await fetch(`/api/items/${itemId}/comments`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify({content: newComment}),
+            })
+
+            if (!response.ok) throw new Error("Failed to post comment")
+
+            const data = await response.json()
+            setComments([data, ...comments])
+            setNewComment("")
+            toast.success("Comment posted")
+        } catch (error: any) {
+            toast.error("Failed to post comment")
+        } finally {
+            setIsLoading(false)
+        }
     }
-  }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!newComment.trim()) return
+    return (
+        <div className="space-y-8">
+            <h3 className="text-2xl font-bold">Comments</h3>
 
-    setIsSubmitting(true)
-    try {
-      const response = await fetch(`/api/items/${itemId}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: newComment }),
-      })
-
-      if (response.ok) {
-        const comment = await response.json()
-        setComments([comment, ...comments])
-        setNewComment("")
-        toast.success("Comment added")
-      }
-    } catch (error) {
-      toast.error("Failed to add comment")
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Comments</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Textarea
-          placeholder="Add a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          required
-        />
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Posting..." : "Post Comment"}
-        </Button>
-      </form>
-
-      <Separator />
-
-      <div className="space-y-6">
-        {isLoading ? (
-          <p className="text-muted-foreground">Loading comments...</p>
-        ) : comments.length === 0 ? (
-          <p className="text-muted-foreground">No comments yet. Be the first to comment!</p>
-        ) : (
-          comments.map((comment) => (
-            <div key={comment.id} className="flex gap-4">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={comment.user.image || ""} alt={comment.user.name || "User"} />
-                <AvatarFallback>{comment.user.name?.[0] || "U"}</AvatarFallback>
-              </Avatar>
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium">{comment.user.name || "User"}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
-                  </p>
-                </div>
-                <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                  {comment.content}
-                </p>
-              </div>
+            <div className="space-y-4">
+                <Textarea
+                    placeholder="Leave a comment..."
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    disabled={isLoading}
+                />
+                <Button onClick={onSubmit} disabled={isLoading || !newComment.trim()}>
+                    Post Comment
+                </Button>
             </div>
-          ))
-        )}
-      </div>
-    </div>
-  )
+
+            <div className="space-y-6">
+                {comments.map((comment) => (
+                    <div key={comment.id} className="flex gap-4">
+                        <Avatar>
+                            <AvatarImage src={comment.user.image}/>
+                            <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 space-y-1">
+                            <div className="flex items-center justify-between">
+                                <p className="font-semibold">{comment.user.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {formatDistanceToNow(new Date(comment.createdAt), {addSuffix: true})}
+                                </p>
+                            </div>
+                            <p className="text-muted-foreground">{comment.content}</p>
+                        </div>
+                    </div>
+                ))}
+                {comments.length === 0 && (
+                    <p className="text-muted-foreground text-center py-10">No comments yet.</p>
+                )}
+            </div>
+        </div>
+    )
 }
