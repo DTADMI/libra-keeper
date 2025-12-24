@@ -1,36 +1,151 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LibraKeeper
+
+A personal library management system that helps you track your books and other items, manage lending to friends, and keep your collection organized.
+
+## Features
+
+- 📚 Track books and other items in your personal library
+- 👥 Manage item lending to friends and contacts
+- 🔔 Get notified when items are borrowed or returned
+- 🏷️ Categorize and tag items for easy searching
+- 🌓 Dark/light theme support
+- 🌐 Multi-language support (i18n)
+- 🔒 Secure authentication and authorization
+- 📱 Responsive design for all devices
+- ♿ Accessibility-first approach
+
+## Tech Stack
+
+### Frontend
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS with CSS variables for theming
+- **UI Components**: shadcn/ui (Radix UI + Tailwind)
+- **State Management**: React Query + Zustand
+- **Form Handling**: React Hook Form + Zod
+- **i18n**: next-intl
+- **Testing**: Jest, React Testing Library, Cypress
+
+### Backend
+- **Runtime**: Node.js (Next.js API Routes)
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js
+- **Validation**: Zod
+- **Email**: Resend
+
+## Prerequisites
+
+- Node.js 18+
+- PostgreSQL 14+
+- pnpm (recommended)
 
 ## Getting Started
 
-First, run the development server:
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/libra-keeper.git
+   cd libra-keeper
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. **Set up environment variables**
+   Create a `.env` file in the root directory with the following variables:
+   ```env
+   # Database
+   DATABASE_URL="postgresql://user:password@localhost:5432/librakeeper"
+   
+   # Authentication
+   NEXTAUTH_SECRET=your-secret-key
+   NEXTAUTH_URL=http://localhost:3000
+   
+   # Email (for notifications)
+   RESEND_API_KEY=re_123456789
+   
+   # Next.js
+   NEXT_PUBLIC_APP_URL=http://localhost:3000
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. **Set up the database**
+   ```bash
+   pnpm prisma migrate dev
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+5. **Run the development server**
+   ```bash
+   pnpm dev
+   ```
 
-## Learn More
+6. **Open [http://localhost:3000](http://localhost:3000)** in your browser
 
-To learn more about Next.js, take a look at the following resources:
+## Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Run the development server:
+  ```bash
+  pnpm dev
+  ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Run tests:
+  ```bash
+  pnpm test
+  ```
 
-## Deploy on Vercel
+- Lint and format code:
+  ```bash
+  pnpm lint
+  pnpm format
+  ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Generate Prisma client:
+  ```bash
+  pnpm prisma generate
+  ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Environment Variables
+
+| Variable | Description | Required | Default |
+|----------|-------------|----------|---------|
+| `NODE_ENV` | Application environment | No | `development` |
+| `NEXT_PUBLIC_APP_URL` | Public URL of the application | Yes | `http://localhost:3000` |
+| `DATABASE_URL` | PostgreSQL connection string | Yes | - |
+| `NEXTAUTH_SECRET` | Secret for NextAuth.js | Yes | - |
+| `NEXTAUTH_URL` | Base URL for NextAuth.js | Yes | - |
+| `RESEND_API_KEY` | API key for Resend email service | No | - |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | No | - |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | No | - |
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to a GitHub/GitLab/Bitbucket repository
+2. Import the repository to Vercel
+3. Add your environment variables in the Vercel project settings
+4. Deploy!
+
+### Self-hosted
+
+1. Build the application:
+   ```bash
+   pnpm build
+   ```
+
+2. Start the production server:
+   ```bash
+   pnpm start
+   ```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
