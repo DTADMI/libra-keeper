@@ -55,6 +55,8 @@
 - [x] E2E tests (Playwright set up)
 - [x] Performance optimization (Initial build check)
 - [x] Security audit (Dependency check)
+- [x] Improve test coverage to >70% for core logic
+- [x] Implement automated coverage checks in CI/CD
 
 ## Phase 5: Deployment & Documentation
 - [x] Production deployment setup (Vercel ready)
@@ -62,3 +64,13 @@
 - [x] User documentation
 - [x] Admin documentation
 - [x] API documentation
+- [x] Implement a successful CI/CD
+
+## Phase 6: Future Improvements & Suggestions
+
+- [ ] Add barcode scanning for quick item entry
+- [ ] Implement a waitlist for borrowed items
+- [ ] Add calendar view for loans and due dates
+- [ ] Integrate with external book metadata APIs (Open Library, Google Books)
+- [ ] Add multi-collection support for different categories of items
+- [ ] Mobile application (PWA or native)

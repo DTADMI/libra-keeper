@@ -129,7 +129,7 @@ The project includes a GitHub Actions workflow for continuous integration. On ev
 1. Installs dependencies
 2. Generates Prisma client
 3. Runs linter
-4. Runs unit and integration tests
+4. Runs unit and integration tests with coverage checks
 5. Verifies the build
 
 ## Documentation

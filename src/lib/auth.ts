@@ -1,10 +1,10 @@
 // src/lib/auth.ts
-import {PrismaAdapter} from "@auth/prisma-adapter"
-import {NextAuthOptions} from "next-auth"
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import {compare} from "bcryptjs"
-import {prisma} from "./db"
+import { compare } from "bcryptjs"
+import { prisma } from "./db"
 
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma) as any,
@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "Email", type: "email" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials) {
+            async authorize(credentials, req) {
                 if (!credentials?.email || !credentials?.password) {
                     throw new Error("Email and password are required")
                 }
