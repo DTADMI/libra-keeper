@@ -25,6 +25,7 @@ model User {
   sentMessages     Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
   itemRequests  ItemRequest[] @relation("RequestedItems")
+  waitlistItems WaitlistEntry[]
 }
 
 model Account {
@@ -79,6 +80,18 @@ model Item {
   loans       Loan[]
   comments    Comment[]
   likes       Like[]
+  waitlist    WaitlistEntry[]
+  collectionId String?
+  collection  Collection? @relation(fields: [collectionId], references: [id])
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  items       Item[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Tag {
@@ -149,6 +162,18 @@ model ItemRequest {
   purchaseInfo  Json?       @default("{}")
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([itemId, userId])
 }
 
 enum Role {

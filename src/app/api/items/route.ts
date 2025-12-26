@@ -1,11 +1,11 @@
 // src/app/api/items/route.ts
-import {NextResponse} from "next/server"
-import {getServerSession} from "next-auth"
-import {z} from "zod"
+import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { z } from "zod"
 
-import {authOptions} from "@/lib/auth"
-import {prisma} from "@/lib/db"
-import {logger} from "@/lib/logger"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/db"
+import { logger } from "@/lib/logger"
 
 const itemSchema = z.object({
     title: z.string().min(1),
@@ -19,6 +19,7 @@ const itemSchema = z.object({
     publishedAt: z.string().datetime().optional().nullable(),
     tags: z.array(z.string()).optional(),
     metadata: z.record(z.string(), z.any()).optional().nullable(),
+    collectionId: z.string().optional().nullable(),
 })
 
 export async function POST(req: Request) {
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
         const json = await req.json()
         const body = itemSchema.parse(json)
 
-        const {tags, metadata, ...itemData} = body
+        const { tags, metadata, collectionId, ...itemData } = body
 
         logger.info(`Creating new item: ${body.title}`)
 
@@ -39,6 +40,7 @@ export async function POST(req: Request) {
             data: {
                 ...itemData,
                 metadata: metadata || {},
+                collectionId: collectionId || null,
                 tags: {
                     connectOrCreate: tags?.map(tag => ({
                         where: { name: tag },

@@ -6,25 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
+import { BarcodeScanner } from "@/components/items/barcode-scanner"
 
 const itemSchema = z.object({
     title: z.string().min(1, "Title is required"),
@@ -34,11 +21,24 @@ const itemSchema = z.object({
     author: z.string().optional(),
     publisher: z.string().optional(),
     isbn: z.string().optional(),
+  collectionId: z.string().optional().or(z.literal("")),
 })
 
 export default function NewItemPage() {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
+  const [collections, setCollections] = useState<{ id: string, name: string }[]>([])
+
+  useEffect(() => {
+    const fetchCollections = async () => {
+      const response = await fetch("/api/collections")
+      if (response.ok) {
+        const data = await response.json()
+        setCollections(data)
+      }
+    }
+    fetchCollections()
+  }, [])
 
     const form = useForm<z.infer<typeof itemSchema>>({
         resolver: zodResolver(itemSchema),
@@ -50,6 +50,7 @@ export default function NewItemPage() {
             author: "",
             publisher: "",
             isbn: "",
+          collectionId: "",
         },
     })
 
@@ -78,9 +79,40 @@ export default function NewItemPage() {
         }
     }
 
+  async function handleScan(isbn: string) {
+    form.setValue("isbn", isbn)
+    toast.info(`Scanned ISBN: ${isbn}. Fetching details...`)
+
+    try {
+      // Try Open Library API first
+      const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`)
+      const data = await response.json()
+      const bookKey = `ISBN:${isbn}`
+
+      if (data[bookKey]) {
+        const bookData = data[bookKey]
+        form.setValue("title", bookData.title || "")
+        form.setValue("author", bookData.authors?.[0]?.name || "")
+        form.setValue("publisher", bookData.publishers?.[0]?.name || "")
+        if (bookData.cover?.large) {
+          form.setValue("coverImage", bookData.cover.large)
+        }
+        toast.success("Details fetched successfully")
+      } else {
+        toast.error("Book details not found, but ISBN was captured")
+      }
+    } catch (error) {
+      console.error("Error fetching book details:", error)
+      toast.error("Failed to fetch book details")
+    }
+  }
+
     return (
         <div className="container mx-auto max-w-2xl py-10">
-            <h1 className="mb-8 text-3xl font-bold">Add New Item</h1>
+          <div className="mb-8 flex items-center justify-between">
+            <h1 className="text-3xl font-bold">Add New Item</h1>
+            <BarcodeScanner onScan={handleScan} />
+          </div>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                     <FormField
@@ -197,6 +229,34 @@ export default function NewItemPage() {
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
+                            )}
+                        />
+                      <FormField
+                        control={form.control}
+                        name="collectionId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Collection</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select a collection" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="">No Collection</SelectItem>
+                                {collections.map((collection) => (
+                                  <SelectItem key={collection.id} value={collection.id}>
+                                    {collection.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
                             )}
                         />
                     </div>

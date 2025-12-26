@@ -68,9 +68,9 @@
 
 ## Phase 6: Future Improvements & Suggestions
 
-- [ ] Add barcode scanning for quick item entry
-- [ ] Implement a waitlist for borrowed items
-- [ ] Add calendar view for loans and due dates
-- [ ] Integrate with external book metadata APIs (Open Library, Google Books)
-- [ ] Add multi-collection support for different categories of items
+- [x] Add barcode scanning for quick item entry
+- [x] Implement a waitlist for borrowed items
+- [x] Add calendar view for loans and due dates
+- [x] Integrate with external book metadata APIs (Open Library, Google Books)
+- [x] Add multi-collection support for different categories of items
 - [ ] Mobile application (PWA or native)
