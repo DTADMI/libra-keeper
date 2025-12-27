@@ -8,15 +8,15 @@ import { format, isSameDay } from "date-fns"
 import { Loader2 } from "lucide-react"
 
 interface Loan {
-  id: string
-  itemId: string
-  dueAt: string | null
+  id: string;
+  itemId: string;
+  dueAt: string | null;
   item: {
-    title: string
-  }
+    title: string;
+  };
   user: {
-    name: string | null
-  }
+    name: string | null;
+  };
 }
 
 export default function CalendarPage() {
@@ -37,25 +37,23 @@ export default function CalendarPage() {
       } finally {
         setIsLoading(false)
       }
-    }
+    };
 
     fetchLoans()
-  }, [])
+  }, []);
 
-  const loansOnSelectedDate = loans.filter(loan =>
-    loan.dueAt && isSameDay(new Date(loan.dueAt), selectedDate || new Date()),
+  const loansOnSelectedDate = loans.filter(
+    (loan) => loan.dueAt && isSameDay(new Date(loan.dueAt), selectedDate || new Date()),
   )
 
-  const dueDates = loans
-    .filter(loan => loan.dueAt)
-    .map(loan => new Date(loan.dueAt!))
+  const dueDates = loans.filter((loan) => loan.dueAt).map((loan) => new Date(loan.dueAt!))
 
   if (isLoading) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
-    )
+    );
   }
 
   return (
@@ -85,18 +83,20 @@ export default function CalendarPage() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>
-                {selectedDate ? format(selectedDate, "PPP") : "Select a date"}
-              </CardTitle>
+              <CardTitle>{selectedDate ? format(selectedDate, "PPP") : "Select a date"}</CardTitle>
             </CardHeader>
             <CardContent>
               {loansOnSelectedDate.length > 0 ? (
                 <ul className="space-y-4">
-                  {loansOnSelectedDate.map(loan => (
+                  {loansOnSelectedDate.map((loan) => (
                     <li key={loan.id} className="border-b pb-2 last:border-0">
                       <p className="font-semibold">{loan.item.title}</p>
-                      <p className="text-sm text-muted-foreground">Borrowed by: {loan.user.name || "User"}</p>
-                      <Badge variant="destructive" className="mt-1">Due</Badge>
+                      <p className="text-sm text-muted-foreground">
+                        Borrowed by: {loan.user.name || "User"}
+                      </p>
+                      <Badge variant="destructive" className="mt-1">
+                        Due
+                      </Badge>
                     </li>
                   ))}
                 </ul>
@@ -108,5 +108,5 @@ export default function CalendarPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,6 +1,7 @@
 # LibraKeeper - Personal Library Management System
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Core Features](#core-features)
 3. [Technical Architecture](#technical-architecture)
@@ -22,6 +23,7 @@ LibraKeeper is a personal library management system designed for collection owne
 ## Core Features
 
 ### Admin (Owner) Features
+
 - **Complete Item Management**: Add, edit, and remove items from your collection
 - - CRUD operations for library items
   - Categorization and tagging
@@ -50,6 +52,7 @@ LibraKeeper is a personal library management system designed for collection owne
   - System configuration
 
 ### Friend (Borrower) Features
+
 - **Browse Collection**: View available items with rich filtering and search
 - **Borrow Requests**: Request to borrow available items
 - **Return Notifications**: Mark items as returned when done
@@ -69,6 +72,7 @@ LibraKeeper is a personal library management system designed for collection owne
   - Activity feed
 
 ### System Features
+
 - **Responsive Design**: Works on desktop and mobile devices
 - **Dark/Light Theme**: Choose your preferred color scheme
 - **Email Notifications**: Get alerts for due dates, requests, and messages
@@ -80,6 +84,7 @@ LibraKeeper is a personal library management system designed for collection owne
 ## Technical Architecture
 
 ### Monolithic Architecture with Modular Design
+
 - Single codebase with clear separation of concerns
 - Modular structure for maintainability
 - API-first design with server-side rendering for optimal performance
@@ -103,6 +108,7 @@ src/
 ## Tech Stack
 
 ### Frontend
+
 - **Framework**: Next.js 14 with App Router
 - **UI Components**: shadcn/ui (built on Radix UI)
 - **Styling**: Tailwind CSS with CSS variables for theming
@@ -113,6 +119,7 @@ src/
 - **Testing**: Jest, React Testing Library, Cypress
 
 ### Backend
+
 - **Runtime**: Node.js 20+
 - **Framework**: Next.js API Routes
 - **Database**: PostgreSQL (primary), Redis (caching)
@@ -122,6 +129,7 @@ src/
 - **Real-time**: Server-Sent Events (SSE)
 
 ### DevOps
+
 - **Hosting**: Vercel (Hobby plan)
 - **Database**: Supabase (free tier)
 - **CI/CD**: GitHub Actions
@@ -133,6 +141,7 @@ src/
 ### Tables
 
 #### Users
+
 ```typescript
 users {
   id: string (uuid)
@@ -173,6 +182,7 @@ accounts {
 ```
 
 #### Library Management
+
 ```typescript
 items {
   id: string (uuid)
@@ -258,6 +268,7 @@ comments {
 ### RESTful Endpoints
 
 #### Admin Endpoints
+
 ```
 GET    /api/admin/items           - List all items with filters
 POST   /api/admin/items           - Create new item
@@ -274,6 +285,7 @@ PUT    /api/admin/users/:id/role   - Update user role
 ```
 
 #### User Endpoints
+
 ```
 GET    /api/items                  - Browse available items
 GET    /api/items/:id             - View item details
@@ -288,11 +300,13 @@ PUT    /api/profile              - Update profile
 ## Authentication & Authorization
 
 ### Authentication Flow
+
 1. Email/Password with JWT
 2. Magic links for passwordless login
 3. Social login (Google, GitHub)
 
 ### Authorization
+
 - **Admin**: Full access to all features
 - **Friends**: Limited to browsing and requesting items
 - **Public**: View-only access (configurable)
@@ -303,6 +317,7 @@ PUT    /api/profile              - Update profile
 ## UI/UX Design
 
 ### Theme
+
 - **Primary Color**: Purple (#7C3AED)
 - **Accent Colors**:
   - Auburn (#9A2A2A)
@@ -316,8 +331,9 @@ PUT    /api/profile              - Update profile
 - **Neutrals**:
   - Light theme: White (#FFFFFF) to Gray-900 (#111827)
   - Dark theme: Gray-900 (#111827) to White (#FFFFFF)
-  
+
 ### Components
+
 - Responsive design with mobile-first approach
 - Accessible components with keyboard navigation
 - Dark/light theme toggle
@@ -326,6 +342,7 @@ PUT    /api/profile              - Update profile
 - Confirmation dialogs
 
 ### Key Pages
+
 1. **Home**
    - Hero section with app description
    - Newly added items carousel
@@ -363,16 +380,19 @@ PUT    /api/profile              - Update profile
 ## Deployment Strategy
 
 ### Development
+
 - Local development with Docker Compose
 - Database migrations with Drizzle
 - Hot reloading for frontend and backend
 
 ### Staging
+
 - Preview deployments on Vercel
 - Test database with seed data
 - Automated testing
 
 ### Production
+
 - Vercel for frontend and API
 - Supabase for PostgreSQL
 - Redis for caching and rate limiting
@@ -401,12 +421,14 @@ PUT    /api/profile              - Update profile
 ## Security Considerations
 
 ### Data Protection
+
 - Encrypt sensitive data at rest
 - Use HTTPS everywhere
 - Implement CSP headers
 - Rate limiting
 
 ### Authentication
+
 - Secure password hashing (Argon2)
 - CSRF protection
 - Secure cookie settings
@@ -417,11 +439,13 @@ PUT    /api/profile              - Update profile
 ## Monitoring & Analytics
 
 ### Error Tracking
+
 - LogRocket for frontend errors
 - Sentry for backend errors
 - Performance monitoring
 
 ### Usage Analytics
+
 - Google Analytics (opt-in)
 - Custom event tracking
 - User flow analysis
@@ -458,23 +482,27 @@ PUT    /api/profile              - Update profile
    - Webhook support for external services
 
 6. **Advanced Search**
-  - Full-text search
-  - Advanced filters
-  - Saved searches
+
+- Full-text search
+- Advanced filters
+- Saved searches
 
 7. **Monetization**
-  - Premium features
-  - Donations
-  - Affiliate links
+
+- Premium features
+- Donations
+- Affiliate links
 
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 20+
 - PostgreSQL 15+
 - pnpm
 
 ### Local Development
+
 1. Clone the repository
 2. Install dependencies: `pnpm install`
 3. Set up environment variables
@@ -499,11 +527,12 @@ PUT    /api/profile              - Update profile
    **Pros**: Excellent real-time features, fault-tolerant
    **Cons**: Smaller talent pool, steeper learning curve
 
- 
 ## Conclusion
+
 The proposed architecture provides a solid foundation for a scalable, maintainable, and user-friendly library management system. The choice of Next.js with a monorepo structure offers the best balance between development velocity and long-term maintainability, while the selected technologies ensure good performance and developer experience.
 
 The system is designed to be cost-effective, starting with free tiers and scaling up as needed. The modular architecture allows for easy extension and modification as requirements evolve.
 
 ## License
+
 MIT

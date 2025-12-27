@@ -30,10 +30,10 @@ export async function GET() {
         orderBy: { createdAt: "desc" },
         include: { requestedBy: { select: { name: true } } },
       }),
-    ])
+    ]);
 
     const activities = [
-      ...loans.map(l => ({
+      ...loans.map((l) => ({
         id: l.id,
         type: "LOAN",
         user: l.user.name || "User",
@@ -41,22 +41,24 @@ export async function GET() {
         status: l.status,
         date: l.createdAt,
       })),
-      ...comments.map(c => ({
+      ...comments.map((c) => ({
         id: c.id,
         type: "COMMENT",
         user: c.user.name || "User",
         item: c.item.title,
         date: c.createdAt,
       })),
-      ...requests.map(r => ({
+      ...requests.map((r) => ({
         id: r.id,
         type: "REQUEST",
         user: r.requestedBy.name || "User",
         item: r.title,
         status: r.status,
         date: r.createdAt,
-      }))
-    ].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 10)
+      })),
+    ]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 10);
 
     return NextResponse.json(activities)
   } catch (error) {

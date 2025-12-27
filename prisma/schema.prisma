@@ -26,6 +26,34 @@ model User {
   receivedMessages Message[] @relation("ReceivedMessages")
   itemRequests  ItemRequest[] @relation("RequestedItems")
   waitlistItems WaitlistEntry[]
+  settings      AppSettings[]
+}
+
+model AppSettings {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  type      SettingType @default(STRING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  updatedBy String?
+  user      User?    @relation(fields: [updatedBy], references: [id])
+}
+
+model FeatureFlag {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isEnabled   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum SettingType {
+  STRING
+  BOOLEAN
+  NUMBER
+  JSON
 }
 
 model Account {

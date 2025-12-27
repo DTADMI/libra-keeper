@@ -9,7 +9,7 @@ import { prisma } from "@/lib/db"
 const messageSchema = z.object({
   content: z.string().min(1),
   receiverId: z.string(),
-})
+});
 
 export async function POST(req: Request) {
   try {
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         sender: { select: { name: true, image: true } },
         receiver: { select: { name: true, image: true } },
       },
-    })
+    });
 
     return NextResponse.json(message, { status: 201 })
   } catch (error) {
@@ -66,7 +66,7 @@ export async function GET(req: Request) {
           receiver: { select: { id: true, name: true, image: true } },
         },
         orderBy: { createdAt: "asc" },
-      })
+      });
       return NextResponse.json(messages)
     }
 
@@ -80,7 +80,7 @@ export async function GET(req: Request) {
         receiver: { select: { id: true, name: true, image: true } },
       },
       orderBy: { createdAt: "desc" },
-    })
+    });
 
     // Group by other user and get latest message
     const conversations = new Map()
@@ -91,10 +91,10 @@ export async function GET(req: Request) {
           user: otherUser,
           lastMessage: msg.content,
           createdAt: msg.createdAt,
-          unread: !msg.read && msg.receiverId === session.user.id
-        })
+          unread: !msg.read && msg.receiverId === session.user.id,
+        });
       }
-    })
+    });
 
     return NextResponse.json(Array.from(conversations.values()))
   } catch (error) {

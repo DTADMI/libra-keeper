@@ -12,7 +12,7 @@ const suggestionSchema = z.object({
   author: z.string().optional(),
   isbn: z.string().optional(),
   type: z.enum(["BORROWED_ITEM", "SUGGESTION"]),
-})
+});
 
 export async function POST(req: Request) {
   try {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
         ...body,
         requestedById: session.user.id,
       },
-    })
+    });
 
     return NextResponse.json(request, { status: 201 })
   } catch (error) {
@@ -51,11 +51,11 @@ export async function GET(req: Request) {
       where: session.user.role === "ADMIN" ? {} : { requestedById: session.user.id },
       include: {
         requestedBy: {
-          select: { name: true, email: true }
-        }
+          select: { name: true, email: true },
+        },
       },
       orderBy: { createdAt: "desc" },
-    })
+    });
 
     return NextResponse.json(requests)
   } catch (error) {

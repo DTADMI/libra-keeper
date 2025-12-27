@@ -1,7 +1,7 @@
 // src/app/(protected)/messages/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,25 +12,25 @@ import { cn } from "@/lib/utils"
 
 type Conversation = {
   user: {
-    id: string
-    name: string | null
-    image: string | null
-  }
-  lastMessage: string
-  createdAt: string
-  unread: boolean
-}
+    id: string;
+    name: string | null;
+    image: string | null;
+  };
+  lastMessage: string;
+  createdAt: string;
+  unread: boolean;
+};
 
 type Message = {
-  id: string
-  content: string
-  senderId: string
-  createdAt: string
+  id: string;
+  content: string;
+  senderId: string;
+  createdAt: string;
   sender: {
-    name: string | null
-    image: string | null
-  }
-}
+    name: string | null;
+    image: string | null;
+  };
+};
 
 export default function MessagesPage() {
   const { data: session } = useSession()
@@ -42,13 +42,13 @@ export default function MessagesPage() {
 
   useEffect(() => {
     fetchConversations()
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (selectedUser) {
       fetchMessages(selectedUser.user.id)
     }
-  }, [selectedUser])
+  }, [selectedUser]);
 
   async function fetchConversations() {
     try {
@@ -88,7 +88,7 @@ export default function MessagesPage() {
           content: newMessage,
           receiverId: selectedUser.user.id,
         }),
-      })
+      });
 
       if (response.ok) {
         const msg = await response.json()
@@ -121,7 +121,7 @@ export default function MessagesPage() {
                   onClick={() => setSelectedUser(conv)}
                   className={cn(
                     "w-full p-4 flex items-center gap-3 hover:bg-accent transition-colors text-left border-b",
-                    selectedUser?.user.id === conv.user.id && "bg-accent"
+                    selectedUser?.user.id === conv.user.id && "bg-accent",
                   )}
                 >
                   <Avatar>
@@ -131,9 +131,7 @@ export default function MessagesPage() {
                   <div className="flex-1 overflow-hidden">
                     <div className="flex justify-between items-center">
                       <p className="font-medium">{conv.user.name || "User"}</p>
-                      {conv.unread && (
-                        <div className="w-2 h-2 bg-primary rounded-full" />
-                      )}
+                      {conv.unread && <div className="w-2 h-2 bg-primary rounded-full" />}
                     </div>
                     <p className="text-sm text-muted-foreground truncate">{conv.lastMessage}</p>
                   </div>
@@ -164,12 +162,15 @@ export default function MessagesPage() {
                       "flex flex-col max-w-[80%] rounded-lg p-3",
                       msg.senderId === session?.user.id
                         ? "ml-auto bg-primary text-primary-foreground"
-                        : "mr-auto bg-accent"
+                        : "mr-auto bg-accent",
                     )}
                   >
                     <p className="text-sm">{msg.content}</p>
                     <p className="text-[10px] opacity-70 mt-1 self-end">
-                      {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(msg.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                   </div>
                 ))}
@@ -193,5 +194,5 @@ export default function MessagesPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

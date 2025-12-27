@@ -1,6 +1,6 @@
 // src/lib/logger.ts
 
-type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+type LogLevel = "info" | "warn" | "error" | "debug";
 
 class Logger {
   private static instance: Logger;
@@ -15,19 +15,19 @@ class Logger {
   }
 
   public info(message: string, ...args: unknown[]) {
-    this.log('info', message, ...args);
+    this.log("info", message, ...args)
   }
 
   public warn(message: string, ...args: unknown[]) {
-    this.log('warn', message, ...args);
+    this.log("warn", message, ...args)
   }
 
   public error(message: string, ...args: unknown[]) {
-    this.log('error', message, ...args);
+    this.log("error", message, ...args)
   }
 
   public debug(message: string, ...args: unknown[]) {
-    this.log('debug', message, ...args);
+    this.log("debug", message, ...args)
   }
 
   private log(level: LogLevel, message: string, ...args: unknown[]) {
@@ -35,17 +35,17 @@ class Logger {
     const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
 
     switch (level) {
-      case 'info':
+      case "info":
         console.info(formattedMessage, ...args);
         break;
-      case 'warn':
+      case "warn":
         console.warn(formattedMessage, ...args);
         break;
-      case 'error':
+      case "error":
         console.error(formattedMessage, ...args);
         break;
-      case 'debug':
-        if (process.env.NODE_ENV !== 'production') {
+      case "debug":
+        if (process.env.NODE_ENV !== "production") {
           console.debug(formattedMessage, ...args);
         }
         break;

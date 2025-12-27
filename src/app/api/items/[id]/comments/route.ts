@@ -1,19 +1,16 @@
 // src/app/api/items/[id]/comments/route.ts
-import {NextResponse} from "next/server"
-import {getServerSession} from "next-auth"
-import {z} from "zod"
+import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { z } from "zod"
 
-import {authOptions} from "@/lib/auth"
-import {prisma} from "@/lib/db"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/db"
 
 const commentSchema = z.object({
   content: z.string().min(1),
-})
+});
 
-export async function POST(
-  req: Request,
-  {params}: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
@@ -22,7 +19,7 @@ export async function POST(
 
     const json = await req.json()
     const { content } = commentSchema.parse(json)
-      const {id} = await params
+    const { id } = await params
 
     const comment = await prisma.comment.create({
       data: {
@@ -38,7 +35,7 @@ export async function POST(
           },
         },
       },
-    })
+    });
 
     return NextResponse.json(comment)
   } catch (error) {
@@ -49,12 +46,9 @@ export async function POST(
   }
 }
 
-export async function GET(
-  req: Request,
-  {params}: { params: Promise<{ id: string }> }
-) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-      const {id} = await params
+    const { id } = await params
 
     const comments = await prisma.comment.findMany({
       where: { itemId: id },
@@ -69,7 +63,7 @@ export async function GET(
       orderBy: {
         createdAt: "desc",
       },
-    })
+    });
 
     return NextResponse.json(comments)
   } catch (error) {

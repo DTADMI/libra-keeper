@@ -7,7 +7,7 @@ import { ScanLine } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 interface BarcodeScannerProps {
-  onScan: (decodedText: string) => void
+  onScan: (decodedText: string) => void;
 }
 
 export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
@@ -24,7 +24,7 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
           aspectRatio: 1.777778,
         },
         /* verbose= */ false,
-      )
+      );
 
       scannerRef.current.render(
         (decodedText) => {
@@ -37,17 +37,17 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
         (error) => {
           // console.warn(error);
         },
-      )
+      );
     }
 
     return () => {
       if (scannerRef.current) {
         scannerRef.current.clear().catch((error) => {
           console.error("Failed to clear scanner", error)
-        })
+        });
       }
-    }
-  }, [isOpen, onScan])
+    };
+  }, [isOpen, onScan]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -67,5 +67,5 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

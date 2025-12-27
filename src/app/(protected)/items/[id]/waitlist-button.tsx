@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation"
 import { Loader2, UserMinus, UserPlus } from "lucide-react"
 
 interface WaitlistButtonProps {
-  itemId: string
-  isJoined: boolean
+  itemId: string;
+  isJoined: boolean;
 }
 
 export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
@@ -21,7 +21,7 @@ export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
       const method = isJoined ? "DELETE" : "POST"
       const response = await fetch(`/api/items/${itemId}/waitlist`, {
         method,
-      })
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update waitlist")
@@ -34,7 +34,7 @@ export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
     } finally {
       setIsLoading(false)
     }
-  }
+  };
 
   return (
     <Button
@@ -53,5 +53,5 @@ export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
       )}
       {isJoined ? "Leave Waitlist" : "Join Waitlist"}
     </Button>
-  )
+  );
 }

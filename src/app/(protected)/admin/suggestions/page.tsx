@@ -1,38 +1,25 @@
 // src/app/(protected)/admin/suggestions/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 
 type ItemRequest = {
-  id: string
-  title: string
-  author: string | null
-  type: "BORROWED_ITEM" | "SUGGESTION"
-  status: "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
-  createdAt: string
+  id: string;
+  title: string;
+  author: string | null;
+  type: "BORROWED_ITEM" | "SUGGESTION";
+  status: "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED";
+  createdAt: string;
   requestedBy: {
-    name: string | null
-    email: string
-  }
-}
+    name: string | null;
+    email: string;
+  };
+};
 
 export default function AdminSuggestionsPage() {
   const [requests, setRequests] = useState<ItemRequest[]>([])
@@ -40,7 +27,7 @@ export default function AdminSuggestionsPage() {
 
   useEffect(() => {
     fetchRequests()
-  }, [])
+  }, []);
 
   async function fetchRequests() {
     try {
@@ -62,10 +49,12 @@ export default function AdminSuggestionsPage() {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
-      })
+      });
 
       if (response.ok) {
-        setRequests(requests.map(r => r.id === requestId ? { ...r, status: newStatus as any } : r))
+        setRequests(
+          requests.map((r) => (r.id === requestId ? { ...r, status: newStatus as any } : r)),
+        )
         toast.success("Status updated")
       }
     } catch (error) {
@@ -105,7 +94,7 @@ export default function AdminSuggestionsPage() {
                   <TableCell>{req.requestedBy.name || req.requestedBy.email}</TableCell>
                   <TableCell>
                     <Badge variant="outline">
-                      {req.type === 'SUGGESTION' ? 'Suggestion' : 'Borrowed'}
+                      {req.type === "SUGGESTION" ? "Suggestion" : "Borrowed"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -139,5 +128,5 @@ export default function AdminSuggestionsPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

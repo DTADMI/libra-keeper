@@ -7,7 +7,7 @@ import { z } from "zod"
 const collectionSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-})
+});
 
 export async function POST(req: Request) {
   try {
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         name,
         description,
       },
-    })
+    });
 
     return NextResponse.json(collection, { status: 201 })
   } catch (error) {
@@ -45,7 +45,7 @@ export async function GET(req: Request) {
         },
       },
       orderBy: { name: "asc" },
-    })
+    });
 
     return NextResponse.json(collections)
   } catch (error) {

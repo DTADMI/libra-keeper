@@ -17,11 +17,11 @@ export async function GET(req: Request) {
 
     const items = await prisma.item.findMany({
       include: { tags: true },
-    })
+    });
 
     if (format === "csv") {
       const headers = ["id", "title", "author", "type", "status", "isbn", "publisher", "createdAt"]
-      const rows = items.map(item => [
+      const rows = items.map((item) => [
         item.id,
         `"${item.title.replace(/"/g, '""')}"`,
         `"${(item.author || "").replace(/"/g, '""')}"`,
@@ -30,23 +30,23 @@ export async function GET(req: Request) {
         item.isbn || "",
         `"${(item.publisher || "").replace(/"/g, '""')}"`,
         item.createdAt.toISOString(),
-      ])
+      ]);
 
-      const csvContent = [headers.join(","), ...rows.map(row => row.join(","))].join("\n")
-      
+      const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
+
       return new NextResponse(csvContent, {
         headers: {
           "Content-Type": "text/csv",
-          "Content-Disposition": `attachment; filename="librakeeper-export-${new Date().toISOString().split('T')[0]}.csv"`,
+          "Content-Disposition": `attachment; filename="librakeeper-export-${new Date().toISOString().split("T")[0]}.csv"`,
         },
-      })
+      });
     }
 
     return NextResponse.json(items, {
       headers: {
-        "Content-Disposition": `attachment; filename="librakeeper-export-${new Date().toISOString().split('T')[0]}.json"`,
+        "Content-Disposition": `attachment; filename="librakeeper-export-${new Date().toISOString().split("T")[0]}.json"`,
       },
-    })
+    });
   } catch (error) {
     return new NextResponse("Internal server error", { status: 500 })
   }

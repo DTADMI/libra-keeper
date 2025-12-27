@@ -6,39 +6,39 @@ import { Toaster } from "@/components/ui/sonner"
 
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
+import { getSetting } from "@/lib/settings"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export const metadata = {
-    title: "LibraKeeper - Your Personal Library Manager",
+export async function generateMetadata() {
+    const libraryName = await getSetting("library_name", "LibraKeeper")
+    return {
+        title: `${libraryName} - Your Personal Library Manager`,
     description: "Manage your personal library and track borrowed items",
     manifest: "/manifest.json",
     themeColor: "#000000",
     viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+    };
 }
 
-export default async function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
-}) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
     const messages = await getMessages()
 
     return (
-        <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
+      <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
         <NextIntlClientProvider messages={messages}>
             <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
             >
                 {children}
                 <Toaster position="top-center" />
             </ThemeProvider>
         </NextIntlClientProvider>
-        </body>
-        </html>
-    )
+      </body>
+      </html>
+    );
 }

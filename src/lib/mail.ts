@@ -1,11 +1,19 @@
 // src/lib/mail.ts
-import { Resend } from 'resend';
+import { Resend } from "resend"
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const domain = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-export const sendEmail = async ({ to, subject, html }: { to: string, subject: string, html: string }) => {
+export const sendEmail = async ({
+                                  to,
+                                  subject,
+                                  html,
+                                }: {
+  to: string;
+  subject: string;
+  html: string;
+}) => {
   if (!resend) {
     console.warn("RESEND_API_KEY is not set. Email not sent.");
     return;
@@ -13,7 +21,7 @@ export const sendEmail = async ({ to, subject, html }: { to: string, subject: st
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'LibraKeeper <noreply@librakeeper.com>', // You might need to verify this domain in Resend
+      from: "LibraKeeper <noreply@librakeeper.com>", // You might need to verify this domain in Resend
       to,
       subject,
       html,
@@ -29,7 +37,11 @@ export const sendEmail = async ({ to, subject, html }: { to: string, subject: st
   }
 };
 
-export const sendLoanRequestEmail = async (adminEmail: string, borrowerName: string, itemTitle: string) => {
+export const sendLoanRequestEmail = async (
+  adminEmail: string,
+  borrowerName: string,
+  itemTitle: string,
+) => {
   await sendEmail({
     to: adminEmail,
     subject: "New Loan Request",
@@ -41,7 +53,11 @@ export const sendLoanRequestEmail = async (adminEmail: string, borrowerName: str
   });
 };
 
-export const sendLoanStatusEmail = async (userEmail: string, itemTitle: string, status: 'APPROVED' | 'REJECTED') => {
+export const sendLoanStatusEmail = async (
+  userEmail: string,
+  itemTitle: string,
+  status: "APPROVED" | "REJECTED",
+) => {
   await sendEmail({
     to: userEmail,
     subject: `Loan Request ${status.toLowerCase()}`,

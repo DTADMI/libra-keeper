@@ -18,15 +18,18 @@ A personal library management system that helps you track your books and other i
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 15+ (App Router)
+
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4
 - **UI Components**: shadcn/ui (Radix UI + Tailwind)
 - **i18n**: next-intl
 - **Authentication**: NextAuth.js
 - **Forms**: React Hook Form + Zod
+- **Feature Management**: Dynamic Feature Flags & Admin Settings
 
 ### Backend
+
 - **Runtime**: Node.js
 - **Database**: PostgreSQL with Prisma ORM
 - **Validation**: Zod
@@ -73,39 +76,44 @@ libra-keeper/
 ## Getting Started
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/libra-keeper.git
    cd libra-keeper
    ```
 
 2. **Install dependencies**
+
    ```bash
    pnpm install
    ```
 
 3. **Set up environment variables**
    Create a `.env` file in the root directory with the following variables:
+
    ```env
    # Database
    DATABASE_URL="postgresql://user:password@localhost:5432/librakeeper"
-   
+
    # Authentication
    NEXTAUTH_SECRET=your-secret-key
    NEXTAUTH_URL=http://localhost:3000
-   
+
    # Email (for notifications)
    RESEND_API_KEY=re_123456789
-   
+
    # Next.js
    NEXT_PUBLIC_APP_URL=http://localhost:3000
    ```
 
 4. **Set up the database**
+
    ```bash
    pnpm prisma migrate dev
    ```
 
 5. **Run the development server**
+
    ```bash
    pnpm dev
    ```
@@ -127,6 +135,7 @@ pnpm test:e2e
 ## CI/CD
 
 The project includes a GitHub Actions workflow for continuous integration. On every push or pull request to the `main` branch, the workflow:
+
 1. Installs dependencies
 2. Generates Prisma client
 3. Runs linter
@@ -136,6 +145,7 @@ The project includes a GitHub Actions workflow for continuous integration. On ev
 ## Documentation
 
 Comprehensive documentation can be found in the `docs` folder:
+
 - [User Guide](docs/user-guide.md)
 - [Admin Guide](docs/admin-guide.md)
 - [API Reference](docs/api-reference.md)
@@ -143,16 +153,19 @@ Comprehensive documentation can be found in the `docs` folder:
 ## Development
 
 - Run the development server:
+
   ```bash
   pnpm dev
   ```
 
 - Run tests:
+
   ```bash
   pnpm test
   ```
 
 - Lint and format code:
+
   ```bash
   pnpm lint
   pnpm format
@@ -165,16 +178,16 @@ Comprehensive documentation can be found in the `docs` folder:
 
 ## Environment Variables
 
-| Variable | Description | Required | Default |
-|----------|-------------|----------|---------|
-| `NODE_ENV` | Application environment | No | `development` |
-| `NEXT_PUBLIC_APP_URL` | Public URL of the application | Yes | `http://localhost:3000` |
-| `DATABASE_URL` | PostgreSQL connection string | Yes | - |
-| `NEXTAUTH_SECRET` | Secret for NextAuth.js | Yes | - |
-| `NEXTAUTH_URL` | Base URL for NextAuth.js | Yes | - |
-| `RESEND_API_KEY` | API key for Resend email service | No | - |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID | No | - |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | No | - |
+| Variable               | Description                      | Required | Default                 |
+|------------------------|----------------------------------|----------|-------------------------|
+| `NODE_ENV`             | Application environment          | No       | `development`           |
+| `NEXT_PUBLIC_APP_URL`  | Public URL of the application    | Yes      | `http://localhost:3000` |
+| `DATABASE_URL`         | PostgreSQL connection string     | Yes      | -                       |
+| `NEXTAUTH_SECRET`      | Secret for NextAuth.js           | Yes      | -                       |
+| `NEXTAUTH_URL`         | Base URL for NextAuth.js         | Yes      | -                       |
+| `RESEND_API_KEY`       | API key for Resend email service | No       | -                       |
+| `GOOGLE_CLIENT_ID`     | Google OAuth client ID           | No       | -                       |
+| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret       | No       | -                       |
 
 ## Deployment
 
@@ -188,6 +201,7 @@ Comprehensive documentation can be found in the `docs` folder:
 ### Self-hosted
 
 1. Build the application:
+
    ```bash
    pnpm build
    ```

@@ -3,10 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 
-export async function POST(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function POST(req: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
@@ -19,7 +16,7 @@ export async function POST(
     const item = await prisma.item.findUnique({
       where: { id: itemId },
       include: { loans: { where: { status: "APPROVED" } } },
-    })
+    });
 
     if (!item) {
       return new NextResponse("Item not found", { status: 404 })
@@ -37,7 +34,7 @@ export async function POST(
           userId: session.user.id,
         },
       },
-    })
+    });
 
     if (existingEntry) {
       return new NextResponse("Already in waitlist", { status: 400 })
@@ -49,7 +46,7 @@ export async function POST(
         itemId,
         userId: session.user.id,
       },
-    })
+    });
 
     return NextResponse.json(waitlistEntry)
   } catch (error) {
@@ -58,10 +55,7 @@ export async function POST(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function DELETE(req: Request, { params }: { params: { id: string } }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
@@ -77,7 +71,7 @@ export async function DELETE(
           userId: session.user.id,
         },
       },
-    })
+    });
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
@@ -86,10 +80,7 @@ export async function DELETE(
   }
 }
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } },
-) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     const itemId = params.id
 
@@ -105,7 +96,7 @@ export async function GET(
         },
       },
       orderBy: { createdAt: "asc" },
-    })
+    });
 
     return NextResponse.json(waitlist)
   } catch (error) {

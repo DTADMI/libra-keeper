@@ -1,7 +1,7 @@
 // src/app/(protected)/suggestions/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -10,22 +10,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast } from "sonner"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 type ItemRequest = {
-  id: string
-  title: string
-  author: string | null
-  type: "BORROWED_ITEM" | "SUGGESTION"
-  status: "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
-  createdAt: string
-}
+  id: string;
+  title: string;
+  author: string | null;
+  type: "BORROWED_ITEM" | "SUGGESTION";
+  status: "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED";
+  createdAt: string;
+};
 
 export default function SuggestionsPage() {
   const { data: session } = useSession()
@@ -41,7 +35,7 @@ export default function SuggestionsPage() {
 
   useEffect(() => {
     fetchRequests()
-  }, [])
+  }, []);
 
   async function fetchRequests() {
     try {
@@ -66,7 +60,7 @@ export default function SuggestionsPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, author, description, type }),
-      })
+      });
 
       if (response.ok) {
         const newRequest = await response.json()
@@ -86,7 +80,7 @@ export default function SuggestionsPage() {
   return (
     <div className="container mx-auto p-4 space-y-8">
       <h1 className="text-2xl font-bold">Suggestions & Item Requests</h1>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Card>
           <CardHeader>
@@ -102,13 +96,20 @@ export default function SuggestionsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="SUGGESTION">Suggestion (Item to acquire)</SelectItem>
-                    <SelectItem value="BORROWED_ITEM">Borrowed Item (Item you have but not in catalog)</SelectItem>
+                    <SelectItem value="BORROWED_ITEM">
+                      Borrowed Item (Item you have but not in catalog)
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                <Input
+                  id="title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="author">Author/Creator</Label>
@@ -116,7 +117,11 @@ export default function SuggestionsPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Description/Notes</Label>
-                <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} />
+                <Textarea
+                  id="description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
               </div>
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Submitting..." : "Submit Request"}
@@ -137,12 +142,19 @@ export default function SuggestionsPage() {
                 <CardContent className="p-4 flex items-center justify-between">
                   <div>
                     <p className="font-medium">{req.title}</p>
-                    <p className="text-sm text-muted-foreground">{req.type === 'SUGGESTION' ? 'Suggestion' : 'Borrowed Item'}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {req.type === "SUGGESTION" ? "Suggestion" : "Borrowed Item"}
+                    </p>
                   </div>
-                  <Badge variant={
-                    req.status === 'COMPLETED' ? 'default' :
-                    req.status === 'REJECTED' ? 'destructive' : 'secondary'
-                  }>
+                  <Badge
+                    variant={
+                      req.status === "COMPLETED"
+                        ? "default"
+                        : req.status === "REJECTED"
+                          ? "destructive"
+                          : "secondary"
+                    }
+                  >
                     {req.status}
                   </Badge>
                 </CardContent>
@@ -152,5 +164,5 @@ export default function SuggestionsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

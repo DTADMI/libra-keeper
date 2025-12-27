@@ -1,32 +1,19 @@
 // src/app/(protected)/admin/users/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type User = {
-  id: string
-  name: string | null
-  email: string
-  role: "ADMIN" | "USER"
-  createdAt: string
-}
+  id: string;
+  name: string | null;
+  email: string;
+  role: "ADMIN" | "USER";
+  createdAt: string;
+};
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([])
@@ -34,7 +21,7 @@ export default function UsersPage() {
 
   useEffect(() => {
     fetchUsers()
-  }, [])
+  }, []);
 
   async function fetchUsers() {
     try {
@@ -55,11 +42,11 @@ export default function UsersPage() {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, role: newRole }),
-      })
+      });
 
       if (!response.ok) throw new Error("Failed to update role")
-      
-      setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u))
+
+      setUsers(users.map((u) => (u.id === userId ? { ...u, role: newRole } : u)))
       toast.success("User role updated")
     } catch (error: any) {
       toast.error(error.message)
@@ -112,5 +99,5 @@ export default function UsersPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

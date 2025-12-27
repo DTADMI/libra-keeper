@@ -9,7 +9,7 @@ import { prisma } from "@/lib/db"
 const roleSchema = z.object({
   userId: z.string(),
   role: z.enum(["ADMIN", "USER"]),
-})
+});
 
 export async function GET() {
   try {
@@ -29,7 +29,7 @@ export async function GET() {
       orderBy: {
         createdAt: "desc",
       },
-    })
+    });
 
     return NextResponse.json(users)
   } catch (error) {
@@ -55,7 +55,7 @@ export async function PATCH(req: Request) {
     const user = await prisma.user.update({
       where: { id: userId },
       data: { role },
-    })
+    });
 
     return NextResponse.json(user)
   } catch (error) {

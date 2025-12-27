@@ -1,7 +1,7 @@
 // src/app/(protected)/profile/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,7 +20,7 @@ export default function ProfilePage() {
       setName(session.user.name || "")
       setImage(session.user.image || "")
     }
-  }, [session])
+  }, [session]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -31,7 +31,7 @@ export default function ProfilePage() {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, image }),
-      })
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update profile")
@@ -86,5 +86,5 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

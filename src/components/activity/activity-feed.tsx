@@ -1,19 +1,19 @@
 // src/components/activity/activity-feed.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDistanceToNow } from "date-fns"
 import { Icons } from "@/components/icons"
 
 type Activity = {
-  id: string
-  type: "LOAN" | "COMMENT" | "REQUEST"
-  user: string
-  item: string
-  status?: string
-  date: string
-}
+  id: string;
+  type: "LOAN" | "COMMENT" | "REQUEST";
+  user: string;
+  item: string;
+  status?: string;
+  date: string;
+};
 
 export function ActivityFeed() {
   const [activities, setActivities] = useState<Activity[]>([])
@@ -33,8 +33,9 @@ export function ActivityFeed() {
         setIsLoading(false)
       }
     }
+
     fetchActivity()
-  }, [])
+  }, []);
 
   if (isLoading) return <p>Loading activity...</p>
 
@@ -69,5 +70,5 @@ export function ActivityFeed() {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

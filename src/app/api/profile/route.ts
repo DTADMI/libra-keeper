@@ -9,7 +9,7 @@ import { prisma } from "@/lib/db"
 const profileSchema = z.object({
   name: z.string().min(1).optional(),
   image: z.string().url().optional().nullable().or(z.literal("")),
-})
+});
 
 export async function GET() {
   try {
@@ -28,7 +28,7 @@ export async function GET() {
         role: true,
         createdAt: true,
       },
-    })
+    });
 
     return NextResponse.json(user)
   } catch (error) {
@@ -49,7 +49,7 @@ export async function PATCH(req: Request) {
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data: body,
-    })
+    });
 
     return NextResponse.json(user)
   } catch (error) {

@@ -1,21 +1,18 @@
 // src/app/api/suggestions/[id]/route.ts
-import {NextResponse} from "next/server"
-import {getServerSession} from "next-auth"
-import {z} from "zod"
+import { NextResponse } from "next/server"
+import { getServerSession } from "next-auth"
+import { z } from "zod"
 
-import {authOptions} from "@/lib/auth"
-import {prisma} from "@/lib/db"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/db"
 
 const updateSuggestionSchema = z.object({
   status: z.enum(["PENDING", "PROCESSING", "COMPLETED", "REJECTED"]),
-})
+});
 
-export async function PATCH(
-  req: Request,
-  {params}: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-      const {id} = await params
+    const { id } = await params
     const session = await getServerSession(authOptions)
     if (!session?.user || session.user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 })
@@ -25,12 +22,12 @@ export async function PATCH(
     const { status } = updateSuggestionSchema.parse(json)
 
     const request = await prisma.itemRequest.update({
-        where: {id},
+      where: { id },
       data: {
         status,
         processedById: session.user.id,
       },
-    })
+    });
 
     return NextResponse.json(request)
   } catch (error) {
@@ -41,20 +38,17 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  {params}: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-      const {id} = await params
+    const { id } = await params
     const session = await getServerSession(authOptions)
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
     const request = await prisma.itemRequest.findUnique({
-        where: {id},
-    })
+      where: { id },
+    });
 
     if (!request) {
       return new NextResponse("Not found", { status: 404 })
@@ -65,8 +59,8 @@ export async function DELETE(
     }
 
     await prisma.itemRequest.delete({
-        where: {id},
-    })
+      where: { id },
+    });
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {
