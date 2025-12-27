@@ -91,3 +91,37 @@
 - [x] Integrate with external book metadata APIs (Open Library, Google Books)
 - [x] Add multi-collection support for different categories of items
 - [x] Mobile application (PWA)
+
+## Status: Completed
+
+### Tasks:
+
+1. **Initialize action plan and documentation** [COMPLETED]
+    - [x] Analyze current state
+    - [x] Create `action-plan.md`
+    - [x] Update `README.md`
+2. **Configure Environment Variables** [COMPLETED]
+    - [x] Update `.env` with actual generated secrets (no shell commands)
+    - [x] Synchronize `DATABASE_URL` with credentials
+3. **Enhance Docker Configuration** [COMPLETED]
+    - [x] Rename container to `libra-keeper` (as per issue description)
+    - [x] Ensure image name is `librakeeper-db`
+    - [x] Create `docker/Dockerfile.db`
+4. **Automate Local Setup and Testing** [COMPLETED]
+    - [x] Create automation script `scripts/setup-local.js`
+    - [x] Add `package.json` scripts
+
+### 6. Fix Setup Issues [COMPLETED]
+
+- [x] Fix `DATABASE_URL` parsing errors by using URL-safe characters and providing guidance in `.env.example`.
+- [x] Switch from port 5432 to 5433 to avoid conflicts with other PostgreSQL instances on the host.
+- [x] Update `docker/init-db.sh` to grant necessary permissions (`CREATEDB`, `ALL ON SCHEMA public`, role membership) to
+  the application user for Prisma migrations and shadow database creation.
+- [x] Update `scripts/setup-local.js` to use `pnpm exec`, add a stabilization delay, and improve logs.
+- [x] Update `package.json` to consistently use `pnpm` for all database and setup commands.
+- [x] Resolve authentication mismatches by synchronizing `.env` variables with Docker environment and removing random
+  password generation from `docker-compose.yml`.
+- [x] Fix syntax errors in `init-db.sh` by properly escaping PostgreSQL `$$` blocks and using `EXECUTE format` for
+  dynamic SQL.
+- [x] Verify the entire flow with `pnpm setup:local`.
+- [x] Update `README.md` with new automated setup instructions and Docker configuration details.

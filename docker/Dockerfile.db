@@ -1,0 +1,15 @@
+FROM postgres:15-alpine
+
+# Install any additional tools if needed
+# RUN apk add --no-cache curl
+
+# Copy initialization scripts
+# The init-db.sh will be mounted via compose for development, 
+# but we can also include it in the image for standalone use.
+COPY ./docker/init-db.sh /docker-entrypoint-initdb.d/init-db.sh
+RUN chmod +x /docker-entrypoint-initdb.d/init-db.sh
+
+# Default environment variables (can be overridden)
+ENV POSTGRES_DB=librakeeper
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres

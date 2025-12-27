@@ -243,3 +243,4 @@ typings/
 /test-results/hydration-no-hydration-mismatch-errors-on-home-mobile-safari/test-failed-1.png
 
 next-env.d.ts!/.idea/
+.postgres_data/
