@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
     title: "LibraKeeper - Your Personal Library Manager",
     description: "Manage your personal library and track borrowed items",
+    manifest: "/manifest.json",
+    themeColor: "#000000",
+    viewport: "width=device-width, initial-scale=1, maximum-scale=1",
 }
 
 export default async function RootLayout({

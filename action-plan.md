@@ -73,4 +73,4 @@
 - [x] Add calendar view for loans and due dates
 - [x] Integrate with external book metadata APIs (Open Library, Google Books)
 - [x] Add multi-collection support for different categories of items
-- [ ] Mobile application (PWA or native)
+- [x] Mobile application (PWA)

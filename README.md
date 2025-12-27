@@ -12,6 +12,7 @@ A personal library management system that helps you track your books and other i
 - 🌐 Multi-language support (i18n)
 - 🔒 Secure authentication and authorization
 - 📱 Responsive design for all devices
+- 📱 Progressive Web App (PWA) support
 - ♿ Accessibility-first approach
 
 ## Tech Stack
