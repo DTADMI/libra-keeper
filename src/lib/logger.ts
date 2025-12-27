@@ -14,7 +14,23 @@ class Logger {
     return Logger.instance;
   }
 
-  private log(level: LogLevel, message: string, ...args: any[]) {
+  public info(message: string, ...args: unknown[]) {
+    this.log('info', message, ...args);
+  }
+
+  public warn(message: string, ...args: unknown[]) {
+    this.log('warn', message, ...args);
+  }
+
+  public error(message: string, ...args: unknown[]) {
+    this.log('error', message, ...args);
+  }
+
+  public debug(message: string, ...args: unknown[]) {
+    this.log('debug', message, ...args);
+  }
+
+  private log(level: LogLevel, message: string, ...args: unknown[]) {
     const timestamp = new Date().toISOString();
     const formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
 
@@ -39,22 +55,6 @@ class Logger {
     // if (process.env.NODE_ENV === 'production') {
     //   sendToExternalService({ level, message, timestamp, args });
     // }
-  }
-
-  public info(message: string, ...args: any[]) {
-    this.log('info', message, ...args);
-  }
-
-  public warn(message: string, ...args: any[]) {
-    this.log('warn', message, ...args);
-  }
-
-  public error(message: string, ...args: any[]) {
-    this.log('error', message, ...args);
-  }
-
-  public debug(message: string, ...args: any[]) {
-    this.log('debug', message, ...args);
   }
 }
 

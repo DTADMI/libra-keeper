@@ -4,11 +4,10 @@ import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { EditItemForm } from "./edit-item-form"
 
-export default async function EditItemPage({
-    params,
-}: {
-    params: { id: string }
+export default async function EditItemPage(props: {
+  params: Promise<{ id: string }>
 }) {
+  const params = await props.params
     const session = await getServerSession(authOptions)
 
     if (session?.user.role !== "ADMIN") {
