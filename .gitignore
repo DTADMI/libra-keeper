@@ -224,9 +224,9 @@ dist/**/*.js.map
 
 # TypeScript v1 declaration files
 typings/
-!/.idea/
+/.idea/
 /package.json.1858806514
-!/test-results/
+/test-results/
 /test-results/**
 /.output.txt
 /test-results/breakout-Breakout-MVP-paddle-moves-and-start-pause-works-mobile-safari/error-context.md
@@ -244,3 +244,4 @@ typings/
 
 next-env.d.ts!/.idea/
 .postgres_data/
+.qodo/
