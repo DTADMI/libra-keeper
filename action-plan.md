@@ -125,3 +125,11 @@
   dynamic SQL.
 - [x] Verify the entire flow with `pnpm setup:local`.
 - [x] Update `README.md` with new automated setup instructions and Docker configuration details.
+- [x] Resolve Next.js 16/Turbopack and Prisma Compatibility Issues:
+    - [x] Rename `src/middleware.ts` to `src/proxy.ts` to address Next.js 16 deprecation warning.
+    - [x] Update `next.config.ts` to include `turbopack: {}` and `outputFileTracingRoot` to silence builder and
+      workspace root warnings.
+    - [x] Implement Prisma Driver Adapter using `@prisma/adapter-pg` and `pg` to resolve
+      `PrismaClientConstructorValidationError` in Next.js 16 environment.
+    - [x] Enable `driverAdapters` preview feature in `schema.prisma` and regenerate Prisma client.
+    - [x] Verify development server starts successfully with `pnpm dev`.
