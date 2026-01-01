@@ -1,0 +1,18 @@
+{
+  "Index": {
+    "title": "Welcome to LibraKeeper",
+    "description": "Your Personal Library Manager"
+  },
+  "Navigation": {
+    "home": "Home",
+    "books": "Books",
+    "borrowers": "Borrowers",
+    "loans": "Loans",
+    "settings": "Settings"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "message": "The page you are looking for does not exist.",
+    "backToHome": "Go back home"
+  }
+}

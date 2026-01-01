@@ -1,25 +1,18 @@
 // src/app/page.tsx
-import { useTranslations } from "next-intl"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
+import { redirect } from "next/navigation"
+import { locales } from "@/i18n"
 
-export default function Home() {
-  const t = useTranslations("HomePage")
+// This page will redirect to the default locale
+// The root path (/) will redirect to /en or the default locale
+export default function RootPage() {
+  // This will only be hit if the middleware didn't redirect
+  // So we'll redirect to the default locale
+  const defaultLocale = locales[0] || "en"
+  redirect(`/${defaultLocale}`)
 
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="mx-auto max-w-2xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">{t("title")}</h1>
-        <p className="mt-6 text-lg leading-8 text-muted-foreground">{t("description")}</p>
-        <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Button asChild size="lg">
-            <Link href="/dashboard">{t("getStarted")}</Link>
-          </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/about">{t("learnMore")}</Link>
-          </Button>
-        </div>
-      </div>
-    </main>
-  );
+  // This won't be rendered, but it's here to make TypeScript happy
+  return null
 }
+
+// This tells Next.js that this is a dynamic route
+export const dynamic = "force-dynamic"
