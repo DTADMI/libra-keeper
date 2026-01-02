@@ -1,5 +1,4 @@
 import type { NextConfig } from "next"
-import path from "path"
 
 // Only apply PWA in production or when explicitly enabled in development
 const withPWA =
@@ -14,8 +13,8 @@ const nextConfig: NextConfig = withPWA({
   // Configure output file tracing
   output: "standalone",
 
-  // Set the root directory for file tracing to avoid lockfile warnings
-  outputFileTracingRoot: path.join(__dirname, ".."),
+  // Set the root directory for file tracing
+  outputFileTracingRoot: __dirname,
 
   // Your other Next.js config options here
   experimental: {

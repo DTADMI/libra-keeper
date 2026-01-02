@@ -1,6 +1,4 @@
 // src/app/[locale]/layout.tsx
-"use client"
-
 import { notFound } from "next/navigation"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
@@ -36,12 +34,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <NextIntlClientProvider
       locale={locale}
       messages={messages}
-      onError={(error) => {
-        if (process.env.NODE_ENV === "development") {
-          console.error(error)
-        }
-      }}
-      getMessageFallback={({ namespace, key }) => `[${namespace}.${key}]`}
     >
       {children}
     </NextIntlClientProvider>
