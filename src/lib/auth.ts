@@ -1,12 +1,12 @@
 // src/lib/auth.ts
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { NextAuthOptions } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import CredentialsProvider from "next-auth/providers/credentials"
 import { compare } from "bcryptjs"
-import { prisma } from "./db"
-
+import { NextAuthOptions } from "next-auth"
 import { Adapter } from "next-auth/adapters"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
+
+import { prisma } from "./db"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
@@ -35,7 +35,7 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
-        })
+        });
 
         if (!user || !user.password) {
           throw new Error("No user found with this email")
@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           role: user.role,
-        }
+        };
       },
     }),
   ],

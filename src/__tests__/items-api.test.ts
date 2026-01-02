@@ -1,6 +1,7 @@
-import { prismaMock } from "@/lib/prisma-mock"
-import { GET, POST } from "@/app/api/items/route"
 import { getServerSession } from "next-auth"
+
+import { GET, POST } from "@/app/api/items/route"
+import { prismaMock } from "@/lib/prisma-mock"
 
 jest.mock("next-auth", () => ({
   getServerSession: jest.fn(),
@@ -49,12 +50,12 @@ describe("Items API", () => {
       id: "new-id",
       ...newItem,
       tags: [{ name: "fiction" }],
-    } as any)
+    } as any);
 
     const request = new Request("http://localhost/api/items", {
       method: "POST",
       body: JSON.stringify(newItem),
-    })
+    });
 
     const response = await POST(request)
     expect(response.status).toBe(200)
@@ -71,7 +72,7 @@ describe("Items API", () => {
     const request = new Request("http://localhost/api/items", {
       method: "POST",
       body: JSON.stringify({ title: "Test" }),
-    })
+    });
 
     const response = await POST(request)
     expect(response.status).toBe(401)

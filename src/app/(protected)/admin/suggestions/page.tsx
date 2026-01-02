@@ -3,17 +3,20 @@
 
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
+type ItemRequestType = "BORROWED_ITEM" | "SUGGESTION"
 type ItemRequest = {
   id: string;
   title: string;
   author: string | null;
-  type: "BORROWED_ITEM" | "SUGGESTION";
-  status: "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED";
+  type: ItemRequestType;
+  status: ItemRequestStatus;
   createdAt: string;
   requestedBy: {
     name: string | null;
@@ -53,8 +56,8 @@ export default function AdminSuggestionsPage() {
 
       if (response.ok) {
         setRequests(
-          requests.map((r) => (r.id === requestId ? { ...r, status: newStatus as any } : r)),
-        )
+          requests.map((r) => (r.id === requestId ? { ...r, status: newStatus as ItemRequestStatus } : r)),
+        );
         toast.success("Status updated")
       }
     } catch (error) {
@@ -62,7 +65,9 @@ export default function AdminSuggestionsPage() {
     }
   }
 
-  if (isLoading) return <div className="p-8 text-center">Loading requests...</div>
+  if (isLoading) {
+    return <div className="p-8 text-center">Loading requests...</div>
+  }
 
   return (
     <div className="container mx-auto p-4">

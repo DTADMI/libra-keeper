@@ -10,7 +10,7 @@ const settingSchema = z.object({
   key: z.string().min(1),
   value: z.string(),
   type: z.enum(["STRING", "BOOLEAN", "NUMBER", "JSON"]),
-})
+});
 
 export async function GET() {
   try {
@@ -21,7 +21,7 @@ export async function GET() {
 
     const settings = await prisma.appSettings.findMany({
       orderBy: { key: "asc" },
-    })
+    });
 
     return NextResponse.json(settings)
   } catch (error) {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       where: { key },
       update: { value, type, updatedBy: session.user.id },
       create: { key, value, type, updatedBy: session.user.id },
-    })
+    });
 
     return NextResponse.json(setting)
   } catch (error) {

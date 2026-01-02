@@ -1,11 +1,12 @@
 // src/app/[locale]/layout.tsx
 "use client"
 
-import { NextIntlClientProvider } from "next-intl"
 import { notFound } from "next/navigation"
-import { locales } from "@/i18n"
+import { NextIntlClientProvider } from "next-intl"
 import { getMessages } from "next-intl/server"
 import { ReactNode } from "react"
+
+import { locales } from "@/i18n"
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }))
@@ -16,14 +17,11 @@ interface LocaleLayoutProps {
   params: { locale: string };
 }
 
-export default async function LocaleLayout({
-                                             children,
-                                             params,
-                                           }: LocaleLayoutProps) {
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = params
 
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as any)) {
+  if (!locales.includes(locale as string)) {
     notFound()
   }
 
@@ -47,7 +45,7 @@ export default async function LocaleLayout({
     >
       {children}
     </NextIntlClientProvider>
-  )
+  );
 }
 
 export const dynamicParams = false

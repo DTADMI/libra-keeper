@@ -1,13 +1,13 @@
 // src/app/dashboard/page.tsx
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { getServerSession } from "next-auth"
 
-import { prisma } from "@/lib/db"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { ActivityFeed } from "@/components/activity/activity-feed"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { authOptions } from "@/lib/auth"
+import { prisma } from "@/lib/db"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   const items = await prisma.item.findMany({
     include: { tags: true },
     orderBy: { createdAt: "desc" },
-  })
+  });
 
   return (
     <div className="container mx-auto p-4">

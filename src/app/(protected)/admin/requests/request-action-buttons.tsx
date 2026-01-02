@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { useState } from "react"
 import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
 
 interface RequestActionButtonsProps {
   loanId: string;
@@ -22,7 +23,7 @@ export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ status }),
-      })
+      });
 
       if (!response.ok) {
         throw new Error("Failed to update request")
@@ -52,5 +53,5 @@ export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
         Approve
       </Button>
     </div>
-  )
+  );
 }

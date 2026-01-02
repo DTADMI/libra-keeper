@@ -1,11 +1,12 @@
 // src/app/(protected)/admin/settings/page.tsx
 "use client"
 
+import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Icons } from "@/components/icons"
-import { SettingsManager } from "./settings-manager"
+
 import { FeatureFlagManager } from "./feature-flag-manager"
+import { SettingsManager } from "./settings-manager"
 
 export default function AdminSettingsPage() {
   const exportData = (format: "json" | "csv") => {

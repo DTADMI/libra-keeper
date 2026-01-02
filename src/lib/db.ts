@@ -1,6 +1,6 @@
 // src/lib/db.ts
-import { PrismaClient } from "@prisma/client"
 import { PrismaPg } from "@prisma/adapter-pg"
+import { PrismaClient } from "@prisma/client"
 import { Pool } from "pg"
 
 declare global {
@@ -20,7 +20,7 @@ const adapter = new PrismaPg(pool)
 const prismaOptions = {
   log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
   adapter,
-}
+};
 
 export const prisma: PrismaClient = global.prisma || new PrismaClient(prismaOptions)
 

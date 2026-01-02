@@ -1,8 +1,9 @@
 import { getServerSession } from "next-auth"
+
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 
 export default async function MyLoansPage() {
   const session = await getServerSession(authOptions)
@@ -17,7 +18,7 @@ export default async function MyLoansPage() {
     orderBy: {
       createdAt: "desc",
     },
-  })
+  });
 
   return (
     <div className="container mx-auto p-4">
@@ -75,5 +76,5 @@ export default async function MyLoansPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

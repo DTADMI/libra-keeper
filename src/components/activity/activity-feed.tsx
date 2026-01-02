@@ -1,10 +1,11 @@
 // src/components/activity/activity-feed.tsx
 "use client"
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDistanceToNow } from "date-fns"
+import { useEffect, useState } from "react"
+
 import { Icons } from "@/components/icons"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 type Activity = {
   id: string;
@@ -37,7 +38,9 @@ export function ActivityFeed() {
     fetchActivity()
   }, []);
 
-  if (isLoading) return <p>Loading activity...</p>
+  if (isLoading) {
+    return <p>Loading activity...</p>
+  }
 
   return (
     <Card>

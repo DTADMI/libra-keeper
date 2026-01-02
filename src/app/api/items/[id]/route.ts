@@ -38,7 +38,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           select: { likes: true },
         },
       },
-    })
+    });
 
     if (!item) {
       return new NextResponse("Not Found", { status: 404 })
@@ -80,7 +80,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       include: {
         tags: true,
       },
-    })
+    });
 
     return NextResponse.json(item)
   } catch (error) {
@@ -101,7 +101,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
     await prisma.item.delete({
       where: { id },
-    })
+    });
 
     return new NextResponse(null, { status: 204 })
   } catch (error) {

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
+import { z } from "zod"
+
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { z } from "zod"
 import { sendLoanRequestEmail } from "@/lib/mail"
 
 const loanSchema = z.object({
@@ -21,7 +22,7 @@ export async function POST(req: Request) {
 
     const item = await prisma.item.findUnique({
       where: { id: itemId },
-    })
+    });
 
     if (!item) {
       return new NextResponse("Item not found", { status: 404 })
@@ -37,13 +38,13 @@ export async function POST(req: Request) {
         userId: session.user.id,
         status: "PENDING",
       },
-    })
+    });
 
     // Send email to admin
     const admins = await prisma.user.findMany({
       where: { role: "ADMIN" },
       select: { email: true },
-    })
+    });
 
     for (const admin of admins) {
       if (admin.email) {
@@ -74,7 +75,7 @@ export async function GET(req: Request) {
         user: true,
       },
       orderBy: { createdAt: "desc" },
-    })
+    });
 
     return NextResponse.json(loans)
   } catch (error) {

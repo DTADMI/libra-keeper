@@ -1,10 +1,11 @@
 // src/app/(protected)/items/[id]/borrow-button.tsx
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
 
 interface BorrowButtonProps {
   itemId: string;
@@ -24,7 +25,7 @@ export function BorrowButton({ itemId, disabled }: BorrowButtonProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ itemId }),
-      })
+      });
 
       if (!response.ok) {
         const error = await response.text()
@@ -33,8 +34,12 @@ export function BorrowButton({ itemId, disabled }: BorrowButtonProps) {
 
       toast.success("Borrow request sent successfully")
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || "Failed to send borrow request")
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to send borrow request")
+      } else {
+        toast.error("An unknown error occurred")
+      }
     } finally {
       setIsLoading(false)
     }
@@ -44,5 +49,5 @@ export function BorrowButton({ itemId, disabled }: BorrowButtonProps) {
     <Button onClick={onBorrow} disabled={isLoading || disabled} size="lg">
       {isLoading ? "Sending Request..." : "Request to Borrow"}
     </Button>
-  )
+  );
 }

@@ -245,3 +245,11 @@ typings/
 next-env.d.ts!/.idea/
 .postgres_data/
 .qodo/
+playwright-report/
+
+# Service worker generated files
+/public/sw.js
+/public/workbox-*.js
+/public/worker-*.js
+/public/sw.js.map
+/public/workbox-*.js.map

@@ -1,12 +1,13 @@
 // src/app/(protected)/items/[id]/comments-section.tsx
 "use client"
 
+import { formatDistanceToNow } from "date-fns"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
+
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { toast } from "sonner"
-import { formatDistanceToNow } from "date-fns"
 
 interface Comment {
   id: string;
@@ -32,11 +33,13 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
       .then((res) => res.json())
       .then((data) => setComments(data))
       .catch(() => {
-      })
-  }, [itemId])
+      });
+  }, [itemId]);
 
   async function onSubmit() {
-    if (!newComment.trim()) return
+    if (!newComment.trim()) {
+      return
+    }
 
     setIsLoading(true)
     try {
@@ -44,16 +47,22 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: newComment }),
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to post comment")
+      if (!response.ok) {
+        throw new Error("Failed to post comment")
+      }
 
       const data = await response.json()
       setComments([data, ...comments])
       setNewComment("")
       toast.success("Comment posted")
-    } catch (error: any) {
-      toast.error("Failed to post comment")
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to post comment")
+      } else {
+        toast.error("An unknown error occurred")
+      }
     } finally {
       setIsLoading(false)
     }

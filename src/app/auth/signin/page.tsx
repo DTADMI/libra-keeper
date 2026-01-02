@@ -1,15 +1,16 @@
 // src/app/auth/signin/page.tsx
 "use client"
 
-import { useState } from "react"
-import { signIn } from "next-auth/react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
+import { signIn } from "next-auth/react"
+import { useState } from "react"
+import { toast } from "sonner"
+
 import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
-import Link from "next/link"
 
 export default function SignInPage() {
   const router = useRouter()
@@ -28,7 +29,7 @@ export default function SignInPage() {
         email,
         password,
         redirect: false,
-      })
+      });
 
       if (result?.error) {
         throw new Error(result.error)
@@ -36,8 +37,15 @@ export default function SignInPage() {
 
       router.push("/dashboard")
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else if (typeof error === "string") {
+        toast.error(error || "Failed to sign in")
+      } else {
+        toast.error("An unexpected error occurred")
+      }
+      console.error(error)
     } finally {
       setIsLoading(false)
     }
@@ -90,5 +98,5 @@ export default function SignInPage() {
         </p>
       </div>
     </div>
-  )
+  );
 }

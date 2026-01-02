@@ -1,5 +1,6 @@
 // src/lib/auth-utils.ts
 import { getServerSession } from "next-auth"
+
 import { authOptions } from "@/lib/auth"
 
 export async function getCurrentUser() {

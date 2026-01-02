@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
+import { z } from "zod"
+
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { z } from "zod"
 
 const collectionSchema = z.object({
   name: z.string().min(1),

@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
+import { z } from "zod"
+
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { z } from "zod"
 import { sendLoanStatusEmail } from "@/lib/mail"
 
 const updateLoanSchema = z.object({
@@ -24,7 +25,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const loan = await prisma.loan.findUnique({
       where: { id },
       include: { item: true, user: true },
-    })
+    });
 
     if (!loan) {
       return new NextResponse("Loan not found", { status: 404 })
@@ -38,19 +39,19 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         approvedAt: status === "APPROVED" ? new Date() : undefined,
         returnedAt: status === "RETURNED" ? new Date() : undefined,
       },
-    })
+    });
 
     // Update item status based on loan status
     if (status === "APPROVED") {
       await prisma.item.update({
         where: { id: loan.itemId },
         data: { status: "BORROWED" },
-      })
+      });
     } else if (status === "RETURNED") {
       await prisma.item.update({
         where: { id: loan.itemId },
         data: { status: "AVAILABLE" },
-      })
+      });
     }
 
     // Send email to user if approved or rejected

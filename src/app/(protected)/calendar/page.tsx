@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { format, isSameDay } from "date-fns"
 import { Loader2 } from "lucide-react"
+import { useEffect, useState } from "react"
+
+import { Badge } from "@/components/ui/badge"
+import { Calendar } from "@/components/ui/calendar"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface Loan {
   id: string;
@@ -44,7 +45,7 @@ export default function CalendarPage() {
 
   const loansOnSelectedDate = loans.filter(
     (loan) => loan.dueAt && isSameDay(new Date(loan.dueAt), selectedDate || new Date()),
-  )
+  );
 
   const dueDates = loans.filter((loan) => loan.dueAt).map((loan) => new Date(loan.dueAt!))
 

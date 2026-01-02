@@ -1,13 +1,14 @@
 // src/app/(protected)/messages/page.tsx
 "use client"
 
-import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 
 type Conversation = {
@@ -78,7 +79,9 @@ export default function MessagesPage() {
 
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault()
-    if (!selectedUser || !newMessage.trim()) return
+    if (!selectedUser || !newMessage.trim()) {
+      return
+    }
 
     try {
       const response = await fetch("/api/messages", {

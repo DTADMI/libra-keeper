@@ -1,23 +1,26 @@
 // src/app/(protected)/suggestions/page.tsx
 "use client"
 
-import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 
+type ItemRequestType = "BORROWED_ITEM" | "SUGGESTION"
+type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
 type ItemRequest = {
   id: string;
   title: string;
   author: string | null;
-  type: "BORROWED_ITEM" | "SUGGESTION";
-  status: "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED";
+  type: ItemRequestType;
+  status: ItemRequestStatus;
   createdAt: string;
 };
 
@@ -31,7 +34,7 @@ export default function SuggestionsPage() {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [description, setDescription] = useState("")
-  const [type, setType] = useState<"BORROWED_ITEM" | "SUGGESTION">("SUGGESTION")
+  const [type, setType] = useState<ItemRequestType>("SUGGESTION")
 
   useEffect(() => {
     fetchRequests()
@@ -90,7 +93,7 @@ export default function SuggestionsPage() {
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="type">Request Type</Label>
-                <Select value={type} onValueChange={(v: any) => setType(v)}>
+                <Select value={type} onValueChange={(v: ItemRequestType) => setType(v)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

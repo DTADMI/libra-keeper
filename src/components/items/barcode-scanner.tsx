@@ -1,9 +1,10 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
 import { Html5QrcodeScanner } from "html5-qrcode"
-import { Button } from "@/components/ui/button"
 import { ScanLine } from "lucide-react"
+import { useEffect, useRef, useState } from "react"
+
+import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
 interface BarcodeScannerProps {

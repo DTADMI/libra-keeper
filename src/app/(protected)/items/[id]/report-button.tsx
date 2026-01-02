@@ -2,7 +2,8 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { toast } from "sonner"
+
 import { Icons } from "@/components/icons"
 import {
   AlertDialog,
@@ -15,8 +16,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
 
 interface ReportButtonProps {
   itemId: string;
@@ -28,7 +29,9 @@ export function ReportButton({ itemId }: ReportButtonProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   async function onReport() {
-    if (!reason.trim()) return
+    if (!reason.trim()) {
+      return
+    }
 
     setIsLoading(true)
     try {
@@ -36,15 +39,24 @@ export function ReportButton({ itemId }: ReportButtonProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reason }),
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to send report")
+      if (!response.ok) {
+        throw new Error("Failed to send report")
+      }
 
       toast.success("Report sent to admin")
       setIsOpen(false)
       setReason("")
-    } catch (error: any) {
-      toast.error("Failed to send report")
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else if (typeof error === "string") {
+        toast.error(error || "Failed to send report")
+      } else {
+        toast.error("An unexpected error occurred")
+      }
+      console.error(error)
     } finally {
       setIsLoading(false)
     }
@@ -87,5 +99,5 @@ export function ReportButton({ itemId }: ReportButtonProps) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
+  );
 }

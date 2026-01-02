@@ -1,6 +1,8 @@
 // src/app/layout.tsx
 import "./globals.css"
+
 import { Inter } from "next/font/google"
+
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 
@@ -10,20 +12,16 @@ export const metadata = {
   title: "LibraKeeper - Your Personal Library Manager",
   description: "Manage your personal library and track borrowed items",
   manifest: "/manifest.json",
-}
+};
 
 export const viewport = {
   themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
-}
+};
 
-export default function RootLayout({
-                                     children,
-                                   }: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
@@ -38,5 +36,5 @@ export default function RootLayout({
       </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

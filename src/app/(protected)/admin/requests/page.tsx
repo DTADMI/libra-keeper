@@ -1,9 +1,11 @@
 import { redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
+
+import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+
 import { RequestActionButtons } from "./request-action-buttons"
 
 export default async function AdminRequestsPage() {
@@ -24,7 +26,7 @@ export default async function AdminRequestsPage() {
     orderBy: {
       createdAt: "desc",
     },
-  })
+  });
 
   return (
     <div className="container mx-auto p-4">
@@ -60,5 +62,5 @@ export default async function AdminRequestsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -31,7 +32,7 @@ export default function RegisterPage() {
           password,
           name,
         }),
-      })
+      });
 
       if (!response.ok) {
         const data = await response.json()
@@ -40,8 +41,15 @@ export default function RegisterPage() {
 
       toast.success("Account created successfully")
       router.push("/auth/signin")
-    } catch (error: any) {
-      toast.error(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else if (typeof error === "string") {
+        toast.error(error || "Failed to register")
+      } else {
+        toast.error("An unexpected error occurred")
+      }
+      console.error(error)
     } finally {
       setIsLoading(false)
     }
@@ -73,5 +81,5 @@ export default function RegisterPage() {
         </form>
       </div>
     </div>
-  )
+  );
 }

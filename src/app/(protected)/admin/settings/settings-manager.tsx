@@ -1,18 +1,21 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "sonner"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+
+type SettingType = "STRING" | "BOOLEAN" | "NUMBER" | "JSON"
 
 interface Setting {
   id?: string;
   key: string;
   value: string;
-  type: "STRING" | "BOOLEAN" | "NUMBER" | "JSON";
+  type: SettingType;
 }
 
 export function SettingsManager() {
@@ -32,11 +35,11 @@ export function SettingsManager() {
     } finally {
       setLoading(false)
     }
-  }
+  };
 
   useEffect(() => {
     fetchSettings()
-  }, [])
+  }, []);
 
   const handleSave = async (setting: Setting) => {
     try {
@@ -44,7 +47,7 @@ export function SettingsManager() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(setting),
-      })
+      });
 
       if (res.ok) {
         toast.success("Setting saved")
@@ -55,7 +58,7 @@ export function SettingsManager() {
     } catch (error) {
       toast.error("Error saving setting")
     }
-  }
+  };
 
   const handleAdd = async () => {
     if (!newSetting.key) {
@@ -63,7 +66,7 @@ export function SettingsManager() {
     }
     await handleSave(newSetting)
     setNewSetting({ key: "", value: "", type: "STRING" })
-  }
+  };
 
   if (loading) {
     return <div>Loading settings...</div>
@@ -99,7 +102,7 @@ export function SettingsManager() {
             <Label htmlFor="new-type">Type</Label>
             <Select
               value={newSetting.type}
-              onValueChange={(v: any) => setNewSetting({ ...newSetting, type: v })}
+              onValueChange={(v: SettingType) => setNewSetting({ ...newSetting, type: v as SettingType })}
             >
               <SelectTrigger id="new-type">
                 <SelectValue placeholder="Type" />
@@ -124,7 +127,7 @@ export function SettingsManager() {
                 onChange={(e) => {
                   const newSettings = settings.map((s) =>
                     s.key === setting.key ? { ...s, value: e.target.value } : s,
-                  )
+                  );
                   setSettings(newSettings)
                 }}
               />
@@ -137,5 +140,5 @@ export function SettingsManager() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

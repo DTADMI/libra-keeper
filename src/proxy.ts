@@ -1,4 +1,5 @@
 import createMiddleware from "next-intl/middleware"
+
 import { locales } from "./i18n"
 
 export default createMiddleware({
@@ -25,7 +26,5 @@ export const config = {
   // - Static files (images, fonts, etc.)
   // - Public folder files
   // - Next.js internals (e.g., _next, _vercel)
-  matcher: [
-    "/((?!api|_next|_vercel|.*\\..*).*)",
-  ],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };

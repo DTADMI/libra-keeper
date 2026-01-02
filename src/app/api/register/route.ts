@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server"
 import { hash } from "bcryptjs"
+import { NextResponse } from "next/server"
+
 import { prisma } from "@/lib/db"
 
 export async function POST(req: Request) {
@@ -12,7 +13,7 @@ export async function POST(req: Request) {
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
-    })
+    });
 
     if (existingUser) {
       return NextResponse.json({ message: "User with this email already exists" }, { status: 400 })
@@ -26,7 +27,7 @@ export async function POST(req: Request) {
         name,
         password: hashedPassword,
       },
-    })
+    });
 
     return NextResponse.json(
       {
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
         },
       },
       { status: 201 },
-    )
+    );
   } catch (error) {
     return NextResponse.json({ message: "Something went wrong" }, { status: 500 })
   }

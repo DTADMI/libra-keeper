@@ -9,9 +9,7 @@ export default async function NotFound() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 text-center">
         <div className="text-6xl font-bold text-gray-900">404</div>
-        <h1 className="text-3xl font-bold text-gray-900">
-          {t("title", "Page Not Found")}
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t("title", "Page Not Found")}</h1>
         <p className="mt-2 text-gray-600">
           {t("message", "The page you are looking for does not exist.")}
         </p>
@@ -25,5 +23,5 @@ export default async function NotFound() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -4,8 +4,9 @@ jest.mock("@/lib/auth", () => ({
   authOptions: {},
 }));
 
-import { getCurrentUser, requireAdmin, requireAuth } from "@/lib/auth-utils"
 import { getServerSession } from "next-auth"
+
+import { getCurrentUser, requireAdmin, requireAuth } from "@/lib/auth-utils"
 
 // Mock next-auth
 jest.mock("next-auth", () => ({

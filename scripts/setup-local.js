@@ -28,7 +28,7 @@ async function main() {
     let envContent = envExample
       .replace("your_secure_root_password", require("crypto").randomBytes(24).toString("base64"))
       .replace("your_secure_app_password", require("crypto").randomBytes(24).toString("base64"))
-      .replace("your_secure_nextauth_secret", require("crypto").randomBytes(32).toString("base64"))
+      .replace("your_secure_nextauth_secret", require("crypto").randomBytes(32).toString("base64"));
 
     // Update DATABASE_URL to use the new app password
     const appPasswordMatch = envContent.match(/DB_APP_PASSWORD=(.*)/)
@@ -37,7 +37,7 @@ async function main() {
       envContent = envContent.replace(
         /DATABASE_URL="postgresql:\/\/libra_app:.*@localhost:5433\/librakeeper\?schema=public"/,
         `DATABASE_URL="postgresql://libra_app:${appPassword}@localhost:5433/librakeeper?schema=public"`,
-      )
+      );
     }
 
     fs.writeFileSync(path.join(__dirname, "..", ".env"), envContent)
@@ -46,7 +46,7 @@ async function main() {
 
   // Load .env into process.env so docker compose can see it
   const dotenv = fs.readFileSync(path.join(__dirname, "..", ".env"), "utf8")
-  dotenv.split("\n").forEach(line => {
+  dotenv.split("\n").forEach((line) => {
     const match = line.match(/^([^#=]+)=(.*)$/)
     if (match) {
       const key = match[1].trim()
@@ -56,7 +56,7 @@ async function main() {
       }
       process.env[key] = value
     }
-  })
+  });
 
   // 2. Start Docker
   log("Starting Docker container (libra-keeper)...")
@@ -67,7 +67,9 @@ async function main() {
   let isHealthy = false
   for (let i = 0; i < 30; i++) {
     try {
-      const status = execSync("docker inspect --format=\"{{.State.Health.Status}}\" libra-keeper").toString().trim()
+      const status = execSync("docker inspect --format=\"{{.State.Health.Status}}\" libra-keeper")
+        .toString()
+        .trim()
       if (status === "healthy") {
         isHealthy = true
         break
@@ -76,7 +78,7 @@ async function main() {
     } catch (e) {
       log(`Waiting for container to start... (${i + 1}/30)`)
     }
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
   }
 
   if (!isHealthy) {
@@ -88,7 +90,7 @@ async function main() {
 
   // Give it an extra second to be sure
   log("Giving database an extra 2 seconds to stabilize...")
-  await new Promise(resolve => setTimeout(resolve, 2000))
+  await new Promise((resolve) => setTimeout(resolve, 2000))
 
   // 4. Run Prisma migrations
   log("Running Prisma migrations...")
@@ -101,7 +103,7 @@ async function main() {
   log("Setup complete! You can now run \"pnpm dev\" to start the application.")
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err)
   process.exit(1)
 })

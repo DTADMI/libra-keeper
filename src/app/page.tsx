@@ -1,5 +1,6 @@
 // src/app/page.tsx
 import { redirect } from "next/navigation"
+
 import { locales } from "@/i18n"
 
 // This page will redirect to the default locale

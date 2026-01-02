@@ -3,15 +3,17 @@
 
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
+type UserRole = "ADMIN" | "USER"
 type User = {
   id: string;
   name: string | null;
   email: string;
-  role: "ADMIN" | "USER";
+  role: UserRole;
   createdAt: string;
 };
 
@@ -26,17 +28,23 @@ export default function UsersPage() {
   async function fetchUsers() {
     try {
       const response = await fetch("/api/admin/users")
-      if (!response.ok) throw new Error("Failed to fetch users")
+      if (!response.ok) {
+        throw new Error("Failed to fetch users")
+      }
       const data = await response.json()
       setUsers(data)
-    } catch (error: any) {
-      toast.error(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else {
+        toast.error("An unknown error occurred")
+      }
     } finally {
       setIsLoading(false)
     }
   }
 
-  async function updateRole(userId: string, newRole: "ADMIN" | "USER") {
+  async function updateRole(userId: string, newRole: UserRole) {
     try {
       const response = await fetch("/api/admin/users", {
         method: "PATCH",
@@ -44,16 +52,24 @@ export default function UsersPage() {
         body: JSON.stringify({ userId, role: newRole }),
       });
 
-      if (!response.ok) throw new Error("Failed to update role")
+      if (!response.ok) {
+        throw new Error("Failed to update role")
+      }
 
       setUsers(users.map((u) => (u.id === userId ? { ...u, role: newRole } : u)))
       toast.success("User role updated")
-    } catch (error: any) {
-      toast.error(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message || "Failed to update role")
+      } else {
+        toast.error("An unknown error occurred")
+      }
     }
   }
 
-  if (isLoading) return <div className="p-8 text-center">Loading users...</div>
+  if (isLoading) {
+    return <div className="p-8 text-center">Loading users...</div>
+  }
 
   return (
     <div className="container mx-auto p-4">
@@ -80,7 +96,7 @@ export default function UsersPage() {
                   <TableCell>
                     <Select
                       defaultValue={user.role}
-                      onValueChange={(value: "ADMIN" | "USER") => updateRole(user.id, value)}
+                      onValueChange={(value: UserRole) => updateRole(user.id, value)}
                     >
                       <SelectTrigger className="w-[120px]">
                         <SelectValue />

@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
 import { Loader2, UserMinus, UserPlus } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
+
+import { Button } from "@/components/ui/button"
 
 interface WaitlistButtonProps {
   itemId: string;

@@ -1,17 +1,18 @@
 // src/app/(protected)/items/[id]/edit/edit-item-form.tsx
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import * as z from "zod"
+
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -24,10 +25,14 @@ const itemSchema = z.object({
   coverImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
 });
 
+export type Item = z.infer<typeof itemSchema> & {
+  id: string;
+};
+
 type ItemFormValues = z.infer<typeof itemSchema>;
 
 interface EditItemFormProps {
-  item: any;
+  item: Item;
 }
 
 export function EditItemForm({ item }: EditItemFormProps) {
@@ -46,7 +51,7 @@ export function EditItemForm({ item }: EditItemFormProps) {
       isbn: item.isbn || "",
       coverImage: item.coverImage || "",
     },
-  })
+  });
 
   async function onSubmit(values: ItemFormValues) {
     setIsLoading(true)
@@ -55,15 +60,24 @@ export function EditItemForm({ item }: EditItemFormProps) {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
-      })
+      });
 
-      if (!response.ok) throw new Error("Failed to update item")
+      if (!response.ok) {
+        throw new Error("Failed to update item")
+      }
 
       toast.success("Item updated successfully")
       router.push(`/items/${item.id}`)
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong")
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else if (typeof error === "string") {
+        toast.error(error || "Failed to update item")
+      } else {
+        toast.error("An unexpected error occurred")
+      }
+      console.error(error)
     } finally {
       setIsLoading(false)
     }
@@ -193,5 +207,5 @@ export function EditItemForm({ item }: EditItemFormProps) {
         </div>
       </form>
     </Form>
-  )
+  );
 }

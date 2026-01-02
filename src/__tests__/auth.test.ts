@@ -28,9 +28,10 @@ jest.mock("../lib/db", () => ({
   },
 }));
 
-import { prisma } from "../lib/db"
-import { authOptions } from "../lib/auth"
 import { compare } from "bcryptjs"
+
+import { authOptions } from "../lib/auth"
+import { prisma } from "../lib/db"
 
 jest.mock("bcryptjs", () => ({
   compare: jest.fn(),
@@ -50,7 +51,7 @@ describe("authOptions", () => {
           },
           {} as any,
         ),
-      ).rejects.toThrow("Email and password are required")
+      ).rejects.toThrow("Email and password are required");
       await expect(authorize(null, {} as any)).rejects.toThrow("Email and password are required")
     });
 
@@ -67,7 +68,7 @@ describe("authOptions", () => {
           },
           {} as any,
         ),
-      ).rejects.toThrow("No user found with this email")
+      ).rejects.toThrow("No user found with this email");
     });
 
     it("should throw error if user has no password", async () => {
@@ -87,7 +88,7 @@ describe("authOptions", () => {
           },
           {} as any,
         ),
-      ).rejects.toThrow("No user found with this email")
+      ).rejects.toThrow("No user found with this email");
     });
 
     it("should throw error if password invalid", async () => {
@@ -108,7 +109,7 @@ describe("authOptions", () => {
           },
           {} as any,
         ),
-      ).rejects.toThrow("Invalid password")
+      ).rejects.toThrow("Invalid password");
     });
 
     it("should return user object if credentials are valid", async () => {

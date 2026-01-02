@@ -14,16 +14,16 @@ describe("API Schema Validation", () => {
       title: "The Great Gatsby",
       type: "BOOK",
       status: "AVAILABLE",
-    }
+    };
     expect(itemSchema.parse(validItem)).toEqual(validItem)
-  })
+  });
 
   test("itemSchema fails on invalid data", () => {
     const invalidItem = {
       title: "",
       type: "INVALID_TYPE",
-    }
+    };
     const result = itemSchema.safeParse(invalidItem)
     expect(result.success).toBe(false)
-  })
+  });
 });

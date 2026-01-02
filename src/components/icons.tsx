@@ -1,7 +1,6 @@
 // src/components/icons.tsx
 "use client"
 
-import * as React from "react"
 import {
   AlertCircle,
   Bell,
@@ -32,6 +31,7 @@ import {
   User,
   X,
 } from "lucide-react"
+import * as React from "react"
 
 export const Icons = {
   google: (props: React.SVGProps<SVGSVGElement>) => (

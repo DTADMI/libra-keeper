@@ -1,13 +1,14 @@
 // src/app/(protected)/profile/page.tsx
 "use client"
 
-import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { toast } from "sonner"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function ProfilePage() {
   const { data: session, update } = useSession()
@@ -39,8 +40,15 @@ export default function ProfilePage() {
 
       await update({ name, image })
       toast.success("Profile updated successfully")
-    } catch (error: any) {
-      toast.error(error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast.error(error.message)
+      } else if (typeof error === "string") {
+        toast.error(error || "Failed to update profile")
+      } else {
+        toast.error("An unexpected error occurred")
+      }
+      console.error(error)
     } finally {
       setIsLoading(false)
     }

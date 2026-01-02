@@ -1,7 +1,9 @@
 import { notFound, redirect } from "next/navigation"
 import { getServerSession } from "next-auth"
+
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
+
 import { EditItemForm } from "./edit-item-form"
 
 export default async function EditItemPage(props: { params: Promise<{ id: string }> }) {
@@ -15,7 +17,7 @@ export default async function EditItemPage(props: { params: Promise<{ id: string
   const item = await prisma.item.findUnique({
     where: { id: params.id },
     include: { tags: true },
-  })
+  });
 
   if (!item) {
     notFound()
@@ -26,5 +28,5 @@ export default async function EditItemPage(props: { params: Promise<{ id: string
       <h1 className="mb-8 text-3xl font-bold">Edit Item</h1>
       <EditItemForm item={item} />
     </div>
-  )
+  );
 }

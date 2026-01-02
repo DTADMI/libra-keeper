@@ -10,7 +10,7 @@ const flagSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
   isEnabled: z.boolean(),
-})
+});
 
 export async function GET() {
   try {
@@ -21,7 +21,7 @@ export async function GET() {
 
     const flags = await prisma.featureFlag.findMany({
       orderBy: { name: "asc" },
-    })
+    });
 
     return NextResponse.json(flags)
   } catch (error) {
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
       where: { name },
       update: { description, isEnabled },
       create: { name, description, isEnabled },
-    })
+    });
 
     return NextResponse.json(flag)
   } catch (error) {

@@ -54,7 +54,7 @@ export async function POST(req: Request) {
       include: {
         tags: true,
       },
-    })
+    });
 
     return NextResponse.json(item)
   } catch (error) {
@@ -81,7 +81,7 @@ export async function GET() {
       orderBy: {
         createdAt: "desc",
       },
-    })
+    });
 
     return NextResponse.json(items)
   } catch (error) {

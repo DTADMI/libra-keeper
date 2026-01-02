@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client"
 import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended"
+
 import { prisma } from "./db"
 
 // Mock the entire db module before importing it

@@ -1,13 +1,13 @@
 // src/components/ui/form.tsx
 "use client"
 
-import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
 import { Slot } from "@radix-ui/react-slot"
+import * as React from "react"
 import { Controller, ControllerProps, FieldPath, FieldValues, FormProvider, useFormContext } from "react-hook-form"
 
-import { cn } from "@/lib/utils"
 import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 
 const Form = FormProvider
 
@@ -24,13 +24,13 @@ const FormField = <
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
-    ...props
-  }: ControllerProps<TFieldValues, TName>) => {
+                      ...props
+                    }: ControllerProps<TFieldValues, TName>) => {
   return (
     <FormFieldContext.Provider value={{ name: props.name }}>
       <Controller {...props} />
     </FormFieldContext.Provider>
-  )
+  );
 };
 
 const useFormField = () => {
@@ -53,7 +53,7 @@ const useFormField = () => {
     formDescriptionId: `${id}-form-item-description`,
     formMessageId: `${id}-form-item-message`,
     ...fieldState,
-  }
+  };
 };
 
 type FormItemContextValue = {
@@ -88,7 +88,7 @@ const FormLabel = React.forwardRef<
       htmlFor={formItemId}
       {...props}
     />
-  )
+  );
 });
 FormLabel.displayName = "FormLabel"
 
@@ -106,7 +106,7 @@ const FormControl = React.forwardRef<
       aria-invalid={!!error}
       {...props}
     />
-  )
+  );
 });
 FormControl.displayName = "FormControl"
 
@@ -123,7 +123,7 @@ const FormDescription = React.forwardRef<
       className={cn("text-sm text-muted-foreground", className)}
       {...props}
     />
-  )
+  );
 });
 FormDescription.displayName = "FormDescription"
 
@@ -147,17 +147,17 @@ const FormMessage = React.forwardRef<
     >
       {body}
     </p>
-  )
+  );
 });
 FormMessage.displayName = "FormMessage"
 
 export {
-  useFormField,
   Form,
-  FormItem,
-  FormLabel,
   FormControl,
   FormDescription,
-  FormMessage,
   FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  useFormField,
 };

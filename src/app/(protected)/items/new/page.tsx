@@ -1,17 +1,18 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
+
+import { BarcodeScanner } from "@/components/items/barcode-scanner"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
-import { toast } from "sonner"
-import { BarcodeScanner } from "@/components/items/barcode-scanner"
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -52,7 +53,7 @@ export default function NewItemPage() {
       isbn: "",
       collectionId: "",
     },
-  })
+  });
 
   async function onSubmit(values: z.infer<typeof itemSchema>) {
     setIsLoading(true)
@@ -63,7 +64,7 @@ export default function NewItemPage() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(values),
-      })
+      });
 
       if (!response.ok) {
         throw new Error("Failed to create item")
@@ -87,7 +88,7 @@ export default function NewItemPage() {
       // Try Open Library API first
       const response = await fetch(
         `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`,
-      )
+      );
       const data = await response.json()
       const bookKey = `ISBN:${isbn}`
 
@@ -265,5 +266,5 @@ export default function NewItemPage() {
         </form>
       </Form>
     </div>
-  )
+  );
 }

@@ -10,5 +10,5 @@ export function useSession() {
     user: session?.user,
     status,
     update,
-  }
+  };
 }

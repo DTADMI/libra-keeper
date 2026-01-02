@@ -1,12 +1,13 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
+
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { toast } from "sonner"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
 interface FeatureFlag {
   id?: string;
@@ -17,7 +18,11 @@ interface FeatureFlag {
 
 export function FeatureFlagManager() {
   const [flags, setFlags] = useState<FeatureFlag[]>([])
-  const [newFlag, setNewFlag] = useState<FeatureFlag>({ name: "", description: "", isEnabled: false })
+  const [newFlag, setNewFlag] = useState<FeatureFlag>({
+    name: "",
+    description: "",
+    isEnabled: false,
+  })
   const [loading, setLoading] = useState(true)
 
   const fetchFlags = async () => {
@@ -32,11 +37,11 @@ export function FeatureFlagManager() {
     } finally {
       setLoading(false)
     }
-  }
+  };
 
   useEffect(() => {
     fetchFlags()
-  }, [])
+  }, []);
 
   const handleSave = async (flag: FeatureFlag) => {
     try {
@@ -44,7 +49,7 @@ export function FeatureFlagManager() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(flag),
-      })
+      });
 
       if (res.ok) {
         toast.success("Feature flag saved")
@@ -55,7 +60,7 @@ export function FeatureFlagManager() {
     } catch (error) {
       toast.error("Error saving feature flag")
     }
-  }
+  };
 
   const handleAdd = async () => {
     if (!newFlag.name) {
@@ -63,7 +68,7 @@ export function FeatureFlagManager() {
     }
     await handleSave(newFlag)
     setNewFlag({ name: "", description: "", isEnabled: false })
-  }
+  };
 
   if (loading) {
     return <div>Loading flags...</div>
@@ -128,5 +133,5 @@ export function FeatureFlagManager() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

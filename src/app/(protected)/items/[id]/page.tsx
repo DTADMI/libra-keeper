@@ -1,14 +1,16 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getServerSession } from "next-auth"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import Link from "next/link"
+
 import { BorrowButton } from "./borrow-button"
-import { LikeButton } from "./like-button"
 import { CommentsSection } from "./comments-section"
+import { LikeButton } from "./like-button"
 import { ReportButton } from "./report-button"
 import { WaitlistButton } from "./waitlist-button"
 
@@ -32,7 +34,7 @@ export default async function ItemDetailsPage({ params }: { params: { id: string
         include: { user: true },
       },
     },
-  })
+  });
 
   if (!item) {
     notFound()
@@ -42,7 +44,7 @@ export default async function ItemDetailsPage({ params }: { params: { id: string
   const hasActiveLoan = item.loans.length > 0
   const userHasPendingLoan = item.loans.some(
     (loan) => loan.userId === session?.user.id && loan.status === "PENDING",
-  )
+  );
   const userJoinedWaitlist = item.waitlist.some((entry) => entry.userId === session?.user.id)
 
   return (
