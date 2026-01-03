@@ -6,13 +6,15 @@ import { getRequestConfig } from "next-intl/server"
 export const locales = ["en"] as const
 
 export default getRequestConfig(async ({ locale }) => {
+  const currentLocale = locale as string
   // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale as string)) {
+  if (!locales.includes(currentLocale as any)) {
     notFound()
   }
 
   return {
-    messages: (await import(`./src/i18n/messages/${locale}.json`)).default,
+    locale: currentLocale,
+    messages: (await import(`./src/i18n/messages/${currentLocale}.json`)).default,
     // You can add other i18n options here
   };
 });

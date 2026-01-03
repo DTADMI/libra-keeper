@@ -28,12 +28,14 @@ export default async function AdminRequestsPage() {
     },
   });
 
+  type LoanWithItemAndUser = typeof loans[0];
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Borrowing Requests</h1>
 
       <div className="grid gap-4">
-        {loans.map((loan) => (
+        {loans.map((loan: LoanWithItemAndUser) => (
           <Card key={loan.id}>
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">

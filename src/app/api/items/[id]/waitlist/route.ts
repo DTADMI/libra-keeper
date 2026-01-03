@@ -4,14 +4,14 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    const itemId = params.id
+    const { id: itemId } = await params
 
     // Check if item exists and is borrowed
     const item = await prisma.item.findUnique({
@@ -56,14 +56,14 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    const itemId = params.id
+    const { id: itemId } = await params
 
     await prisma.waitlistEntry.delete({
       where: {
@@ -81,9 +81,9 @@ export async function DELETE(req: Request, { params }: { params: { id: string } 
   }
 }
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const itemId = params.id
+    const { id: itemId } = await params
 
     const waitlist = await prisma.waitlistEntry.findMany({
       where: { itemId },

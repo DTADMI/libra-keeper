@@ -17,6 +17,8 @@ export default async function DashboardPage() {
     orderBy: { createdAt: "desc" },
   });
 
+  type ItemWithTags = typeof items[0];
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between">
@@ -32,7 +34,7 @@ export default async function DashboardPage() {
         <div className="lg:col-span-3">
           <h2 className="text-xl font-semibold mb-4">Your Library</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {items.map((item) => (
+            {items.map((item: ItemWithTags) => (
               <Link key={item.id} href={`/items/${item.id}`}>
                 <Card className="overflow-hidden hover:shadow-md transition-shadow">
                   {item.coverImage && (

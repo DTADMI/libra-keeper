@@ -14,11 +14,12 @@ import { LikeButton } from "./like-button"
 import { ReportButton } from "./report-button"
 import { WaitlistButton } from "./waitlist-button"
 
-export default async function ItemDetailsPage({ params }: { params: { id: string } }) {
+export default async function ItemDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const session = await getServerSession(authOptions)
 
   const item = await prisma.item.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       tags: true,
       loans: {

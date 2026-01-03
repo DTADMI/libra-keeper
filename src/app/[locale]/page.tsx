@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { getTranslations } from "next-intl/server"
 
-export default async function Home({ params: { locale } }: { params: { locale: string } }) {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params
   // Use getTranslations on the server
   const t = await getTranslations("Index")
 
