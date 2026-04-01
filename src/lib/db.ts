@@ -8,12 +8,14 @@ declare global {
   var prisma: PrismaClient | undefined
 }
 
-// Check if DATABASE_URL is set
+const databaseUrl =
+  process.env.DATABASE_URL ?? "postgresql://postgres:postgres@127.0.0.1:5432/librakeeper?schema=public"
+
 if (!process.env.DATABASE_URL) {
-  throw new Error("DATABASE_URL environment variable is not set")
+  console.warn("[build] DATABASE_URL is not set. Using fallback URL for build-time module initialization.")
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+const pool = new Pool({ connectionString: databaseUrl })
 const adapter = new PrismaPg(pool)
 
 // Configure the Prisma client with appropriate logging
