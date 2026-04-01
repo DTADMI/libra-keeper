@@ -1,4 +1,5 @@
 import type { NextConfig } from "next"
+import createNextIntlPlugin from "next-intl/plugin"
 
 // Only apply PWA in production or when explicitly enabled in development
 const withPWA =
@@ -9,8 +10,9 @@ const withPWA =
       disable: process.env.NODE_ENV !== "production",
     })
     : (config: NextConfig) => config
+const withNextIntl = createNextIntlPlugin("./next-intl.config.ts")
 
-const nextConfig: NextConfig = withPWA({
+const nextConfig: NextConfig = withNextIntl(withPWA({
   // Configure output file tracing
   output: "standalone",
 
@@ -21,6 +23,6 @@ const nextConfig: NextConfig = withPWA({
   experimental: {
     // Add any experimental features here
   },
-});
+}));
 
 export default nextConfig;

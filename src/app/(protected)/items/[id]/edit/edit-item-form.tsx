@@ -16,13 +16,13 @@ import { Textarea } from "@/components/ui/textarea"
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "OTHER"]),
   status: z.enum(["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"]),
-  author: z.string().optional(),
-  publisher: z.string().optional(),
-  isbn: z.string().optional(),
-  coverImage: z.string().url("Must be a valid URL").optional().or(z.literal("")),
+  author: z.string().optional().nullable(),
+  publisher: z.string().optional().nullable(),
+  isbn: z.string().optional().nullable(),
+  coverImage: z.string().url("Must be a valid URL").optional().nullable().or(z.literal("")),
 });
 
 export type Item = z.infer<typeof itemSchema> & {
@@ -158,7 +158,7 @@ export function EditItemForm({ item }: EditItemFormProps) {
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Item description" {...field} />
+                <Textarea placeholder="Item description" {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -168,29 +168,29 @@ export function EditItemForm({ item }: EditItemFormProps) {
           <FormField
             control={form.control}
             name="author"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Author / Artist</FormLabel>
-                <FormControl>
-                  <Input placeholder="Author or Artist name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Author / Artist</FormLabel>
+              <FormControl>
+                <Input placeholder="Author or Artist name" {...field} value={field.value ?? ""} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
           <FormField
             control={form.control}
             name="coverImage"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Cover Image URL</FormLabel>
-                <FormControl>
-                  <Input placeholder="https://example.com/image.jpg" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Cover Image URL</FormLabel>
+              <FormControl>
+                <Input placeholder="https://example.com/image.jpg" {...field} value={field.value ?? ""} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         </div>
         <div className="flex gap-4">
           <Button type="submit" disabled={isLoading}>

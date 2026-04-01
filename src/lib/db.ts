@@ -1,6 +1,6 @@
 // src/lib/db.ts
 import { PrismaPg } from "@prisma/adapter-pg"
-import { PrismaClient } from "@prisma/client"
+import { Prisma, PrismaClient } from "@prisma/client"
 import { Pool } from "pg"
 
 declare global {
@@ -18,7 +18,10 @@ const adapter = new PrismaPg(pool)
 
 // Configure the Prisma client with appropriate logging
 const prismaOptions = {
-  log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
+  log:
+    process.env.NODE_ENV === "development"
+      ? (["query", "error", "warn"] as Prisma.LogLevel[])
+      : (["error"] as Prisma.LogLevel[]),
   adapter,
 };
 

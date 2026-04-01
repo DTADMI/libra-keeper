@@ -18,10 +18,9 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.24.0
-          run_install: false
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.24.0 --activate
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -36,7 +35,7 @@ jobs:
         run: pnpm prisma generate
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm exec eslint . --ext .ts,.tsx --quiet
 
       - name: Test
         run: pnpm test --coverage
