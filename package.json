@@ -13,6 +13,7 @@
     "ignoredBuiltDependencies": [
       "@parcel/watcher",
       "@prisma/engines",
+      "prisma",
       "@swc/core",
       "sharp",
       "unrs-resolver"
@@ -132,6 +133,7 @@
     "whatwg-fetch": "^3.6.20"
   },
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=24.0.0 <25.0.0",
+    "pnpm": ">=10.24.0"
   }
 }

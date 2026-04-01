@@ -1,6 +1,7 @@
 // src/app/dashboard/page.tsx
 import Link from "next/link"
 import { getServerSession } from "next-auth"
+import type { Prisma } from "@prisma/client"
 
 import { ActivityFeed } from "@/components/activity/activity-feed"
 import { Badge } from "@/components/ui/badge"
@@ -17,7 +18,9 @@ export default async function DashboardPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  type ItemWithTags = typeof items[0];
+  type ItemWithTags = Prisma.ItemGetPayload<{
+    include: { tags: true }
+  }>
 
   return (
     <div className="container mx-auto p-4">
