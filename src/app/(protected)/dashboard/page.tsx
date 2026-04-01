@@ -1,7 +1,6 @@
 // src/app/dashboard/page.tsx
 import Link from "next/link"
 import { getServerSession } from "next-auth"
-import type { Prisma } from "@prisma/client"
 
 import { ActivityFeed } from "@/components/activity/activity-feed"
 import { Badge } from "@/components/ui/badge"
@@ -13,14 +12,19 @@ import { prisma } from "@/lib/db"
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
 
-  const items = await prisma.item.findMany({
+  type ItemWithTags = {
+    id: string
+    title: string
+    type: string
+    author: string | null
+    coverImage: string | null
+    tags: Array<{ id: string; name: string }>
+  }
+
+  const items = (await prisma.item.findMany({
     include: { tags: true },
     orderBy: { createdAt: "desc" },
-  });
-
-  type ItemWithTags = Prisma.ItemGetPayload<{
-    include: { tags: true }
-  }>
+  })) as ItemWithTags[]
 
   return (
     <div className="container mx-auto p-4">
