@@ -1,7 +1,23 @@
 import { getServerSession } from "next-auth"
 
+jest.mock("@/lib/db", () => ({
+  prisma: {
+    item: {
+      findMany: jest.fn(),
+      create: jest.fn(),
+    },
+  },
+}))
+
 import { GET, POST } from "@/app/api/items/route"
-import { prismaMock } from "@/lib/prisma-mock"
+import { prisma } from "@/lib/db"
+
+const prismaMock = prisma as unknown as {
+  item: {
+    findMany: jest.Mock
+    create: jest.Mock
+  }
+}
 
 jest.mock("next-auth", () => ({
   getServerSession: jest.fn(),
