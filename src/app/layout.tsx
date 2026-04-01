@@ -3,6 +3,8 @@ import "./globals.css"
 
 import { Inter } from "next/font/google"
 
+import { PWAInstallPrompt } from "@/components/pwa/install-prompt"
+import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/sonner"
 
@@ -25,6 +27,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+      <ServiceWorkerRegistration />
+      <PWAInstallPrompt />
       <ThemeProvider
         attribute="class"
         defaultTheme="system"

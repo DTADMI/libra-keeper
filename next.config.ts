@@ -2,9 +2,10 @@ import type { NextConfig } from "next"
 
 // Only apply PWA in production or when explicitly enabled in development
 const withPWA =
-  process.env.ENABLE_PWA === "true"
+  process.env.ENABLE_PWA === "true" || process.env.NODE_ENV === "production"
     ? require("next-pwa")({
       dest: "public",
+      register: false,
       disable: process.env.NODE_ENV !== "production",
     })
     : (config: NextConfig) => config
