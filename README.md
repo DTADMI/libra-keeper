@@ -225,6 +225,7 @@ Comprehensive documentation can be found in the `docs` folder:
 - [User Guide](docs/user-guide.md)
 - [Admin Guide](docs/admin-guide.md)
 - [API Reference](docs/api-reference.md)
+- [Supabase Postgres Migration Plan](docs/supabase-postgres-migration-plan.md)
 
 ## Development
 
