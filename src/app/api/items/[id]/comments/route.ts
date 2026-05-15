@@ -27,14 +27,22 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         userId: session.user.id,
       },
       include: {
-        user: {
-          select: {
-            name: true,
-            image: true,
-          },
-        },
+        user: { select: { name: true, image: true } },
+        item: { select: { title: true } },
       },
-    });
+    })
+
+    if (comment.item.title) {
+      await prisma.notification.create({
+        data: {
+          userId: session.user.id,
+          type: "COMMENT_POSTED",
+          title: "Comment posted",
+          body: `You commented on "${comment.item.title}"`,
+          link: `/items/${id}`,
+        },
+      })
+    }
 
     return NextResponse.json(comment)
   } catch (error) {

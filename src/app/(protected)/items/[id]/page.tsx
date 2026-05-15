@@ -3,6 +3,8 @@ import { notFound } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { ItemGallery } from "@/components/gallery"
+import { formatDistanceToNow } from "date-fns"
 import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
@@ -38,11 +40,6 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
     include: {
       tags: true,
       loans: {
-        where: {
-          status: {
-            in: ["PENDING", "APPROVED"],
-          },
-        },
         include: { user: true },
         orderBy: { createdAt: "desc" },
       },
@@ -110,6 +107,8 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
               </Badge>
             ))}
           </div>
+
+          <ItemGallery itemId={item.id} isAdmin={isAdmin} />
 
           <div className="space-y-4">
             <h2 className="text-2xl font-semibold">Description</h2>
@@ -232,6 +231,44 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
                 ))}
               </div>
             </div>
+          )}
+
+          {item.loans.length > 0 && (
+            <>
+              <Separator />
+              <div className="space-y-4">
+                <h2 className="text-xl font-semibold">Loan History</h2>
+                <div className="space-y-2">
+                  {item.loans.map((loan) => (
+                    <div key={loan.id} className="flex items-center justify-between text-sm border-b pb-2">
+                      <div>
+                        <p className="font-medium">{loan.user.name || "Unknown"}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {loan.status === "PENDING" && "Requested "}
+                          {loan.status === "APPROVED" && "Borrowed "}
+                          {loan.status === "RETURNED" && "Returned "}
+                          {loan.status === "REJECTED" && "Rejected "}
+                          {loan.status === "OVERDUE" && "Overdue since "}
+                          {loan.status === "LOST" && "Lost "}
+                          {loan.status === "DAMAGED" && "Returned damaged "}
+                          {formatDistanceToNow(new Date(loan.createdAt), { addSuffix: true })}
+                          {loan.returnedAt && ` · Returned ${formatDistanceToNow(new Date(loan.returnedAt), { addSuffix: true })}`}
+                        </p>
+                        {loan.returnCondition && (
+                          <p className="text-xs text-muted-foreground">
+                            Condition: {loan.returnCondition}
+                            {loan.returnNotes && ` — ${loan.returnNotes}`}
+                          </p>
+                        )}
+                      </div>
+                      <Badge variant="outline" className="text-[10px]">
+                        {loan.status}
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
 
           <Separator className="my-10" />

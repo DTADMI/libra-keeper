@@ -9,25 +9,27 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  password      String?
-  image         String?
-  role          Role      @default(USER)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-  loans         Loan[]
-  comments      Comment[]
-  likes         Like[]
-  sentMessages     Message[] @relation("SentMessages")
-  receivedMessages Message[] @relation("ReceivedMessages")
-  itemRequests  ItemRequest[] @relation("RequestedItems")
-  waitlistItems WaitlistEntry[]
-  settings      AppSettings[]
+  id                    String              @id @default(cuid())
+  name                  String?
+  email                 String              @unique
+  emailVerified         DateTime?
+  password              String?
+  image                 String?
+  role                  Role                @default(USER)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  accounts              Account[]
+  sessions              Session[]
+  loans                 Loan[]
+  comments              Comment[]
+  likes                 Like[]
+  sentMessages          Message[]           @relation("SentMessages")
+  receivedMessages      Message[]           @relation("ReceivedMessages")
+  itemRequests          ItemRequest[]       @relation("RequestedItems")
+  waitlistItems         WaitlistEntry[]
+  settings              AppSettings[]
+  conditionHistory      ConditionHistory[]
+  notifications         Notification[]
 }
 
 model AppSettings {
@@ -48,6 +50,11 @@ model FeatureFlag {
   isEnabled   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 
 enum SettingType {
@@ -92,26 +99,28 @@ model VerificationToken {
 }
 
 model Item {
-  id          String    @id @default(cuid())
-  title       String
-  description String?
-  type        ItemType
-  status      ItemStatus @default(AVAILABLE)
-  coverImage  String?
-  isbn        String?
-  author      String?
-  publisher   String?
-  publishedAt DateTime?
-  metadata    Json?      @default("{}")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  tags        Tag[]      @relation("ItemTags")
-  loans       Loan[]
-  comments    Comment[]
-  likes       Like[]
-  waitlist    WaitlistEntry[]
-  collectionId String?
-  collection  Collection? @relation(fields: [collectionId], references: [id])
+  id               String             @id @default(cuid())
+  title            String
+  description      String?
+  type             ItemType
+  status           ItemStatus         @default(AVAILABLE)
+  coverImage       String?
+  isbn             String?
+  author           String?
+  publisher        String?
+  publishedAt      DateTime?
+  metadata         Json?              @default("{}")
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  tags             Tag[]              @relation("ItemTags")
+  loans            Loan[]
+  comments         Comment[]
+  likes            Like[]
+  waitlist         WaitlistEntry[]
+  conditionHistory ConditionHistory[]
+  images           ItemImage[]
+  collectionId     String?
+  collection       Collection?        @relation(fields: [collectionId], references: [id])
 }
 
 model Collection {
@@ -130,18 +139,20 @@ model Tag {
 }
 
 model Loan {
-  id          String   @id @default(cuid())
-  itemId      String
-  item        Item     @relation(fields: [itemId], references: [id])
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  status      LoanStatus @default(PENDING)
-  requestedAt DateTime @default(now())
-  approvedAt  DateTime?
-  dueAt       DateTime?
-  returnedAt  DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String     @id @default(cuid())
+  itemId          String
+  item            Item       @relation(fields: [itemId], references: [id])
+  userId          String
+  user            User       @relation(fields: [userId], references: [id])
+  status          LoanStatus @default(PENDING)
+  requestedAt     DateTime   @default(now())
+  approvedAt      DateTime?
+  dueAt           DateTime?
+  returnedAt      DateTime?
+  returnCondition String?
+  returnNotes     String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 }
 
 model Comment {
@@ -167,30 +178,30 @@ model Like {
 }
 
 model Message {
-  id        String   @id @default(cuid())
-  content   String
-  senderId  String
-  sender    User     @relation("SentMessages", fields: [senderId], references: [id])
+  id         String   @id @default(cuid())
+  content    String
+  senderId   String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
   receiverId String
-  receiver  User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  read      Boolean  @default(false)
-  createdAt DateTime @default(now())
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
 }
 
 model ItemRequest {
-  id            String      @id @default(cuid())
+  id            String        @id @default(cuid())
   requestedById String
-  requestedBy   User        @relation("RequestedItems", fields: [requestedById], references: [id])
+  requestedBy   User          @relation("RequestedItems", fields: [requestedById], references: [id])
   processedById String?
-  type          RequestType @default(SUGGESTION)
+  type          RequestType   @default(SUGGESTION)
   status        RequestStatus @default(PENDING)
   title         String
   description   String?
   author        String?
   isbn          String?
-  purchaseInfo  Json?       @default("{}")
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  purchaseInfo  Json?         @default("{}")
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 model WaitlistEntry {
@@ -205,9 +216,40 @@ model WaitlistEntry {
   @@unique([itemId, userId])
 }
 
-enum Role {
-  USER
-  ADMIN
+model ConditionHistory {
+  id                String   @id @default(cuid())
+  itemId            String
+  item              Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  loanId            String?
+  previousCondition String?
+  newCondition      String
+  notes             String?
+  changedById       String
+  changedBy         User     @relation(fields: [changedById], references: [id])
+  createdAt         DateTime @default(now())
+}
+
+model ItemImage {
+  id        String   @id @default(cuid())
+  itemId    String
+  item      Item     @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  url       String
+  position  Int      @default(0)
+  caption   String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 enum ItemType {
@@ -236,6 +278,7 @@ enum LoanStatus {
   RETURNED
   OVERDUE
   LOST
+  DAMAGED
 }
 
 enum RequestType {
