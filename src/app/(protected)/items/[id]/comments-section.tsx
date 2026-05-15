@@ -2,70 +2,39 @@
 "use client"
 
 import { formatDistanceToNow } from "date-fns"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-
-interface Comment {
-  id: string;
-  content: string;
-  createdAt: string;
-  user: {
-    name: string;
-    image: string;
-  };
-}
+import { useComments, useAddComment } from "@/hooks/use-items"
 
 interface CommentsSectionProps {
   itemId: string;
 }
 
 export function CommentsSection({ itemId }: CommentsSectionProps) {
-  const [comments, setComments] = useState<Comment[]>([])
+  const { data: comments = [], isLoading } = useComments(itemId)
+  const addComment = useAddComment(itemId)
   const [newComment, setNewComment] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(() => {
-    fetch(`/api/items/${itemId}/comments`)
-      .then((res) => res.json())
-      .then((data) => setComments(data))
-      .catch(() => {
-      });
-  }, [itemId]);
+  function onSubmit() {
+    if (!newComment.trim()) return
 
-  async function onSubmit() {
-    if (!newComment.trim()) {
-      return
-    }
+    addComment.mutate(newComment, {
+      onSuccess: () => {
+        setNewComment("")
+        toast.success("Comment posted")
+      },
+      onError: (error) => {
+        toast.error(error instanceof Error ? error.message : "Failed to post comment")
+      },
+    })
+  }
 
-    setIsLoading(true)
-    try {
-      const response = await fetch(`/api/items/${itemId}/comments`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: newComment }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to post comment")
-      }
-
-      const data = await response.json()
-      setComments([data, ...comments])
-      setNewComment("")
-      toast.success("Comment posted")
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message || "Failed to post comment")
-      } else {
-        toast.error("An unknown error occurred")
-      }
-    } finally {
-      setIsLoading(false)
-    }
+  if (isLoading) {
+    return <p className="text-muted-foreground text-center py-10">Loading comments...</p>
   }
 
   return (
@@ -77,9 +46,9 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
           placeholder="Leave a comment..."
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
-          disabled={isLoading}
+          disabled={addComment.isPending}
         />
-        <Button onClick={onSubmit} disabled={isLoading || !newComment.trim()}>
+        <Button onClick={onSubmit} disabled={addComment.isPending || !newComment.trim()}>
           Post Comment
         </Button>
       </div>
@@ -88,8 +57,8 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
         {comments.map((comment) => (
           <div key={comment.id} className="flex gap-4">
             <Avatar>
-              <AvatarImage src={comment.user.image} />
-              <AvatarFallback>{comment.user.name[0]}</AvatarFallback>
+              <AvatarImage src={comment.user.image ?? undefined} />
+              <AvatarFallback>{comment.user.name?.[0] ?? "?"}</AvatarFallback>
             </Avatar>
             <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between">

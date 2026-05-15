@@ -61,16 +61,16 @@ Last updated: 2026-05-15
 | 🟡 | Create `hooks/use-feature-flags.tsx` — React Context + SWR client consumption | ✅ COMPLETED | `FeatureFlagsProvider`, `useFeatureFlag(id)`, `<FeatureGate>` component. Match QH pattern. |
 | 🟡 | Add `@tanstack/react-query-devtools` in dev mode | ✅ COMPLETED | Conditional import in query-provider. |
 | 🟡 | Add `swr` dependency for feature flags client-side | ✅ COMPLETED | Used by feature flag hooks (matching QH pattern). |
-| 🟡 | Migrate items CRUD to React Query (queries + mutations) | 🗂️ BACKLOG | `useQuery` for list/detail, `useMutation` with `invalidateQueries`. Optimistic updates for like/unlike, comment add. |
-| 🟡 | Migrate loans system to React Query | 🗂️ BACKLOG | Borrow request, approval/rejection, return. Optimistic status changes. |
-| 🟡 | Migrate messages to React Query | 🗂️ BACKLOG | Inbox list, conversation view. Polling or manual refetch. |
-| 🟡 | Migrate admin pages to React Query | 🗂️ BACKLOG | User management, settings, flags, export. Admin queries hook file. |
-| 🟡 | Migrate suggestions + waitlist to React Query | 🗂️ BACKLOG | Create suggestion, join/leave waitlist. |
-| 🟡 | Migrate activity feed to React Query | 🗂️ BACKLOG | Auto-refetch on new activity. |
-| 🟡 | Enhanced feature flags — add types: percentage, user_list | 🗂️ BACKLOG | Extend `FeatureFlag` model. Redis-backed storage with DB fallback. |
-| 🟡 | Create `hooks/use-admin-queries.ts` — admin CRUD hooks with optimistic updates | 🗂️ BACKLOG | Pattern from QH: `onMutate` cancelQueries + setQueryData, `onError` rollback, `onSettled` invalidate. |
-| 🟢 | Add loading skeleton components for all data-loaded pages | 🗂️ BACKLOG | shadcn-style skeleton components. Replace generic spinners. |
-| 🟢 | Add error boundary components for data-fetching errors | 🗂️ BACKLOG | Per-route error states with retry buttons. |
+| 🟡 | Migrate items CRUD to React Query (queries + mutations) | ✅ COMPLETED | `hooks/use-items.ts`. Like toggling with optimistic updates, comments with optimistic prepend. |
+| 🟡 | Migrate loans system to React Query | ✅ COMPLETED | `hooks/use-loans.ts`. Borrow mutation, loan status update mutations. |
+| 🟡 | Migrate messages to React Query | ✅ COMPLETED | `hooks/use-messages.ts`. Conversations + messages with optimistic send. Page migrated. |
+| 🟡 | Migrate suggestions + waitlist to React Query | ✅ COMPLETED | `hooks/use-suggestions.ts`. Create suggestion mutation, waitlist join/leave. Page migrated. |
+| 🟡 | Migrate activity feed to React Query | ✅ COMPLETED | `hooks/use-activity.ts`. 30s auto-refetch. Component migrated. |
+| 🟡 | Enhanced feature flags — add types: percentage, user_list | ✅ COMPLETED | `lib/feature-flags.ts`. 12 default flags. `evaluateFlag()` for percentage + user_list. Redis+DB persistence. |
+| 🟡 | Create `hooks/use-admin-queries.ts` — admin CRUD hooks with optimistic updates | ✅ COMPLETED | `hooks/use-admin.ts`. Users, flags, settings, export hooks. |
+| 🟡 | Migrate admin pages to React Query | 🗂️ BACKLOG | Admin pages are server components. React Query hooks ready for when they become client-side. |
+| 🟢 | Add loading skeleton components for all data-loaded pages | ✅ COMPLETED | `components/ui/skeleton.tsx` |
+| 🟢 | Add error boundary components for data-fetching errors | ✅ COMPLETED | `components/error-boundary.tsx` |
 
 ---
 
@@ -102,13 +102,14 @@ Last updated: 2026-05-15
 
 | Priority | Item | Status | Notes |
 |----------|------|--------|-------|
-| 🟡 | Add Vercel cron jobs for email reminders + cleanup | 🗂️ BACKLOG | Due date reminders, overdue notifications, token cleanup. `vercel.json` crons config. |
+| 🟡 | Add Vercel cron jobs for email reminders + cleanup | ✅ COMPLETED | `vercel.json` crons config. Daily 9AM email reminders for due/overdue loans. Weekly Sunday cleanup of expired sessions. `CRON_SECRET` env var. |
 | 🟡 | Configure CSP headers in `next.config.ts` | ✅ COMPLETED | Comprehensive CSP: script-src, connect-src, frame-src, worker-src, img-src. Added in Phase 1. |
 | 🟡 | Create vendor adapters — `lib/adapters/email.ts` | ✅ COMPLETED | Interface-based adapter. Resend implementation + mock for tests. Added in Phase 1. |
 | 🟡 | Create vendor adapters — `lib/adapters/storage.ts` | ✅ COMPLETED | Supabase Storage adapter (public + private buckets). Mock for tests. Added in Phase 1. |
 | 🟡 | Add CSRF protection to mutation endpoints | ✅ COMPLETED | Double-submit cookie pattern. `lib/security/csrf.ts`. Added in Phase 1. |
-| 🟡 | Expand i18n — add French locale (FR) | 🗂️ BACKLOG | Bilingual EN/FR per cross-project rules. Quebec French norms. |
-| 🟡 | Expand i18n — translate all UI strings (currently ~3 keys) | 🗂️ BACKLOG | All pages, components, form labels, errors, emails. |
+| 🟡 | Expand i18n — add French locale (FR) | ✅ COMPLETED | `src/i18n/messages/fr.json` with 120+ translated keys. Quebec French norms. `next-intl.config.ts` updated. |
+| 🟡 | Expand i18n — translate all UI strings (currently ~3 keys) | ✅ COMPLETED | `en.json` expanded from 3 keys to 120+ keys covering all pages. |
+| 🟡 | Supabase Realtime subscriptions for activity feed + loan status | ✅ COMPLETED | `hooks/use-realtime.ts`. Channel subscriptions for items (loans, comments, likes) and global activity feed. |
 | 🟢 | Add screen reader optimization | 🗂️ BACKLOG | ARIA labels, focus management, semantic HTML audit. |
 | 🟢 | Add high contrast theme variant | 🗂️ BACKLOG | Toggle alongside dark/light. |
 | 🟡 | Add Sentry or equivalent error monitoring | 🗂️ BACKLOG | Capture API errors, client-side errors. Vercel integration. |
@@ -169,11 +170,11 @@ Last updated: 2026-05-15
 
 | Phase | Progress | Blockers |
 |-------|----------|----------|
-| Phase 1 — Security & Infrastructure | ✅ 100% | None (Supabase + Upstash provisioning needed for production) |
+| Phase 1 — Security & Infrastructure | ✅ 100% | None (Supabase + Upstash provisioning for production) |
 | Phase 2a — Supabase Auth Migration | ✅ 100% | None |
-| Phase 2 — State Management & UX | 🟡 30% | React Query migration for pages is in backlog |
-| Phase 2b — RLS Defense-in-Depth | 0% | Supabase provisioning needed for SQL migrations |
-| Phase 3 — Hardening & Polish | 🟡 40% | CSP, adapters, CSRF done. i18n, monitoring remaining. |
+| Phase 2 — State Management & UX | ✅ 90% | Admin pages are server components (React Query hooks ready) |
+| Phase 2b — RLS Defense-in-Depth | ✅ 100% | None (SQL migrations + RLS policies written) |
+| Phase 3 — Hardening & Polish | 🟡 75% | Sentry, monitoring, accessibility remaining |
 | Phase 4 — Future | 0% | Post-launch |
 | Supabase DB Migration | 🟡 50% | Account provisioning + connection string rotation |
 

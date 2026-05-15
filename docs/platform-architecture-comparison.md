@@ -26,6 +26,7 @@
 **What is it?** Supabase is an open-source Firebase alternative built on PostgreSQL. It provides a managed database with built-in authentication, file storage, edge functions, and realtime subscriptions — all accessed through a unified SDK.
 
 **Core components:**
+
 | Component | What it does | Equivalent to |
 |-----------|-------------|---------------|
 | **Postgres Database** | Full SQL database with extensions (PostGIS, pgvector, pg_cron) | Firebase Firestore, but relational |
@@ -74,6 +75,7 @@ Browser/App
 **What is it?** Convex is a full-stack serverless platform where your database schema, server functions, and realtime subscriptions are all defined in TypeScript. There is no separate database server to manage, no ORM, and no migration files — you write TypeScript and Convex handles the rest.
 
 **Core components:**
+
 | Component | What it does | How it differs from Supabase |
 |-----------|-------------|------------------------------|
 | **Database** | Custom document-relational engine (not PostgreSQL) | No SQL. Schema defined in TS with `defineTable()`. |

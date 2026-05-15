@@ -1,77 +1,36 @@
-// src/components/activity/activity-feed.tsx
 "use client"
 
 import { formatDistanceToNow } from "date-fns"
-import { useEffect, useState } from "react"
 
-import { Icons } from "@/components/icons"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-
-type Activity = {
-  id: string;
-  type: "LOAN" | "COMMENT" | "REQUEST";
-  user: string;
-  item: string;
-  status?: string;
-  date: string;
-};
+import { useActivity } from "@/hooks/use-activity"
 
 export function ActivityFeed() {
-  const [activities, setActivities] = useState<Activity[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    async function fetchActivity() {
-      try {
-        const response = await fetch("/api/activity")
-        if (response.ok) {
-          const data = await response.json()
-          setActivities(data)
-        }
-      } catch (error) {
-        console.error(error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    fetchActivity()
-  }, []);
+  const { data: activities = [], isLoading, error } = useActivity()
 
   if (isLoading) {
-    return <p>Loading activity...</p>
+    return <p className="text-muted-foreground text-sm">Loading activity...</p>
+  }
+
+  if (error) {
+    return <p className="text-destructive text-sm">Failed to load activity.</p>
+  }
+
+  if (activities.length === 0) {
+    return <p className="text-muted-foreground text-sm">No recent activity.</p>
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Recent Activity</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {activities.map((act) => (
-          <div key={`${act.type}-${act.id}`} className="flex items-start gap-3 text-sm">
-            <div className="mt-0.5">
-              {act.type === "LOAN" && <Icons.calendar className="h-4 w-4 text-blue-500" />}
-              {act.type === "COMMENT" && <Icons.messageSquare className="h-4 w-4 text-green-500" />}
-              {act.type === "REQUEST" && <Icons.help className="h-4 w-4 text-yellow-500" />}
-            </div>
-            <div className="flex-1">
-              <p>
-                <span className="font-semibold">{act.user}</span>{" "}
-                {act.type === "LOAN" && `requested to borrow ${act.item}`}
-                {act.type === "COMMENT" && `commented on ${act.item}`}
-                {act.type === "REQUEST" && `submitted a request for ${act.item}`}
-              </p>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                {formatDistanceToNow(new Date(act.date), { addSuffix: true })}
-              </p>
-            </div>
+    <div className="space-y-4">
+      {activities.map((activity) => (
+        <div key={activity.id} className="flex items-start gap-3 text-sm">
+          <div className="min-w-0 flex-1">
+            <p>{activity.message}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true })}
+            </p>
           </div>
-        ))}
-        {activities.length === 0 && (
-          <p className="text-center text-muted-foreground py-4">No recent activity.</p>
-        )}
-      </CardContent>
-    </Card>
-  );
+        </div>
+      ))}
+    </div>
+  )
 }

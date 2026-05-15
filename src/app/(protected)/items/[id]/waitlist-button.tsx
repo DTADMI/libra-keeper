@@ -1,11 +1,10 @@
 "use client"
 
 import { Loader2, UserMinus, UserPlus } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
+import { useWaitlist } from "@/hooks/use-suggestions"
 
 interface WaitlistButtonProps {
   itemId: string;
@@ -13,39 +12,28 @@ interface WaitlistButtonProps {
 }
 
 export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
-  const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const waitlist = useWaitlist(itemId)
 
-  const handleToggleWaitlist = async () => {
-    setIsLoading(true)
-    try {
-      const method = isJoined ? "DELETE" : "POST"
-      const response = await fetch(`/api/items/${itemId}/waitlist`, {
-        method,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update waitlist")
-      }
-
-      toast.success(isJoined ? "Left the waitlist" : "Joined the waitlist")
-      router.refresh()
-    } catch (error) {
-      toast.error("Something went wrong")
-    } finally {
-      setIsLoading(false)
-    }
-  };
+  const handleToggleWaitlist = () => {
+    waitlist.mutate(isJoined ? "leave" : "join", {
+      onSuccess: () => {
+        toast.success(isJoined ? "Left the waitlist" : "Joined the waitlist")
+      },
+      onError: () => {
+        toast.error("Something went wrong")
+      },
+    })
+  }
 
   return (
     <Button
       onClick={handleToggleWaitlist}
-      disabled={isLoading}
+      disabled={waitlist.isPending}
       variant={isJoined ? "outline" : "secondary"}
       size="lg"
       className="flex items-center gap-2"
     >
-      {isLoading ? (
+      {waitlist.isPending ? (
         <Loader2 className="h-4 w-4 animate-spin" />
       ) : isJoined ? (
         <UserMinus className="h-4 w-4" />

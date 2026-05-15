@@ -1,8 +1,7 @@
 // src/app/(protected)/suggestions/page.tsx
 "use client"
 
-import { useSession } from "@/hooks/use-session"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
 import { Badge } from "@/components/ui/badge"
@@ -10,162 +9,127 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
+import { useSession } from "@/hooks/use-session"
+import { useSuggestions, useCreateSuggestion } from "@/hooks/use-suggestions"
 
-type ItemRequestType = "BORROWED_ITEM" | "SUGGESTION"
-type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
-type ItemRequest = {
-  id: string;
-  title: string;
-  author: string | null;
-  type: ItemRequestType;
-  status: ItemRequestStatus;
-  createdAt: string;
-};
+const statusColors: Record<string, string> = {
+  PENDING: "bg-yellow-100 text-yellow-800",
+  PROCESSING: "bg-blue-100 text-blue-800",
+  COMPLETED: "bg-green-100 text-green-800",
+  REJECTED: "bg-red-100 text-red-800",
+}
 
 export default function SuggestionsPage() {
   const { data: session } = useSession()
-  const [requests, setRequests] = useState<ItemRequest[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { data: requests = [], isLoading: listLoading, error: listError } = useSuggestions()
+  const createSuggestion = useCreateSuggestion()
 
-  // Form state
   const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
   const [description, setDescription] = useState("")
-  const [type, setType] = useState<ItemRequestType>("SUGGESTION")
+  const [type, setType] = useState<"BORROWED_ITEM" | "SUGGESTION">("SUGGESTION")
+  const [author, setAuthor] = useState("")
+  const [isbn, setIsbn] = useState("")
 
-  useEffect(() => {
-    fetchRequests()
-  }, []);
-
-  async function fetchRequests() {
-    try {
-      const response = await fetch("/api/suggestions")
-      if (response.ok) {
-        const data = await response.json()
-        setRequests(data)
-      }
-    } catch (error) {
-      console.error("Failed to fetch requests", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  async function onSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setIsSubmitting(true)
+    if (!title.trim()) return
 
-    try {
-      const response = await fetch("/api/suggestions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, author, description, type }),
-      });
-
-      if (response.ok) {
-        const newRequest = await response.json()
-        setRequests([newRequest, ...requests])
-        setTitle("")
-        setAuthor("")
-        setDescription("")
-        toast.success("Request submitted")
-      }
-    } catch (error) {
-      toast.error("Failed to submit request")
-    } finally {
-      setIsSubmitting(false)
-    }
+    createSuggestion.mutate(
+      { title: title.trim(), description: description.trim() || undefined, type, author: author.trim() || undefined, isbn: isbn.trim() || undefined },
+      {
+        onSuccess: () => {
+          toast.success("Suggestion submitted")
+          setTitle("")
+          setDescription("")
+          setAuthor("")
+          setIsbn("")
+        },
+        onError: (error) => {
+          toast.error(error instanceof Error ? error.message : "Failed to submit suggestion")
+        },
+      },
+    )
   }
+
+  const isAdmin = session?.user?.role === "ADMIN"
 
   return (
-    <div className="container mx-auto p-4 space-y-8">
-      <h1 className="text-2xl font-bold">Suggestions & Item Requests</h1>
+    <div className="container mx-auto p-4 max-w-3xl">
+      <h1 className="text-2xl font-bold mb-6">Item Suggestions</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Submit New Request</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={onSubmit} className="space-y-4">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>{isAdmin ? "Manage Requests" : "Submit a Suggestion"}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!isAdmin && (
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="type">Request Type</Label>
-                <Select value={type} onValueChange={(v: ItemRequestType) => setType(v)}>
+                <Label htmlFor="type">Type</Label>
+                <Select value={type} onValueChange={(v) => setType(v as typeof type)}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="SUGGESTION">Suggestion (Item to acquire)</SelectItem>
-                    <SelectItem value="BORROWED_ITEM">
-                      Borrowed Item (Item you have but not in catalog)
-                    </SelectItem>
+                    <SelectItem value="SUGGESTION">Suggestion to acquire</SelectItem>
+                    <SelectItem value="BORROWED_ITEM">I have this item</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input
-                  id="title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
+                <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="author">Author/Creator</Label>
+                <Label htmlFor="author">Author / Creator</Label>
                 <Input id="author" value={author} onChange={(e) => setAuthor(e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Description/Notes</Label>
-                <Textarea
-                  id="description"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+                <Label htmlFor="isbn">ISBN / Identifier</Label>
+                <Input id="isbn" value={isbn} onChange={(e) => setIsbn(e.target.value)} />
               </div>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Submitting..." : "Submit Request"}
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea id="description" value={description} onChange={(e) => setDescription(e.target.value)} rows={3} />
+              </div>
+              <Button type="submit" disabled={createSuggestion.isPending || !title.trim()}>
+                {createSuggestion.isPending ? "Submitting..." : "Submit"}
               </Button>
             </form>
-          </CardContent>
-        </Card>
-
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Your Recent Requests</h2>
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : requests.length === 0 ? (
-            <p className="text-muted-foreground">No requests yet.</p>
-          ) : (
-            requests.map((req) => (
-              <Card key={req.id}>
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{req.title}</p>
-                    <p className="text-sm text-muted-foreground">
-                      {req.type === "SUGGESTION" ? "Suggestion" : "Borrowed Item"}
-                    </p>
-                  </div>
-                  <Badge
-                    variant={
-                      req.status === "COMPLETED"
-                        ? "default"
-                        : req.status === "REJECTED"
-                          ? "destructive"
-                          : "secondary"
-                    }
-                  >
-                    {req.status}
-                  </Badge>
-                </CardContent>
-              </Card>
-            ))
           )}
-        </div>
+        </CardContent>
+      </Card>
+
+      {listLoading && <p className="text-muted-foreground">Loading suggestions...</p>}
+      {listError && <p className="text-destructive">Failed to load suggestions.</p>}
+
+      <div className="space-y-4">
+        {requests.map((req) => (
+          <Card key={req.id}>
+            <CardContent className="p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="font-semibold">{req.title}</h3>
+                  {req.author && <p className="text-sm text-muted-foreground">by {req.author}</p>}
+                  {req.description && <p className="text-sm mt-1">{req.description}</p>}
+                </div>
+                <Badge className={statusColors[req.status] ?? ""}>{req.status}</Badge>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+        {!listLoading && requests.length === 0 && (
+          <p className="text-muted-foreground text-center py-8">No suggestions yet.</p>
+        )}
       </div>
     </div>
-  );
+  )
 }
