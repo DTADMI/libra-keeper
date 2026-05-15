@@ -36,7 +36,3 @@ Response.prototype.json = async function <T>(): Promise<T> {
   const text = await this.text()
   return text ? JSON.parse(text) : {} as T
 }
-
-jest.mock("@auth/prisma-adapter", () => ({
-  PrismaAdapter: jest.fn(),
-}));

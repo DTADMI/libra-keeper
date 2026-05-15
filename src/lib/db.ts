@@ -1,4 +1,6 @@
 // src/lib/db.ts
+import "server-only"
+
 import { PrismaPg } from "@prisma/adapter-pg"
 import { Prisma, PrismaClient } from "@prisma/client"
 import { Pool } from "pg"

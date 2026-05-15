@@ -1,3 +1,5 @@
+import "server-only"
+
 import { createServerClient as createSupabaseServerClient } from "@supabase/ssr"
 import { createClient } from "@supabase/supabase-js"
 import { cookies, headers } from "next/headers"

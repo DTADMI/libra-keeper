@@ -57,36 +57,56 @@ Last updated: 2026-05-15
 
 | Priority | Item | Status | Notes |
 |----------|------|--------|-------|
+| 🟡 | Create `components/providers/query-provider.tsx` | ✅ COMPLETED | Dedicated provider wrapper. Devtools in dev mode. |
+| 🟡 | Create `hooks/use-feature-flags.tsx` — React Context + SWR client consumption | ✅ COMPLETED | `FeatureFlagsProvider`, `useFeatureFlag(id)`, `<FeatureGate>` component. Match QH pattern. |
+| 🟡 | Add `@tanstack/react-query-devtools` in dev mode | ✅ COMPLETED | Conditional import in query-provider. |
+| 🟡 | Add `swr` dependency for feature flags client-side | ✅ COMPLETED | Used by feature flag hooks (matching QH pattern). |
 | 🟡 | Migrate items CRUD to React Query (queries + mutations) | 🗂️ BACKLOG | `useQuery` for list/detail, `useMutation` with `invalidateQueries`. Optimistic updates for like/unlike, comment add. |
 | 🟡 | Migrate loans system to React Query | 🗂️ BACKLOG | Borrow request, approval/rejection, return. Optimistic status changes. |
 | 🟡 | Migrate messages to React Query | 🗂️ BACKLOG | Inbox list, conversation view. Polling or manual refetch. |
 | 🟡 | Migrate admin pages to React Query | 🗂️ BACKLOG | User management, settings, flags, export. Admin queries hook file. |
 | 🟡 | Migrate suggestions + waitlist to React Query | 🗂️ BACKLOG | Create suggestion, join/leave waitlist. |
 | 🟡 | Migrate activity feed to React Query | 🗂️ BACKLOG | Auto-refetch on new activity. |
-| 🟡 | Enhanced feature flags — add types: percentage, user_list | 🗂️ BACKLOG | Extend `FeatureFlag` model. Redis-backed storage with DB fallback. `useFeatureFlag()` client hook via SWR. |
-| 🟡 | Create `hooks/use-feature-flags.tsx` — React Context + SWR client consumption | 🗂️ BACKLOG | `FeatureFlagsProvider`, `useFeatureFlag(id)`, `<FeatureGate>` component. Match QH pattern. |
-| 🟡 | Create `components/providers/query-provider.tsx` | 🔜 UP NEXT | Dedicated provider wrapper. Devtools in dev mode. Error boundary. |
-| 🟡 | Create `components/providers/feature-flags-provider.tsx` | 🗂️ BACKLOG | SWR-based context provider for client-side flag consumption. |
+| 🟡 | Enhanced feature flags — add types: percentage, user_list | 🗂️ BACKLOG | Extend `FeatureFlag` model. Redis-backed storage with DB fallback. |
 | 🟡 | Create `hooks/use-admin-queries.ts` — admin CRUD hooks with optimistic updates | 🗂️ BACKLOG | Pattern from QH: `onMutate` cancelQueries + setQueryData, `onError` rollback, `onSettled` invalidate. |
-| 🟡 | Add `@tanstack/react-query-devtools` in dev mode | 🔜 UP NEXT | Conditional import in query-provider. |
-| 🟡 | Add `swr` dependency for feature flags client-side | 🔜 UP NEXT | Used by feature flag hooks (matching QH pattern). |
 | 🟢 | Add loading skeleton components for all data-loaded pages | 🗂️ BACKLOG | shadcn-style skeleton components. Replace generic spinners. |
 | 🟢 | Add error boundary components for data-fetching errors | 🗂️ BACKLOG | Per-route error states with retry buttons. |
 
 ---
 
-## Phase 3: Hardening, Polish & DevOps
+## Phase 2b: RLS Defense-in-Depth + Prisma Hardening
 
-> Goal: RLS, CSP, cron jobs, vendor adapters, i18n, accessibility, monitoring.
+> **Strategy decision:** Keep Prisma as primary data layer (SF pattern). Add RLS policies via Supabase SQL migrations as defense-in-depth. Application-level authorization in route handlers remains the primary guard.
+>
+> See `docs/platform-architecture-comparison.md` for the full analysis of Supabase vs Convex vs SpacetimeDB vs Neo4j across all projects.
+>
+> See `story-forge/docs/architecture-security.md` for the documented SF pattern that LK now follows.
 
 | Priority | Item | Status | Notes |
 |----------|------|--------|-------|
-| 🔴 | Implement RLS policies on all tables | ⛔ BLOCKED | Requires Supabase. Enable RLS, create policies per table. Admin bypass via service role. Track in `docs/technical/rls-policy-inventory.md`. |
+| 🔴 | Add `import "server-only"` guard to `lib/db.ts` | 🔜 UP NEXT | Prevents Prisma client from being bundled into client components. Match SF pattern. |
+| 🔴 | Create `supabase/migrations/` directory structure | 🔜 UP NEXT | Follow SF's dual-migration pattern: Prisma Migrate for schema, Supabase SQL for RLS/triggers. |
+| 🔴 | Create initial Supabase SQL migration — schema mirroring Prisma | 🔜 UP NEXT | `001_create_tables.sql` with idempotent `CREATE TABLE IF NOT EXISTS`. |
+| 🔴 | Add RLS policies on all tables | 🔜 UP NEXT | Enable RLS. Policies: "Users can only see their own data", "Admins can see all". Binary access model. |
+| 🔴 | Add `set_updated_at()` trigger function | 🔜 UP NEXT | Auto-update `updated_at` columns. |
+| 🔴 | Create `handle_new_user()` trigger for `public.profiles` sync | 🔜 UP NEXT | Auto-create profile row when `auth.users` row is created. |
+| 🟡 | Create `docs/architecture-security.md` — dual-layer authorization doc | 🔜 UP NEXT | Document app-level guards + RLS defense-in-depth pattern. Mirror SF's doc. |
+| 🟡 | Add Supabase Realtime subscriptions for activity feed | 🗂️ BACKLOG | Automatically update UI when loans/comments change. See platform comparison doc Section 5 for code examples. |
+| 🟡 | Create `scripts/` migration tooling (apply, validate, report) | 🗂️ BACKLOG | Match QH's `apply-migrations.mjs` pattern for multi-environment migration. |
+
+---
+
+## Phase 3: Hardening, Polish & DevOps
+
+> Goal: RLS done in Phase 2b. Focus on cron jobs, i18n, accessibility, monitoring.
+
+| Priority | Item | Status | Notes |
+|----------|------|--------|-------|
 | 🟡 | Add Vercel cron jobs for email reminders + cleanup | 🗂️ BACKLOG | Due date reminders, overdue notifications, token cleanup. `vercel.json` crons config. |
-| 🟡 | Create vendor adapters — `lib/adapters/email.ts` wrapping Resend | 🗂️ BACKLOG | Interface-based adapter for testability. Resend implementation + mock for tests. |
-| 🟡 | Create vendor adapters — `lib/adapters/storage.ts` for file uploads | 🗂️ BACKLOG | Supabase Storage adapter (public + private buckets). Mock for tests. |
-| 🟡 | Configure CSP headers in `next.config.ts` | 🗂️ BACKLOG | Comprehensive CSP: script-src, connect-src, frame-src, worker-src, img-src. |
-| 🟡 | Add CSRF protection to mutation endpoints | 🗂️ BACKLOG | Double-submit cookie pattern. Middleware or per-route check. |
+| 🟡 | Configure CSP headers in `next.config.ts` | ✅ COMPLETED | Comprehensive CSP: script-src, connect-src, frame-src, worker-src, img-src. Added in Phase 1. |
+| 🟡 | Create vendor adapters — `lib/adapters/email.ts` | ✅ COMPLETED | Interface-based adapter. Resend implementation + mock for tests. Added in Phase 1. |
+| 🟡 | Create vendor adapters — `lib/adapters/storage.ts` | ✅ COMPLETED | Supabase Storage adapter (public + private buckets). Mock for tests. Added in Phase 1. |
+| 🟡 | Add CSRF protection to mutation endpoints | ✅ COMPLETED | Double-submit cookie pattern. `lib/security/csrf.ts`. Added in Phase 1. |
 | 🟡 | Expand i18n — add French locale (FR) | 🗂️ BACKLOG | Bilingual EN/FR per cross-project rules. Quebec French norms. |
 | 🟡 | Expand i18n — translate all UI strings (currently ~3 keys) | 🗂️ BACKLOG | All pages, components, form labels, errors, emails. |
 | 🟢 | Add screen reader optimization | 🗂️ BACKLOG | ARIA labels, focus management, semantic HTML audit. |
@@ -118,12 +138,13 @@ Last updated: 2026-05-15
 
 ## Supabase Migration (Parallel Track)
 
-> Scope: migrate DB hosting only. Keep Prisma + NextAuth. See `docs/supabase-postgres-migration-plan.md`.
+> Scope: migrate DB hosting from Docker to Supabase. Keep Prisma. Auth already migrated (Phase 2a).
 
 | Status | Task | Notes |
 |--------|------|-------|
 | ⛔ | Supabase staging/prod projects provisioning | Requires account creation |
-| ⛔ | `DATABASE_URL` / `DIRECT_URL` rotation | Staging first, then prod |
+| ✅ | Supabase Auth migration (NextAuth → Supabase Auth) | Phase 2a completed |
+| ✅ | `DATABASE_URL` / `DIRECT_URL` for Supabase pooler | Documented in `.env.example` |
 | ⛔ | Rehearsal runbook execution | Scripted validation queries |
 | ⛔ | Prisma `DIRECT_URL` split for pooled connections | Required for Supabase connection pooling |
 | ⛔ | 48h stabilization monitoring | Error rates, latency, connection pool |
@@ -134,11 +155,27 @@ Last updated: 2026-05-15
 
 | Item | Decision | Rationale |
 |------|----------|-----------|
-| Migrate from Prisma to direct Supabase SDK | ❌ REJECTED | Prisma works well with LK's schema complexity. No benefit from raw SDK. |
-| Migrate from NextAuth to Supabase Auth | ❌ REJECTED | NextAuth is stable and integrated. Migration is high-risk, low-value. |
+| Migrate from Prisma to direct Supabase SDK | ❌ REJECTED | **Revised after SF analysis.** LK's data model (2-level nesting, 11 models) matches SF's Prisma pattern, not QH's flat SDK pattern. Prisma stays. RLS added as defense-in-depth via SQL migrations. See `docs/platform-architecture-comparison.md` for full analysis. |
+| Migrate from NextAuth to Supabase Auth | ✅ COMPLETED | Phase 2a. Supabase Auth provides built-in email verification, password reset, magic links, and RLS integration — all previously missing. |
+| Use Convex instead of Supabase | ❌ REJECTED | Convex's auto-reactivity is appealing but vendor lock-in (closed source, proprietary DB) is unacceptable for a personal/hobby project where data portability matters. See `docs/platform-architecture-comparison.md`. |
+| Use Neo4j | ❌ REJECTED | No graph relationships in LK's data model. Items don't interconnect — they're independently cataloged. Neo4j would add complexity with zero benefit. |
 | Adopt PostGIS / MapLibre / Three.js | ❌ REJECTED | Irrelevant to library management domain. |
 | Move to monorepo / microservices | ❌ REJECTED | Monolith is simpler and sufficient for LK's scale. |
 | Abandon PWA in favor of React Native only | ❌ REJECTED | PWA supplements (not replaces) native app. Both can coexist. |
+
+---
+
+## Status Summary
+
+| Phase | Progress | Blockers |
+|-------|----------|----------|
+| Phase 1 — Security & Infrastructure | ✅ 100% | None (Supabase + Upstash provisioning needed for production) |
+| Phase 2a — Supabase Auth Migration | ✅ 100% | None |
+| Phase 2 — State Management & UX | 🟡 30% | React Query migration for pages is in backlog |
+| Phase 2b — RLS Defense-in-Depth | 0% | Supabase provisioning needed for SQL migrations |
+| Phase 3 — Hardening & Polish | 🟡 40% | CSP, adapters, CSRF done. i18n, monitoring remaining. |
+| Phase 4 — Future | 0% | Post-launch |
+| Supabase DB Migration | 🟡 50% | Account provisioning + connection string rotation |
 
 ---
 
