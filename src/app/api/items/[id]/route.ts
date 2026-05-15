@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db"
 const itemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional().nullable(),
-  type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "OTHER"]),
+  type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"]),
   status: z.enum(["AVAILABLE", "BORROWED", "GIVEN_AWAY", "LOST"]).optional(),
   coverImage: z.string().url().optional().nullable(),
   isbn: z.string().optional().nullable(),

@@ -78,6 +78,7 @@
       "MOVIE": "Film",
       "GAME": "Jeu",
       "TOY": "Jouet",
+      "CLOTHES": "Vêtement",
       "OTHER": "Autre"
     },
     "statuses": {
@@ -108,7 +109,19 @@
     "reportMissing": "Signaler manquant",
     "reportReason": "Raison",
     "reportSubmitted": "Signalement soumis",
-    "reportFailed": "Échec du signalement"
+    "reportFailed": "Échec du signalement",
+    "brand": "Marque",
+    "ageRange": "Tranche d'âge",
+    "material": "Matériau",
+    "condition": "État",
+    "size": "Taille",
+    "genre": "Genre",
+    "platform": "Plateforme",
+    "artist": "Artiste",
+    "director": "Réalisateur",
+    "duration": "Durée",
+    "identifier": "Identifiant",
+    "maker": "Fabricant"
   },
   "Loans": {
     "title": "Mes emprunts",

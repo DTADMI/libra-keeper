@@ -216,6 +216,7 @@ enum ItemType {
   MOVIE
   GAME
   TOY
+  CLOTHES
   OTHER
 }
 

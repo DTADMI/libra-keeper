@@ -2,7 +2,7 @@ import { z } from "zod"
 
 const itemSchema = z.object({
   title: z.string().min(1),
-  type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "OTHER"]),
+  type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"]),
   status: z
     .enum(["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"])
     .optional(),

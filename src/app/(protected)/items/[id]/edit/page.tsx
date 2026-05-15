@@ -24,7 +24,7 @@ export default async function EditItemPage(props: { params: Promise<{ id: string
   return (
     <div className="container mx-auto max-w-2xl py-10">
       <h1 className="mb-8 text-3xl font-bold">Edit Item</h1>
-      <EditItemForm item={item} />
+      <EditItemForm item={item as unknown as import("./edit-item-form").Item} />
     </div>
   );
 }

@@ -42,7 +42,7 @@ export interface Database {
           id: string
           title: string
           description: string | null
-          type: "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "OTHER"
+          type: "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "CLOTHES" | "OTHER"
           status: "AVAILABLE" | "BORROWED" | "RESERVED" | "UNAVAILABLE" | "GIVEN_AWAY" | "LOST"
           cover_image: string | null
           isbn: string | null
@@ -95,7 +95,7 @@ export interface Database {
     Functions: Record<string, never>
     Enums: {
       role: "USER" | "ADMIN"
-      item_type: "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "OTHER"
+      item_type: "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "CLOTHES" | "OTHER"
       item_status: "AVAILABLE" | "BORROWED" | "RESERVED" | "UNAVAILABLE" | "GIVEN_AWAY" | "LOST"
       loan_status: "PENDING" | "APPROVED" | "REJECTED" | "RETURNED" | "OVERDUE" | "LOST"
       request_type: "BORROWED_ITEM" | "SUGGESTION"

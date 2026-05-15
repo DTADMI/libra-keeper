@@ -9,7 +9,7 @@ import { logger } from "@/lib/logger"
 const itemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional().nullable(),
-  type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "OTHER"]),
+  type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"]),
   status: z
     .enum(["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"])
     .optional(),

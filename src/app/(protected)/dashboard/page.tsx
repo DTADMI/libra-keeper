@@ -4,8 +4,19 @@ import { ActivityFeed } from "@/components/activity/activity-feed"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { SearchBar } from "@/components/search-bar"
 import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
+
+const TYPE_SUBTITLE: Record<string, string> = {
+  BOOK: "by",
+  MUSIC: "by",
+  MOVIE: "dir.",
+  GAME: "by",
+  TOY: "Brand:",
+  CLOTHES: "Brand:",
+  OTHER: "by",
+}
 
 export default async function DashboardPage() {
   const session = await getServerAuth()
@@ -26,8 +37,9 @@ export default async function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Dashboard</h1>
+        <SearchBar />
         {session?.user && session.user.role === "ADMIN" && (
           <Button asChild>
             <Link href="/items/new">Add New Item</Link>
@@ -58,7 +70,9 @@ export default async function DashboardPage() {
                         {item.type}
                       </Badge>
                     </div>
-                    <p className="text-sm text-muted-foreground line-clamp-1">{item.author}</p>
+                    <p className="text-sm text-muted-foreground line-clamp-1">
+                      {item.author ? `${TYPE_SUBTITLE[item.type] ?? "by"} ${item.author}` : ""}
+                    </p>
                   </CardHeader>
                   <CardContent className="p-4 pt-0">
                     <div className="flex flex-wrap gap-1">

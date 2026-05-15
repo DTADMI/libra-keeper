@@ -78,6 +78,7 @@
       "MOVIE": "Movie",
       "GAME": "Game",
       "TOY": "Toy",
+      "CLOTHES": "Clothing",
       "OTHER": "Other"
     },
     "statuses": {
@@ -108,7 +109,19 @@
     "reportMissing": "Report Missing",
     "reportReason": "Reason",
     "reportSubmitted": "Report submitted",
-    "reportFailed": "Failed to submit report"
+    "reportFailed": "Failed to submit report",
+    "brand": "Brand",
+    "ageRange": "Age Range",
+    "material": "Material",
+    "condition": "Condition",
+    "size": "Size",
+    "genre": "Genre",
+    "platform": "Platform",
+    "artist": "Artist",
+    "director": "Director",
+    "duration": "Duration",
+    "identifier": "Identifier",
+    "maker": "Maker"
   },
   "Loans": {
     "title": "My Loans",

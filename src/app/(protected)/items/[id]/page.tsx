@@ -12,6 +12,23 @@ import { LikeButton } from "./like-button"
 import { ReportButton } from "./report-button"
 import { WaitlistButton } from "./waitlist-button"
 
+type ItemType = "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "CLOTHES" | "OTHER"
+
+const CREATOR_LABELS: Record<ItemType, string> = {
+  BOOK: "Author", MUSIC: "Artist", MOVIE: "Director", GAME: "Developer",
+  TOY: "Brand", CLOTHES: "Brand", OTHER: "Creator",
+}
+
+const ID_LABELS: Record<ItemType, string> = {
+  BOOK: "ISBN", MUSIC: "UPC", MOVIE: "UPC", GAME: "UPC",
+  TOY: "Barcode", CLOTHES: "SKU", OTHER: "Identifier",
+}
+
+const MAKER_LABELS: Record<ItemType, string> = {
+  BOOK: "Publisher", MUSIC: "Label", MOVIE: "Studio", GAME: "Publisher",
+  TOY: "Manufacturer", CLOTHES: "Manufacturer", OTHER: "Maker",
+}
+
 export default async function ItemDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const session = await getServerAuth()
@@ -46,6 +63,9 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
   );
   const userJoinedWaitlist = item.waitlist.some((entry) => entry.userId === session?.user?.id)
 
+  const itemType = item.type as ItemType
+  const meta = item.metadata as Record<string, unknown> | null | undefined
+
   return (
     <div className="container mx-auto py-10 px-4">
       <div className="flex flex-col md:flex-row gap-10">
@@ -72,7 +92,11 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
               </Badge>
             </div>
             <h1 className="text-4xl font-bold">{item.title}</h1>
-            <p className="text-xl text-muted-foreground mt-1">{item.author}</p>
+            {item.author && (
+              <p className="text-xl text-muted-foreground mt-1">
+                {CREATOR_LABELS[itemType]}: {item.author}
+              </p>
+            )}
             <div className="mt-2 flex items-center gap-4">
               <LikeButton itemId={item.id} />
               <ReportButton itemId={item.id} />
@@ -97,14 +121,71 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
           <Separator />
 
           <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <p className="font-medium">Publisher</p>
-              <p className="text-muted-foreground">{item.publisher || "N/A"}</p>
-            </div>
-            <div>
-              <p className="font-medium">ISBN</p>
-              <p className="text-muted-foreground">{item.isbn || "N/A"}</p>
-            </div>
+            {item.publisher && (
+              <div>
+                <p className="font-medium">{MAKER_LABELS[itemType]}</p>
+                <p className="text-muted-foreground">{item.publisher}</p>
+              </div>
+            )}
+            {item.isbn && (
+              <div>
+                <p className="font-medium">{ID_LABELS[itemType]}</p>
+                <p className="text-muted-foreground">{item.isbn}</p>
+              </div>
+            )}
+
+            {meta && typeof meta === "object" && (
+              <>
+                {(meta.brand as string) && (
+                  <div>
+                    <p className="font-medium">Brand</p>
+                    <p className="text-muted-foreground">{String(meta.brand)}</p>
+                  </div>
+                )}
+                {(meta.size as string) && (
+                  <div>
+                    <p className="font-medium">Size</p>
+                    <p className="text-muted-foreground">{String(meta.size)}</p>
+                  </div>
+                )}
+                {(meta.material as string) && (
+                  <div>
+                    <p className="font-medium">Material</p>
+                    <p className="text-muted-foreground">{String(meta.material)}</p>
+                  </div>
+                )}
+                {(meta.condition as string) && (
+                  <div>
+                    <p className="font-medium">Condition</p>
+                    <p className="text-muted-foreground">{String(meta.condition)}</p>
+                  </div>
+                )}
+                {(meta.ageRange as string) && (
+                  <div>
+                    <p className="font-medium">Age Range</p>
+                    <p className="text-muted-foreground">{String(meta.ageRange)}</p>
+                  </div>
+                )}
+                {(meta.genre as string) && (
+                  <div>
+                    <p className="font-medium">Genre</p>
+                    <p className="text-muted-foreground">{String(meta.genre)}</p>
+                  </div>
+                )}
+                {(meta.platform as string) && (
+                  <div>
+                    <p className="font-medium">Platform</p>
+                    <p className="text-muted-foreground">{String(meta.platform)}</p>
+                  </div>
+                )}
+                {(meta.duration as string) && (
+                  <div>
+                    <p className="font-medium">Duration</p>
+                    <p className="text-muted-foreground">{String(meta.duration)}</p>
+                  </div>
+                )}
+              </>
+            )}
           </div>
 
           <div className="pt-6 flex flex-wrap gap-4">
