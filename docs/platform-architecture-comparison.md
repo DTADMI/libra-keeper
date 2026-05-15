@@ -126,6 +126,7 @@ Browser/App
 **What is it?** SpacetimeDB is a relational database system designed specifically for multiplayer games. It combines a database with an application server where game logic runs inside the database as compiled Rust modules (WebAssembly modules also supported). It provides built-in state synchronization and deterministic transaction processing.
 
 **Core components:**
+
 | Component | What it does |
 |-----------|-------------|
 | **Database** | Custom relational engine with Rust-defined tables |
@@ -156,6 +157,7 @@ Browser/App
 **What is it?** Neo4j is a graph database. Unlike relational databases (which store data in tables with rows and columns) or document databases (which store nested JSON), Neo4j stores data as **nodes** (entities) connected by **relationships** (edges). It uses a query language called **Cypher** that is purpose-built for traversing connections between entities.
 
 **Core concepts:**
+
 | Concept | SQL equivalent | Neo4j |
 |---------|---------------|-------|
 | Entity | Row in a table | **Node** with labels (e.g., `(:Character {name: "Frodo"})`) |
@@ -747,6 +749,106 @@ This is a standard relational model. No graph-like interconnectedness. Items don
 
 ---
 
+### 6.4 VelvetGalaxy (VG)
+
+**Project profile:**
+- Type: Adult-themed social platform with marketplace, artists showcase, and toy reviews
+- Scale: Multi-user, public-facing social network
+- Users: Personal accounts, Organizations ("Moral Persons"), Artists
+- Key features: Social feed (SFW/NSFW), DMs with ephemeral media, chat rooms, groups, events, custom relationship types (Dom/Sub, Partner, mutual consent), 3D galaxy network visualization, Stripe marketplace + subscriptions, toy reviews with 3D viewers, artists portfolio/commissions
+- Data model: 40+ tables, highly interconnected, graph-like social relationships
+- Current stack: Supabase SDK + Supabase Auth + SWR + IndexedDB cache + PostgreSQL rate limiting
+
+**What makes VG's data model a graph:**
+
+```
+┌──────────┐  FOLLOWS    ┌──────────┐  MEMBER_OF   ┌──────────┐
+│  Profile ├────────────►│  Profile  │◄─────────────┤  Group   │
+└────┬─────┘             └────┬─────┘              └────┬─────┘
+     │                        │                          │
+     │ HAS_RELATIONSHIP       │ FRIENDS                  │ HOSTS
+     ▼                        ▼                          ▼
+┌──────────┐             ┌──────────┐              ┌──────────┐
+│Custom    │◄───────────►│  Profile  │◄────────────┤  Event   │
+│Relationship            └──────────┘  RSVPS       └──────────┘
+│(Dom/Sub,                │
+│ Partner,                │ CREATES
+│ mutual)                 ▼
+└──────────┘         ┌──────────┐
+                     │ Artwork  │
+                     │ (Artist  │
+                     │ Showcase)│
+                     └──────────┘
+```
+
+VG has the most genuinely graph-like data of any Nebula Forge project:
+- Profiles connected via follows, friendships, custom relationships
+- Relationships have types (Dom/Sub, Partner), line styles (solid, dashed, wavy), and mutual consent flows
+- The app literally visualizes the social graph in 3D (galaxy-themed network visualization)
+- Groups → Members, Events → Attendees, Conversations → Participants
+
+**Platform analysis (migration effort de-prioritized):**
+
+| Platform | Strengths for VG | Weaknesses for VG | Overall |
+|----------|-----------------|-------------------|---------|
+| **Supabase SDK (current)** | Already working. Supabase Auth + Storage + Realtime integrated. 60+ SQL migrations. RLS on all tables. SWR + IndexedDB caching working well. | No ORM — all queries are manual Supabase SDK calls. Complex nested queries (profile + relationships + artworks) require multiple round-trips. No graph-native queries. | ✅ **Pragmatic choice.** Working and well-integrated. |
+| **Supabase + Neo4j hybrid** | Neo4j is purpose-built for VG's social graph. "Find all profiles connected to this profile through relationship type Dom within 3 hops" is a single Cypher query. The 3D galaxy visualization could query Neo4j directly for graph data. Custom relationship types with line styles map naturally to Neo4j relationship properties. | Must sync user identity between Supabase Auth and Neo4j. Two databases to maintain. Artists showcase, marketplace, and toy reviews stay on Supabase. | 🟡 **Strong technical fit for the graph layer.** The 3D social graph + custom relationships are VG's most unique feature. Neo4j makes them first-class. |
+| **Convex** | Auto-reactive chat (DMs, rooms) and activity feeds. No manual SWR cache management. Real-time updates for new posts, comments, notifications. Simpler DX than Supabase SDK for complex queries. | No ORM — still manual queries. 40+ tables to migrate. Closed source — content policy risk for an adult platform. No Supabase Auth (would need Auth.js). | 🟡 **Good for real-time features.** But the adult content nature raises platform risk concerns with a proprietary host. |
+| **Supabase + Prisma** | Prisma's `include` would reduce round-trips for nested queries (profile + relationships + artworks + posts). Type-safe client. Migration management via Prisma Migrate. | Must rewrite all 60+ SQL migration queries as Prisma schema. Significant effort. Prisma bypasses RLS — need app-level guards. SWR + IndexedDB caching system is independent and can stay. | 🟡 **Adds type safety and query ergonomics.** Not worth the migration cost given 60+ existing SQL migrations, but valuable if starting fresh. |
+| **SpacetimeDB** | Multiplayer chat/rooms would benefit from deterministic sync. | Not a game. No auth. No storage. No web framework integration. | ❌ Not applicable. |
+
+**VG's unique platform considerations:**
+
+1. **Adult content policy risk:** VG hosts NSFW content. This makes **vendor lock-in with closed-source platforms (Convex) particularly risky** — a policy change could shut down the app. Supabase is open source and self-hostable, providing an escape hatch if the managed service changes policies. Neo4j Community Edition is also open source (GPL).
+
+2. **Social graph is the core differentiator:** The custom relationship system (Dom/Sub, Partner, mutual consent flows) and 3D galaxy visualization are what make VG unique. Neo4j handles this natively. Supabase handles it with JOINs. The question is whether the graph complexity justifies a second database.
+
+3. **No ORM, no Redis:** VG uses raw Supabase SDK (like QH), PostgreSQL-based rate limiting (no Redis), and SWR instead of TanStack Query. Adding Redis would improve rate limiting and caching. Adding Prisma would add type safety but at high migration cost.
+
+**VG's Neo4j potential — concrete example:**
+
+```cypher
+// "Find all profiles in a Dom/Sub relationship with this user, showing the relationship type and line style"
+MATCH (dom:Profile {id: $userId})-[:HAS_RELATIONSHIP]->(rel:Relationship {type: "DOM_SUB"})-[:WITH]->(sub:Profile)
+OPTIONAL MATCH (dom)-[:FRIENDS_WITH]-(sub)
+RETURN sub, rel.line_style, rel.mutual_consent, EXISTS((dom)-[:FRIENDS_WITH]-(sub)) AS are_also_friends
+ORDER BY rel.display_order
+```
+
+In Supabase SDK, this requires querying `custom_relationship_types`, `user_relationships`, and `friendships` separately, then merging in JavaScript.
+
+**VG Code Example — "Get a profile with relationships, artworks, and groups":**
+
+```typescript
+// Supabase SDK (current VG approach — 4 round-trips)
+const { data: profile } = await supabase.from("profiles").select("*").eq("id", id).single()
+const { data: relationships } = await supabase.from("user_relationships").select("*, custom_relationship_types(*)").eq("user_id", id)
+const { data: artworks } = await supabase.from("artworks").select("*").eq("artist_id", id).order("created_at", { ascending: false })
+const { data: groups } = await supabase.rpc("get_user_groups", { user_id: id })
+const result = { ...profile, relationships, artworks, groups }
+```
+
+```cypher
+// Neo4j (single query for social graph)
+MATCH (p:Profile {id: $id})
+OPTIONAL MATCH (p)-[:HAS_RELATIONSHIP]->(rel:Relationship)-[:WITH]->(other:Profile)
+OPTIONAL MATCH (p)-[:CREATED]->(a:Artwork)
+OPTIONAL MATCH (p)-[:MEMBER_OF]->(g:Group)
+RETURN p, collect(DISTINCT {rel: rel, profile: other}) AS relationships,
+          collect(DISTINCT a) AS artworks,
+          collect(DISTINCT g) AS groups
+```
+
+**VG Recommendation:**
+
+| Tier | Platform | Rationale |
+|------|----------|-----------|
+| **Pragmatic (today)** | Supabase SDK (current stack) | Working well. Keep it. Add Redis for rate limiting + caching (missing piece). |
+| **Technical best (graph layer)** | Supabase + Neo4j hybrid | When the 3D galaxy visualization and relationship system become performance bottlenecks or need advanced graph queries. Neo4j for the social graph, Supabase for everything else (auth, storage, marketplace, toy reviews, artists). |
+| **Query ergonomics (alternative)** | Supabase + Prisma | If the team wants type-safe queries and automated migrations. High migration cost (60+ SQL files) but long-term DX improvement. Not urgent. |
+
+---
+
 ## 7. Migration Paths
 
 ### 7.1 From Supabase + Prisma → Supabase SDK (Direct)
@@ -961,6 +1063,16 @@ For LK's query complexity, Prisma is the most concise and type-safe. Convex is c
 | — | Neo4j | No graph relationships to model. Using Neo4j for LK would add complexity with zero benefit. |
 | — | SpacetimeDB | Not applicable. |
 
+#### VelvetGalaxy (VG)
+
+| Rank | Platform | When to choose |
+|:----:|----------|---------------|
+| 1 | **Supabase SDK** | **Pragmatic best choice.** Working today with 60+ SQL migrations. Supabase Auth + Storage + Realtime integrated. SWR + IndexedDB caching. |
+| 2 | **Supabase + Neo4j hybrid** | **Technical best choice for the social graph.** The custom relationship system (Dom/Sub, Partner, mutual consent) and 3D galaxy visualization are inherently graph problems. Neo4j handles them natively. Keep Supabase for auth, storage, marketplace, toy reviews, artists. |
+| 3 | **Supabase + Prisma** | **If query ergonomics and type safety become priorities.** Prisma's `include` would reduce round-trips for nested social queries. But 60+ SQL migrations to convert. Not urgent. |
+| 4 | **Convex** | **If real-time features are the top priority.** Auto-reactive chat, notifications, and activity feeds. But adult content raises platform risk on a proprietary host. |
+| — | SpacetimeDB | Not applicable. |
+
 ### Recommended architecture for each project
 
 ```
@@ -991,6 +1103,19 @@ LibraKeeper:
   ORM ───────────────► Prisma (primary data access)
   Auth guards ───────► getServerAuth() + session.user.role checks (Phase 2a)
   React Query ───────► @tanstack/react-query (Phase 1)
+
+VelvetGalaxy:
+  Supabase Auth ─────► @supabase/ssr
+  Supabase Postgres ─► @supabase/supabase-js (direct SDK, no ORM)
+  Supabase Storage ──► @supabase/supabase-js (2 buckets: media + private-media)
+  Supabase Realtime ─► Live activity feeds, notifications, chat
+  SWR ───────────────► Client-side data fetching + caching
+  IndexedDB ─────────► Offline-first caching layer (lib/cache/storage.ts)
+  RLS ───────────────► Primary authorization (all 40+ tables)
+  Rate limiting ─────► PostgreSQL-based (lib/rate-limit.ts, per user+action)
+  Stripe ────────────► Marketplace + subscription tiers (Basic/Premium/Lifetime)
+  Neo4j ─────────────► (future) Social graph queries for 3D galaxy visualization
+  ORM ───────────────► None (raw SQL migrations)
 ```
 
 ---
@@ -1026,6 +1151,16 @@ START: Choosing a backend for your project
    ├─ Deeply relational (3+ levels, many-to-many)?
    │  → Supabase + Prisma. Type-safe includes save round-trips.
    │
+   ├─ Is it a social network with graph-like relationships?
+   │  ├─ And those relationships are core to the product (3D visualization, custom types)?
+   │  │  → Supabase (auth, content, storage) + Neo4j (social graph). Hybrid.
+   │  │
+   │  └─ And relationships are secondary (simple follows/friends)?
+   │     → Supabase SDK. Standard joins are sufficient.
+   │
+   ├─ Does it have adult/NSFW content?
+   │  → Supabase. Open source = self-hostable if platform policy changes.
+   │
    └─ Flat (1-2 levels)?
       → Supabase SDK (if RLS is critical) OR Supabase + Prisma (if DX is priority).
 ```
@@ -1050,4 +1185,4 @@ START: Choosing a backend for your project
 
 ---
 
-*This document was generated from comparative analysis of Supabase, Convex, SpacetimeDB, and Neo4j as applied to the QuestHunt, StoryForge, and LibraKeeper projects within Nebula Forge Digital Studio. Last updated 2026-05-15.*
+*This document was generated from comparative analysis of Supabase, Convex, SpacetimeDB, and Neo4j as applied to the QuestHunt, StoryForge, LibraKeeper, and VelvetGalaxy projects within Nebula Forge Digital Studio. Last updated 2026-05-15.*

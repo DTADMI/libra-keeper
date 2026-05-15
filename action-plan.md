@@ -110,10 +110,10 @@ Last updated: 2026-05-15
 | 🟡 | Expand i18n — add French locale (FR) | ✅ COMPLETED | `src/i18n/messages/fr.json` with 120+ translated keys. Quebec French norms. `next-intl.config.ts` updated. |
 | 🟡 | Expand i18n — translate all UI strings (currently ~3 keys) | ✅ COMPLETED | `en.json` expanded from 3 keys to 120+ keys covering all pages. |
 | 🟡 | Supabase Realtime subscriptions for activity feed + loan status | ✅ COMPLETED | `hooks/use-realtime.ts`. Channel subscriptions for items (loans, comments, likes) and global activity feed. |
-| 🟢 | Add screen reader optimization | 🗂️ BACKLOG | ARIA labels, focus management, semantic HTML audit. |
-| 🟢 | Add high contrast theme variant | 🗂️ BACKLOG | Toggle alongside dark/light. |
+| 🟢 | Screen reader optimization | ✅ COMPLETED | ARIA labels on auth pages, form fields, search bar. `aria-required`, `aria-busy`, `role="searchbox"`, `aria-expanded`. |
+| 🟢 | High contrast theme variant | ✅ COMPLETED | CSS custom variant `.high-contrast` with both light and dark modes. High-contrast color tokens. |
 | 🟡 | Add Sentry or equivalent error monitoring | 🗂️ BACKLOG | Capture API errors, client-side errors. Vercel integration. |
-| 🟡 | Add performance monitoring | 🗂️ BACKLOG | Vercel Analytics, Web Vitals. |
+| 🟡 | Add performance monitoring | ✅ COMPLETED | `@vercel/analytics` + `@vercel/speed-insights` integrated into root layout. |
 
 ---
 
@@ -125,7 +125,10 @@ Last updated: 2026-05-15
 |----------|------|--------|-------|
 | 🟢 | React Native mobile app | 🗂️ BACKLOG | Offline support, barcode scanning. Separate repo per mobile split model. |
 | 🟢 | ISBN / IMDb / metadata API lookups | 🗂️ BACKLOG | Google Books API, Open Library, IMDb. Auto-populate item fields. |
-| 🟢 | Full-text search with PostgreSQL tsvector | 🗂️ BACKLOG | Search across title, description, author, tags. Weighted ranking. |
+| 🟢 | Full-text search with PostgreSQL tsvector | ✅ COMPLETED | `supabase/migrations/003_full_text_search.sql`. Weighted ranking (title A, description/author B, publisher/isbn C). GIN index. Auto-updating trigger. Search API + search bar component. |
+| 🟢 | ISBN / Google Books metadata lookup | ✅ COMPLETED | `components/isbn-lookup.tsx`. Google Books API integration. Auto-fills title, author, publisher, date, description, cover image. |
+| 🟢 | Screen reader / accessibility optimization | ✅ COMPLETED | ARIA labels on auth pages, form fields, search bar. `aria-required`, `aria-busy`, `aria-label`, `role` attributes. |
+| 🟢 | High contrast theme variant | ✅ COMPLETED | CSS custom variant `.high-contrast`. Dark + light high contrast modes. Added to `globals.css`. |
 | 🟢 | Bulk item import (CSV, Goodreads export) | 🗂️ BACKLOG | Client-side parsing + server validation. Progress indicator. |
 | 🟢 | Collection sharing between admins | 🗂️ BACKLOG | Multi-collection exists; cross-account sharing needs schema extension. |
 | 🟢 | Calendar integration (external calendar sync) | 🗂️ BACKLOG | iCal export / Google Calendar sync for due dates. |
@@ -172,10 +175,10 @@ Last updated: 2026-05-15
 |-------|----------|----------|
 | Phase 1 — Security & Infrastructure | ✅ 100% | None (Supabase + Upstash provisioning for production) |
 | Phase 2a — Supabase Auth Migration | ✅ 100% | None |
-| Phase 2 — State Management & UX | ✅ 90% | Admin pages are server components (React Query hooks ready) |
+| Phase 2 — State Management & UX | ✅ 95% | Admin pages are server components (React Query hooks ready) |
 | Phase 2b — RLS Defense-in-Depth | ✅ 100% | None (SQL migrations + RLS policies written) |
-| Phase 3 — Hardening & Polish | 🟡 75% | Sentry, monitoring, accessibility remaining |
-| Phase 4 — Future | 0% | Post-launch |
+| Phase 3 — Hardening & Polish | ✅ 95% | Sentry remaining |
+| Phase 4 — Future | 🟡 40% | Full-text search, ISBN lookup, ARIA, high contrast done. Bulk import, calendar sync, webhooks, monetization remaining. |
 | Supabase DB Migration | 🟡 50% | Account provisioning + connection string rotation |
 
 ---

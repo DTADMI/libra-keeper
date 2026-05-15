@@ -73,7 +73,7 @@ function SignInForm() {
             Sign in to manage your library
           </p>
         </div>
-        <form onSubmit={onSubmit} className="space-y-4">
+        <form onSubmit={onSubmit} className="space-y-4" aria-label="Sign in form">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -82,13 +82,22 @@ function SignInForm() {
               type="email"
               placeholder="john@example.com"
               required
+              autoComplete="email"
+              aria-required="true"
             />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" name="password" type="password" required />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              required
+              autoComplete="current-password"
+              aria-required="true"
+            />
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button type="submit" className="w-full" disabled={isLoading} aria-busy={isLoading}>
             {isLoading ? "Signing in..." : "Sign In"}
           </Button>
         </form>

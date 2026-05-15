@@ -1,6 +1,8 @@
 // src/app/layout.tsx
 import "./globals.css"
 
+import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Inter } from "next/font/google"
 
 import { PWAInstallPrompt } from "@/components/pwa/install-prompt"
@@ -41,6 +43,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </QueryProvider>
           <Toaster position="top-center" />
         </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
