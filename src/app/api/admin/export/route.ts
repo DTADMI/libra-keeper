@@ -1,14 +1,12 @@
 // src/app/api/admin/export/route.ts
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
-
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user || session.user.role !== "ADMIN") {
+    const session = await getServerAuth()
+    if (!session.user || session.user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 

@@ -1,11 +1,9 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getServerSession } from "next-auth"
-
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 import { BorrowButton } from "./borrow-button"
@@ -16,7 +14,7 @@ import { WaitlistButton } from "./waitlist-button"
 
 export default async function ItemDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const session = await getServerSession(authOptions)
+  const session = await getServerAuth()
 
   const item = await prisma.item.findUnique({
     where: { id },
@@ -41,12 +39,12 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
     notFound()
   }
 
-  const isAdmin = session?.user.role === "ADMIN"
+  const isAdmin = session?.user?.role === "ADMIN"
   const hasActiveLoan = item.loans.length > 0
   const userHasPendingLoan = item.loans.some(
-    (loan) => loan.userId === session?.user.id && loan.status === "PENDING",
+    (loan) => loan.userId === session?.user?.id && loan.status === "PENDING",
   );
-  const userJoinedWaitlist = item.waitlist.some((entry) => entry.userId === session?.user.id)
+  const userJoinedWaitlist = item.waitlist.some((entry) => entry.userId === session?.user?.id)
 
   return (
     <div className="container mx-auto py-10 px-4">
@@ -115,7 +113,7 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
             )}
             {item.status === "BORROWED" &&
               !isAdmin &&
-              session?.user.id !== item.loans.find((l) => l.status === "APPROVED")?.userId && (
+              session?.user?.id !== item.loans.find((l) => l.status === "APPROVED")?.userId && (
                 <WaitlistButton itemId={item.id} isJoined={userJoinedWaitlist} />
               )}
             {userHasPendingLoan && (

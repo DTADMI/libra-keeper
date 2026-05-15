@@ -1,16 +1,14 @@
-import { getServerSession } from "next-auth"
-
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 export default async function MyLoansPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerAuth()
 
   const loans = await prisma.loan.findMany({
     where: {
-      userId: session?.user.id,
+      userId: session?.user?.id,
     },
     include: {
       item: true,

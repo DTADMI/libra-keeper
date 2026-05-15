@@ -1,15 +1,13 @@
 import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 import { RequestActionButtons } from "./request-action-buttons"
 
 export default async function AdminRequestsPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerAuth()
 
   if (!session?.user || session.user.role !== "ADMIN") {
     redirect("/dashboard")

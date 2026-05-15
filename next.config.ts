@@ -13,15 +13,37 @@ const withPWA =
 const withNextIntl = createNextIntlPlugin("./next-intl.config.ts")
 
 const nextConfig: NextConfig = withNextIntl(withPWA({
-  // Configure output file tracing
   output: "standalone",
-
-  // Set the root directory for file tracing
   outputFileTracingRoot: __dirname,
 
-  // Your other Next.js config options here
-  experimental: {
-    // Add any experimental features here
+  experimental: {},
+
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://*.supabase.co https://*.googleusercontent.com",
+              "font-src 'self'",
+              "connect-src 'self' https://*.upstash.io https://*.supabase.co https://api.resend.com",
+              "frame-src 'self'",
+              "worker-src 'self' blob:",
+              "manifest-src 'self'",
+            ].join("; "),
+          },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+    ]
   },
 }));
 

@@ -1,7 +1,7 @@
 // src/app/(protected)/profile/page.tsx
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useSession } from "@/hooks/use-session"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 

@@ -1,13 +1,13 @@
 // src/app/(protected)/layout.tsx
 import { redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
 
-import { authOptions } from "@/lib/auth"
+import { createServerClient } from "@/lib/supabase/server"
 
 export default async function ProtectedLayout({ children }: { children: React.ReactNode }) {
-  const session = await getServerSession(authOptions)
+  const supabase = await createServerClient()
+  const { data } = await supabase.auth.getUser()
 
-  if (!session) {
+  if (!data.user) {
     redirect("/auth/signin")
   }
 

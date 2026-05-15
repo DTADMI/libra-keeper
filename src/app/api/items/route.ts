@@ -1,9 +1,8 @@
 // src/app/api/items/route.ts
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
 import { z } from "zod"
 
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 import { logger } from "@/lib/logger"
 
@@ -26,8 +25,8 @@ const itemSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user || session.user.role !== "ADMIN") {
+    const session = await getServerAuth()
+    if (!session.user || session.user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 

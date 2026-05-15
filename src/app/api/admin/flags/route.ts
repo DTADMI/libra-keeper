@@ -1,10 +1,10 @@
 // src/app/api/admin/flags/route.ts
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
 import { z } from "zod"
 
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
+import { invalidateFlagCache } from "@/lib/settings"
 
 const flagSchema = z.object({
   name: z.string().min(1),
@@ -14,8 +14,8 @@ const flagSchema = z.object({
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user || session.user.role !== "ADMIN") {
+    const session = await getServerAuth()
+    if (!session.user || session.user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
@@ -31,8 +31,8 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user || session.user.role !== "ADMIN") {
+    const session = await getServerAuth()
+    if (!session.user || session.user.role !== "ADMIN") {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
@@ -44,6 +44,8 @@ export async function POST(req: Request) {
       update: { description, isEnabled },
       create: { name, description, isEnabled },
     });
+
+    await invalidateFlagCache(name)
 
     return NextResponse.json(flag)
   } catch (error) {

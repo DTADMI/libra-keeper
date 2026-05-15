@@ -1,30 +1,47 @@
-import createMiddleware from "next-intl/middleware"
+import { NextResponse, type NextRequest } from "next/server"
 
-import { locales } from "./i18n"
+import { createMiddlewareClient } from "@/lib/supabase/middleware"
+import { RATE_LIMITS, checkRateLimit } from "@/lib/security/rate-limit"
 
-export default createMiddleware({
-  // Supported locales for the application
-  locales: [...locales],
+const protectedPaths = ["/dashboard", "/admin", "/items", "/loans", "/calendar", "/messages", "/profile", "/suggestions"]
+const authPaths = ["/auth/signin", "/auth/register"]
 
-  // Default locale to use when none is specified
-  defaultLocale: "en",
+export async function proxy(request: NextRequest) {
+  const response = NextResponse.next()
+  const supabase = createMiddlewareClient(request, response)
 
-  // Only use the default locale for the root URL
-  localePrefix: "as-needed",
+  const url = new URL(request.url)
+  const path = url.pathname
 
-  // Configure pathnames for internationalized routing
-  // pathnames: {
-  //   '/': '/',
-  //   '/about': '/about',
-  //   // Add more paths as needed
-  // },
-});
+  const isProtected = protectedPaths.some((p) => path.startsWith(p))
+  const isAuthPage = authPaths.some((p) => path.startsWith(p))
+
+  if (isProtected || isAuthPage) {
+    const { data } = await supabase.auth.getUser()
+
+    if (isProtected && !data.user) {
+      const signInUrl = new URL("/auth/signin", request.url)
+      signInUrl.searchParams.set("redirect", path)
+      return NextResponse.redirect(signInUrl)
+    }
+
+    if (isAuthPage && data.user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", data.user.id)
+        .maybeSingle()
+
+      const dest = profile?.role === "ADMIN" ? "/dashboard" : "/dashboard"
+      return NextResponse.redirect(new URL(dest, request.url))
+    }
+  }
+
+  return response
+}
 
 export const config = {
-  // Match all request paths except for:
-  // - API routes
-  // - Static files (images, fonts, etc.)
-  // - Public folder files
-  // - Next.js internals (e.g., _next, _vercel)
-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
-};
+  matcher: [
+    "/((?!api|_next|_vercel|static|public|favicon\\.ico|.*\\..*).*)",
+  ],
+}

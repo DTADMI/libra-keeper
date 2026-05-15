@@ -1,16 +1,14 @@
 import { notFound, redirect } from "next/navigation"
-import { getServerSession } from "next-auth"
-
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 import { EditItemForm } from "./edit-item-form"
 
 export default async function EditItemPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params
-  const session = await getServerSession(authOptions)
+  const session = await getServerAuth()
 
-  if (session?.user.role !== "ADMIN") {
+  if (!session?.user || session.user.role !== "ADMIN") {
     redirect("/dashboard")
   }
 

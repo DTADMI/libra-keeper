@@ -1,9 +1,8 @@
 // src/app/api/items/[id]/comments/route.ts
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
 import { z } from "zod"
 
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 const commentSchema = z.object({
@@ -12,7 +11,7 @@ const commentSchema = z.object({
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuth()
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }

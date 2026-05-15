@@ -1,16 +1,14 @@
 // src/app/dashboard/page.tsx
 import Link from "next/link"
-import { getServerSession } from "next-auth"
-
 import { ActivityFeed } from "@/components/activity/activity-feed"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerAuth()
 
   type ItemWithTags = {
     id: string
@@ -30,7 +28,7 @@ export default async function DashboardPage() {
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        {session?.user.role === "ADMIN" && (
+        {session?.user && session.user.role === "ADMIN" && (
           <Button asChild>
             <Link href="/items/new">Add New Item</Link>
           </Button>

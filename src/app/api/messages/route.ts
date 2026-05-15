@@ -1,9 +1,8 @@
 // src/app/api/messages/route.ts
 import { NextResponse } from "next/server"
-import { getServerSession } from "next-auth"
 import { z } from "zod"
 
-import { authOptions } from "@/lib/auth"
+import { getServerAuth } from "@/lib/auth-utils"
 import { prisma } from "@/lib/db"
 
 const messageSchema = z.object({
@@ -13,7 +12,7 @@ const messageSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuth()
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }
@@ -44,7 +43,7 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuth()
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 })
     }

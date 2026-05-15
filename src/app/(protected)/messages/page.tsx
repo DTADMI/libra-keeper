@@ -1,7 +1,7 @@
 // src/app/(protected)/messages/page.tsx
 "use client"
 
-import { useSession } from "next-auth/react"
+import { useSession } from "@/hooks/use-session"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -163,7 +163,7 @@ export default function MessagesPage() {
                     key={msg.id}
                     className={cn(
                       "flex flex-col max-w-[80%] rounded-lg p-3",
-                      msg.senderId === session?.user.id
+                      msg.senderId === session?.user?.id
                         ? "ml-auto bg-primary text-primary-foreground"
                         : "mr-auto bg-accent",
                     )}
