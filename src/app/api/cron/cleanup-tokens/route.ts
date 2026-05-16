@@ -29,7 +29,9 @@ export async function GET(req: Request) {
       deletedTokens: deletedTokens.count,
     });
   } catch (error) {
-    console.error("Cleanup cron failed:", error);
+    logger.error("Cleanup cron failed:", error);
     return NextResponse.json({ success: false, error: "Internal error" }, { status: 500 });
   }
 }
+
+import { logger } from "@/lib/logger";

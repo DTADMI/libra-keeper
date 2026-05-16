@@ -2,9 +2,9 @@
 import { NextResponse } from "next/server";
 
 import { getServerAuth } from "@/lib/auth-utils";
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
 import { prisma } from "@/lib/db";
-
-export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerAuth();
     if (!session?.user) {
@@ -73,3 +73,5 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });

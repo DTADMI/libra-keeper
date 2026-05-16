@@ -22,7 +22,9 @@ export async function GET() {
 
     return NextResponse.json(flags);
   } catch (error) {
-    console.error("Error fetching feature flags:", error);
+    logger.error("Error fetching feature flags:", error);
     return NextResponse.json([], { status: 200 });
   }
 }
+
+import { logger } from "@/lib/logger";

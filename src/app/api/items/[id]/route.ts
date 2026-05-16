@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
 import { prisma } from "@/lib/db";
-
 const itemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional().nullable(),
@@ -49,7 +49,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const session = await getServerAuth();
@@ -90,7 +90,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const session = await getServerAuth();
@@ -107,3 +107,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const PATCH = withProtection(_PATCH, { scope: "write", limit: 60, windowSeconds: 60 });
+
+export const DELETE = withProtection(_DELETE, { scope: "write", limit: 60, windowSeconds: 60 });

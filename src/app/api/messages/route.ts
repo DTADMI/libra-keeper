@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
 import { prisma } from "@/lib/db";
-
 const messageSchema = z.object({
   content: z.string().min(1),
   receiverId: z.string(),
 });
 
-export async function POST(req: Request) {
+async function _POST(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session?.user) {
@@ -100,3 +100,5 @@ export async function GET(req: Request) {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });

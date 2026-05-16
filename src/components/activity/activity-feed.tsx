@@ -5,6 +5,7 @@ import { BookOpen, MessageCircle, Send } from "lucide-react";
 import Link from "next/link";
 
 import { useActivity } from "@/hooks/use-activity";
+import { useRealtimeActivity } from "@/hooks/use-realtime";
 
 const ICONS = {
   LOAN: BookOpen,
@@ -14,6 +15,7 @@ const ICONS = {
 
 export function ActivityFeed() {
   const { data: activities = [], isLoading, error } = useActivity();
+  useRealtimeActivity();
 
   if (isLoading) {
     return (

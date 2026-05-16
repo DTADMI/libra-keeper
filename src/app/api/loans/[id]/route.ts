@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
-import { prisma } from "@/lib/db";
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
+import { logger } from "@/lib/logger";
 import { sendLoanStatusEmail } from "@/lib/mail";
-
+import { prisma } from "@/lib/db";
 const updateLoanSchema = z.object({
   status: z.enum(["APPROVED", "REJECTED", "RETURNED", "OVERDUE", "LOST", "DAMAGED"]),
   dueAt: z.string().datetime().optional(),
@@ -12,7 +13,7 @@ const updateLoanSchema = z.object({
   returnNotes: z.string().optional(),
 });
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     const session = await getServerAuth();
@@ -102,7 +103,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    console.error("Loan update error:", error);
+    logger.error("Loan update error:", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const PATCH = withProtection(_PATCH, { scope: "write", limit: 60, windowSeconds: 60 });

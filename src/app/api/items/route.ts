@@ -5,7 +5,7 @@ import { z } from "zod";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
 const itemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional().nullable(),
@@ -23,7 +23,7 @@ const itemSchema = z.object({
   collectionId: z.string().optional().nullable(),
 });
 
-export async function POST(req: Request) {
+async function _POST(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
@@ -87,3 +87,5 @@ export async function GET() {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });

@@ -7,6 +7,25 @@ jest.mock("@/lib/db", () => ({
   },
 }));
 
+jest.mock("@/lib/redis", () => ({
+  redis: {
+    get: jest.fn().mockResolvedValue(null),
+    set: jest.fn().mockResolvedValue("OK"),
+    pipeline: jest.fn().mockReturnValue({
+      zremrangebyscore: jest.fn().mockReturnThis(),
+      zcard: jest.fn().mockReturnThis(),
+      zadd: jest.fn().mockReturnThis(),
+      expire: jest.fn().mockReturnThis(),
+      exec: jest.fn().mockResolvedValue([[null, 0], [null, 0], [null, 1]]),
+    }),
+  },
+}));
+
+jest.mock("@/lib/security/protection", () => ({
+  withProtection: (handler: Function) => handler,
+  RATE_LIMITS: {},
+}));
+
 jest.mock("@/lib/auth-utils", () => ({
   getServerAuth: jest.fn(),
 }));

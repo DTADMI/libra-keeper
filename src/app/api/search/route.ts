@@ -56,7 +56,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json(items);
   } catch (error) {
-    console.error("Search error:", error);
+    logger.error("Search error:", error);
     return NextResponse.json([], { status: 200 });
   }
 }
+
+import { logger } from "@/lib/logger";

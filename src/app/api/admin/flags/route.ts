@@ -4,8 +4,8 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
 import { invalidateFlagCache } from "@/lib/settings";
-
 const flagSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
@@ -29,7 +29,7 @@ export async function GET() {
   }
 }
 
-export async function POST(req: Request) {
+async function _POST(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
@@ -55,3 +55,5 @@ export async function POST(req: Request) {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });

@@ -79,7 +79,9 @@ export async function GET(req: Request) {
       total: results.length,
     });
   } catch (error) {
-    console.error("Email reminder cron failed:", error);
+    logger.error("Email reminder cron failed:", error);
     return NextResponse.json({ success: false, error: "Internal error" }, { status: 500 });
   }
 }
+
+import { logger } from "@/lib/logger";

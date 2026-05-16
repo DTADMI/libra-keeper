@@ -80,7 +80,9 @@ export async function GET() {
 
     return NextResponse.json(activities);
   } catch (error) {
-    console.error("Activity feed error:", error);
+    logger.error("Activity feed error:", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+import { logger } from "@/lib/logger";

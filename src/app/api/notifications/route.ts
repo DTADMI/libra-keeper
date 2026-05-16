@@ -17,7 +17,7 @@ export async function GET() {
 
     return NextResponse.json(notifications);
   } catch (error) {
-    console.error("Notifications error:", error);
+    logger.error("Notifications error:", error);
     return NextResponse.json([], { status: 200 });
   }
 }
@@ -42,3 +42,5 @@ export async function POST(req: Request) {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+import { logger } from "@/lib/logger";

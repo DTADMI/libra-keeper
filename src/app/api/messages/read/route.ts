@@ -32,8 +32,10 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    console.error("Message read error:", error);
+    logger.error("Message read error:", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
+
+import { logger } from "@/lib/logger";

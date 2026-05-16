@@ -2,14 +2,15 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
+import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
+import { logger } from "@/lib/logger";
 import { prisma } from "@/lib/db";
-
 const collectionSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
 });
 
-export async function POST(req: Request) {
+async function _POST(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
@@ -31,7 +32,7 @@ export async function POST(req: Request) {
     if (error instanceof z.ZodError) {
       return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    console.error("[COLLECTIONS_POST]", error);
+    logger.error("[COLLECTIONS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
@@ -49,7 +50,9 @@ export async function GET(req: Request) {
 
     return NextResponse.json(collections);
   } catch (error) {
-    console.error("[COLLECTIONS_GET]", error);
+    logger.error("[COLLECTIONS_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }
+
+export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });
