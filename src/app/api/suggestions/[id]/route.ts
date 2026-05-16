@@ -1,9 +1,9 @@
 // src/app/api/suggestions/[id]/route.ts
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 const updateSuggestionSchema = z.object({
   status: z.enum(["PENDING", "PROCESSING", "COMPLETED", "REJECTED"]),
@@ -11,14 +11,14 @@ const updateSuggestionSchema = z.object({
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const session = await getServerAuth()
+    const { id } = await params;
+    const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const json = await req.json()
-    const { status } = updateSuggestionSchema.parse(json)
+    const json = await req.json();
+    const { status } = updateSuggestionSchema.parse(json);
 
     const request = await prisma.itemRequest.update({
       where: { id },
@@ -28,21 +28,21 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       },
     });
 
-    return NextResponse.json(request)
+    return NextResponse.json(request);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 })
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const session = await getServerAuth()
+    const { id } = await params;
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const request = await prisma.itemRequest.findUnique({
@@ -50,19 +50,19 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
     });
 
     if (!request) {
-      return new NextResponse("Not found", { status: 404 })
+      return new NextResponse("Not found", { status: 404 });
     }
 
     if (request.requestedById !== session.user.id && session.user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     await prisma.itemRequest.delete({
       where: { id },
     });
 
-    return new NextResponse(null, { status: 204 })
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

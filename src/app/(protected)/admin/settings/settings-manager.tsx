@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 type SettingType = "STRING" | "BOOLEAN" | "NUMBER" | "JSON"
 
@@ -19,26 +19,26 @@ interface Setting {
 }
 
 export function SettingsManager() {
-  const [settings, setSettings] = useState<Setting[]>([])
-  const [newSetting, setNewSetting] = useState<Setting>({ key: "", value: "", type: "STRING" })
-  const [loading, setLoading] = useState(true)
+  const [settings, setSettings] = useState<Setting[]>([]);
+  const [newSetting, setNewSetting] = useState<Setting>({ key: "", value: "", type: "STRING" });
+  const [loading, setLoading] = useState(true);
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch("/api/admin/settings")
+      const res = await fetch("/api/admin/settings");
       if (res.ok) {
-        const data = await res.json()
-        setSettings(data)
+        const data = await res.json();
+        setSettings(data);
       }
     } catch (error) {
-      toast.error("Failed to fetch settings")
+      toast.error("Failed to fetch settings");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchSettings()
+    fetchSettings();
   }, []);
 
   const handleSave = async (setting: Setting) => {
@@ -50,26 +50,26 @@ export function SettingsManager() {
       });
 
       if (res.ok) {
-        toast.success("Setting saved")
-        fetchSettings()
+        toast.success("Setting saved");
+        fetchSettings();
       } else {
-        toast.error("Failed to save setting")
+        toast.error("Failed to save setting");
       }
     } catch (error) {
-      toast.error("Error saving setting")
+      toast.error("Error saving setting");
     }
   };
 
   const handleAdd = async () => {
     if (!newSetting.key) {
-      return toast.error("Key is required")
+      return toast.error("Key is required");
     }
-    await handleSave(newSetting)
-    setNewSetting({ key: "", value: "", type: "STRING" })
+    await handleSave(newSetting);
+    setNewSetting({ key: "", value: "", type: "STRING" });
   };
 
   if (loading) {
-    return <div>Loading settings...</div>
+    return <div>Loading settings...</div>;
   }
 
   return (
@@ -128,7 +128,7 @@ export function SettingsManager() {
                   const newSettings = settings.map((s) =>
                     s.key === setting.key ? { ...s, value: e.target.value } : s,
                   );
-                  setSettings(newSettings)
+                  setSettings(newSettings);
                 }}
               />
               <div className="text-xs uppercase text-muted-foreground">{setting.type}</div>

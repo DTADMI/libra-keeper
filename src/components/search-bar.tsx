@@ -1,33 +1,33 @@
-"use client"
+"use client";
 
-import { SearchIcon, X } from "lucide-react"
-import Link from "next/link"
-import { useState, useRef, useEffect } from "react"
+import { SearchIcon, X } from "lucide-react";
+import Link from "next/link";
+import { useEffect,useRef, useState } from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { useSearch } from "@/hooks/use-search"
-import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { useSearch } from "@/hooks/use-search";
+import { cn } from "@/lib/utils";
 
 export function SearchBar() {
-  const [query, setQuery] = useState("")
-  const [open, setOpen] = useState(false)
-  const { data: results = [], isLoading } = useSearch(query)
-  const ref = useRef<HTMLDivElement>(null)
+  const [query, setQuery] = useState("");
+  const [open, setOpen] = useState(false);
+  const { data: results = [], isLoading } = useSearch(query);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
+        setOpen(false);
       }
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   function handleChange(value: string) {
-    setQuery(value)
-    setOpen(value.length >= 2)
+    setQuery(value);
+    setOpen(value.length >= 2);
   }
 
   return (
@@ -39,7 +39,7 @@ export function SearchBar() {
           value={query}
           onChange={(e) => handleChange(e.target.value)}
           onFocus={() => {
-            if (query.length >= 2) setOpen(true)
+            if (query.length >= 2) {setOpen(true);}
           }}
           className="pl-9 pr-8"
           aria-label="Search library items"
@@ -49,8 +49,8 @@ export function SearchBar() {
         {query && (
           <button
             onClick={() => {
-              setQuery("")
-              setOpen(false)
+              setQuery("");
+              setOpen(false);
             }}
             className="absolute right-3 top-1/2 -translate-y-1/2"
             aria-label="Clear search"
@@ -96,5 +96,5 @@ export function SearchBar() {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -4,29 +4,29 @@
 // and vendor independence.
 
 export interface EmailClient {
-  send(params: SendEmailParams): Promise<EmailResult>
+  send(params: SendEmailParams): Promise<EmailResult>;
 }
 
 export interface SendEmailParams {
-  to: string
-  subject: string
-  html?: string
-  text?: string
-  from?: string
+  to: string;
+  subject: string;
+  html?: string;
+  text?: string;
+  from?: string;
 }
 
 export interface EmailResult {
-  id: string
-  success: boolean
+  id: string;
+  success: boolean;
 }
 
 class ResendEmailAdapter implements EmailClient {
-  private apiKey: string
-  private fromDefault: string
+  private apiKey: string;
+  private fromDefault: string;
 
   constructor(apiKey: string, fromDefault?: string) {
-    this.apiKey = apiKey
-    this.fromDefault = fromDefault ?? "LibraKeeper <noreply@librakeeper.app>"
+    this.apiKey = apiKey;
+    this.fromDefault = fromDefault ?? "LibraKeeper <noreply@librakeeper.app>";
   }
 
   async send(params: SendEmailParams): Promise<EmailResult> {
@@ -43,32 +43,32 @@ class ResendEmailAdapter implements EmailClient {
         html: params.html,
         text: params.text,
       }),
-    })
+    });
 
-    const json = await res.json()
+    const json = await res.json();
 
     if (!res.ok) {
-      console.error("Resend API error:", json)
-      return { id: "", success: false }
+      console.error("Resend API error:", json);
+      return { id: "", success: false };
     }
 
-    return { id: (json as { id?: string }).id ?? "", success: true }
+    return { id: (json as { id?: string }).id ?? "", success: true };
   }
 }
 
 class MockEmailAdapter implements EmailClient {
   async send(params: SendEmailParams): Promise<EmailResult> {
-    console.log("[MockEmail]", params.to, params.subject)
-    return { id: "mock-" + Date.now(), success: true }
+    console.log("[MockEmail]", params.to, params.subject);
+    return { id: "mock-" + Date.now(), success: true };
   }
 }
 
 function createEmailClient(): EmailClient {
-  const apiKey = process.env.RESEND_API_KEY
+  const apiKey = process.env.RESEND_API_KEY;
   if (apiKey) {
-    return new ResendEmailAdapter(apiKey, process.env.EMAIL_FROM)
+    return new ResendEmailAdapter(apiKey, process.env.EMAIL_FROM);
   }
-  return new MockEmailAdapter()
+  return new MockEmailAdapter();
 }
 
-export const emailClient: EmailClient = createEmailClient()
+export const emailClient: EmailClient = createEmailClient();

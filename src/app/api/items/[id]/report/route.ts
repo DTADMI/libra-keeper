@@ -1,14 +1,15 @@
 // src/app/api/items/[id]/report/route.ts
-import { NextResponse } from "next/server"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { NextResponse } from "next/server";
+
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const session = await getServerAuth()
+    const { id } = await params;
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     // Create a special ItemRequest for a missing item
@@ -17,7 +18,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
 
     if (!item) {
-      return new NextResponse("Item not found", { status: 404 })
+      return new NextResponse("Item not found", { status: 404 });
     }
 
     const request = await prisma.itemRequest.create({
@@ -33,8 +34,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // Optionally update item status to LOST?
     // Let's wait for admin approval.
 
-    return NextResponse.json(request, { status: 201 })
+    return NextResponse.json(request, { status: 201 });
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

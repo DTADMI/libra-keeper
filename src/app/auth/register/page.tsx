@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { toast } from "sonner"
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { createBrowserClient } from "@/lib/supabase/client"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { createBrowserClient } from "@/lib/supabase/client";
 
 export default function RegisterPage() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
+    event.preventDefault();
+    setIsLoading(true);
 
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
-    const name = formData.get("name") as string
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const name = formData.get("name") as string;
 
     try {
-      const supabase = createBrowserClient()
+      const supabase = createBrowserClient();
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -32,18 +32,18 @@ export default function RegisterPage() {
           data: { name },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
-      })
+      });
 
-      if (error) throw error
+      if (error) {throw error;}
 
-      toast.success("Account created! Check your email to verify your account.")
-      router.push("/auth/signin")
+      toast.success("Account created! Check your email to verify your account.");
+      router.push("/auth/signin");
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : "Failed to register"
-      toast.error(message)
+        error instanceof Error ? error.message : "Failed to register";
+      toast.error(message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -98,5 +98,5 @@ export default function RegisterPage() {
         </p>
       </div>
     </div>
-  )
+  );
 }

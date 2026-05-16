@@ -1,10 +1,10 @@
 // src/app/(protected)/items/[id]/borrow-button.tsx
-"use client"
+"use client";
 
-import { toast } from "sonner"
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { useBorrowItem } from "@/hooks/use-loans"
+import { Button } from "@/components/ui/button";
+import { useBorrowItem } from "@/hooks/use-loans";
 
 interface BorrowButtonProps {
   itemId: string;
@@ -12,17 +12,17 @@ interface BorrowButtonProps {
 }
 
 export function BorrowButton({ itemId, disabled }: BorrowButtonProps) {
-  const borrowItem = useBorrowItem(itemId)
+  const borrowItem = useBorrowItem(itemId);
 
   function onBorrow() {
     borrowItem.mutate(undefined, {
       onSuccess: () => {
-        toast.success("Borrow request sent successfully")
+        toast.success("Borrow request sent successfully");
       },
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : "Failed to send borrow request")
+        toast.error(error instanceof Error ? error.message : "Failed to send borrow request");
       },
-    })
+    });
   }
 
   return (

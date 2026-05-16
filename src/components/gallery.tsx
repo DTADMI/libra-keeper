@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { X, Upload, ChevronLeft, ChevronRight, Star } from "lucide-react"
-import { useState } from "react"
-import { toast } from "sonner"
+import { ChevronLeft, ChevronRight, Star,Upload, X } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { useItemImages, useUploadImage } from "@/hooks/use-item-images"
+import { Button } from "@/components/ui/button";
+import { useItemImages, useUploadImage } from "@/hooks/use-item-images";
 
 interface ItemGalleryProps {
   itemId: string
@@ -13,30 +13,30 @@ interface ItemGalleryProps {
 }
 
 export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
-  const { data: images = [], isLoading } = useItemImages(itemId)
-  const uploadImage = useUploadImage(itemId)
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+  const { data: images = [], isLoading } = useItemImages(itemId);
+  const uploadImage = useUploadImage(itemId);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files
-    if (!files?.length) return
+    const files = e.target.files;
+    if (!files?.length) {return;}
 
     for (const file of Array.from(files)) {
       if (!file.type.startsWith("image/")) {
-        toast.error(`"${file.name}" is not an image`)
-        continue
+        toast.error(`"${file.name}" is not an image`);
+        continue;
       }
-      uploadImage.mutate(file)
+      uploadImage.mutate(file);
     }
-    e.target.value = ""
+    e.target.value = "";
   }
 
   if (isLoading) {
-    return <div className="h-48 bg-muted rounded-lg animate-pulse" />
+    return <div className="h-48 bg-muted rounded-lg animate-pulse" />;
   }
 
-  const activeImage = activeIndex !== null && activeIndex < images.length ? images[activeIndex] : null
-  const idx = activeIndex ?? 0
+  const activeImage = activeIndex !== null && activeIndex < images.length ? images[activeIndex] : null;
+  const idx = activeIndex ?? 0;
 
   return (
     <div className="space-y-3">
@@ -108,5 +108,5 @@ export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

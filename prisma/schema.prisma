@@ -178,14 +178,15 @@ model Like {
 }
 
 model Message {
-  id         String   @id @default(cuid())
-  content    String
-  senderId   String
-  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
-  receiverId String
-  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  read       Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id          String   @id @default(cuid())
+  content     String
+  senderId    String
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId  String
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  read        Boolean  @default(false)
+  attachments Json?
+  createdAt   DateTime @default(now())
 }
 
 model ItemRequest {

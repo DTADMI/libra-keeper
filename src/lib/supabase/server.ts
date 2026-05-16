@@ -1,23 +1,24 @@
-import "server-only"
+import "server-only";
 
-import { createServerClient as createSupabaseServerClient } from "@supabase/ssr"
-import { createClient } from "@supabase/supabase-js"
-import { cookies, headers } from "next/headers"
-import type { Database } from "@/types/database"
+import { createServerClient as createSupabaseServerClient } from "@supabase/ssr";
+import { createClient } from "@supabase/supabase-js";
+import { cookies, headers } from "next/headers";
+
+import type { Database } from "@/types/database";
 
 export async function createServerClient() {
-  const cookieStore = await cookies()
-  const headersList = await headers()
+  const cookieStore = await cookies();
+  const headersList = await headers();
 
-  const authHeader = headersList.get("authorization")
-  const hasBearer = authHeader?.startsWith("Bearer ")
+  const authHeader = headersList.get("authorization");
+  const hasBearer = authHeader?.startsWith("Bearer ");
 
   if (hasBearer && authHeader) {
     return createClient<Database>(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       { global: { headers: { Authorization: authHeader } } },
-    )
+    );
   }
 
   return createSupabaseServerClient<Database>(
@@ -26,20 +27,20 @@ export async function createServerClient() {
     {
       cookies: {
         getAll() {
-          return cookieStore.getAll()
+          return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options),
-            )
+            );
           } catch {
             // Server components can't set cookies — middleware handles refresh
           }
         },
       },
     },
-  )
+  );
 }
 
 export function createAnonymousServerClient() {
@@ -47,5 +48,5 @@ export function createAnonymousServerClient() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     { auth: { persistSession: false, autoRefreshToken: false } },
-  )
+  );
 }

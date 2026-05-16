@@ -1,40 +1,40 @@
 // src/app/(protected)/items/[id]/comments-section.tsx
-"use client"
+"use client";
 
-import { formatDistanceToNow } from "date-fns"
-import { useState } from "react"
-import { toast } from "sonner"
+import { formatDistanceToNow } from "date-fns";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { useComments, useAddComment } from "@/hooks/use-items"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useAddComment,useComments } from "@/hooks/use-items";
 
 interface CommentsSectionProps {
   itemId: string;
 }
 
 export function CommentsSection({ itemId }: CommentsSectionProps) {
-  const { data: comments = [], isLoading } = useComments(itemId)
-  const addComment = useAddComment(itemId)
-  const [newComment, setNewComment] = useState("")
+  const { data: comments = [], isLoading } = useComments(itemId);
+  const addComment = useAddComment(itemId);
+  const [newComment, setNewComment] = useState("");
 
   function onSubmit() {
-    if (!newComment.trim()) return
+    if (!newComment.trim()) {return;}
 
     addComment.mutate(newComment, {
       onSuccess: () => {
-        setNewComment("")
-        toast.success("Comment posted")
+        setNewComment("");
+        toast.success("Comment posted");
       },
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : "Failed to post comment")
+        toast.error(error instanceof Error ? error.message : "Failed to post comment");
       },
-    })
+    });
   }
 
   if (isLoading) {
-    return <p className="text-muted-foreground text-center py-10">Loading comments...</p>
+    return <p className="text-muted-foreground text-center py-10">Loading comments...</p>;
   }
 
   return (

@@ -1,39 +1,40 @@
-import Link from "next/link"
-import { notFound } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { ItemGallery } from "@/components/gallery"
-import { formatDistanceToNow } from "date-fns"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { formatDistanceToNow } from "date-fns";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 
-import { BorrowButton } from "./borrow-button"
-import { CommentsSection } from "./comments-section"
-import { LikeButton } from "./like-button"
-import { ReportButton } from "./report-button"
-import { WaitlistButton } from "./waitlist-button"
+import { ItemGallery } from "@/components/gallery";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
+
+import { BorrowButton } from "./borrow-button";
+import { CommentsSection } from "./comments-section";
+import { LikeButton } from "./like-button";
+import { ReportButton } from "./report-button";
+import { WaitlistButton } from "./waitlist-button";
 
 type ItemType = "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "CLOTHES" | "OTHER"
 
 const CREATOR_LABELS: Record<ItemType, string> = {
   BOOK: "Author", MUSIC: "Artist", MOVIE: "Director", GAME: "Developer",
   TOY: "Brand", CLOTHES: "Brand", OTHER: "Creator",
-}
+};
 
 const ID_LABELS: Record<ItemType, string> = {
   BOOK: "ISBN", MUSIC: "UPC", MOVIE: "UPC", GAME: "UPC",
   TOY: "Barcode", CLOTHES: "SKU", OTHER: "Identifier",
-}
+};
 
 const MAKER_LABELS: Record<ItemType, string> = {
   BOOK: "Publisher", MUSIC: "Label", MOVIE: "Studio", GAME: "Publisher",
   TOY: "Manufacturer", CLOTHES: "Manufacturer", OTHER: "Maker",
-}
+};
 
 export default async function ItemDetailsPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const session = await getServerAuth()
+  const { id } = await params;
+  const session = await getServerAuth();
 
   const item = await prisma.item.findUnique({
     where: { id },
@@ -50,18 +51,18 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
   });
 
   if (!item) {
-    notFound()
+    notFound();
   }
 
-  const isAdmin = session?.user?.role === "ADMIN"
-  const hasActiveLoan = item.loans.length > 0
+  const isAdmin = session?.user?.role === "ADMIN";
+  const hasActiveLoan = item.loans.length > 0;
   const userHasPendingLoan = item.loans.some(
     (loan) => loan.userId === session?.user?.id && loan.status === "PENDING",
   );
-  const userJoinedWaitlist = item.waitlist.some((entry) => entry.userId === session?.user?.id)
+  const userJoinedWaitlist = item.waitlist.some((entry) => entry.userId === session?.user?.id);
 
-  const itemType = item.type as ItemType
-  const meta = item.metadata as Record<string, unknown> | null | undefined
+  const itemType = item.type as ItemType;
+  const meta = item.metadata as Record<string, unknown> | null | undefined;
 
   return (
     <div className="container mx-auto py-10 px-4">

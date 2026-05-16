@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useCallback } from "react"
-import { createBrowserClient } from "@/lib/supabase/client"
-import type { User, Session } from "@supabase/supabase-js"
-import type { Tables } from "@/types/database"
+import type { Session,User } from "@supabase/supabase-js";
+import { useCallback,useEffect, useState } from "react";
+
+import { createBrowserClient } from "@/lib/supabase/client";
+import type { Tables } from "@/types/database";
 
 export type Profile = Tables<"profiles">
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated"
@@ -15,34 +16,34 @@ interface AuthState {
   status: AuthStatus
 }
 
-let inFlightSession: Promise<Session | null> | null = null
-let cachedProfile: { id: string; profile: Profile } | null = null
+let inFlightSession: Promise<Session | null> | null = null;
+let cachedProfile: { id: string; profile: Profile } | null = null;
 
 export function useAuth() {
-  const supabase = createBrowserClient()
+  const supabase = createBrowserClient();
   const [state, setState] = useState<AuthState>({
     user: null,
     profile: null,
     session: null,
     status: "loading",
-  })
+  });
 
   const loadSession = useCallback(async () => {
     if (!inFlightSession) {
       inFlightSession = supabase.auth.getSession().then(({ data }) => {
-        inFlightSession = null
-        return data.session ?? null
+        inFlightSession = null;
+        return data.session ?? null;
       }).catch(() => {
-        inFlightSession = null
-        return null
-      })
+        inFlightSession = null;
+        return null;
+      });
     }
 
-    const session = await inFlightSession
+    const session = await inFlightSession;
 
     if (!session) {
-      setState({ user: null, profile: null, session: null, status: "unauthenticated" })
-      return
+      setState({ user: null, profile: null, session: null, status: "unauthenticated" });
+      return;
     }
 
     setState((prev) => ({
@@ -50,31 +51,31 @@ export function useAuth() {
       user: session.user,
       session,
       status: "authenticated",
-    }))
+    }));
 
     if (
       cachedProfile &&
       cachedProfile.id === session.user.id &&
       Date.now() - new Date(cachedProfile.profile.updated_at).getTime() < 30000
     ) {
-      setState((prev) => ({ ...prev, profile: cachedProfile!.profile }))
-      return
+      setState((prev) => ({ ...prev, profile: cachedProfile!.profile }));
+      return;
     }
 
     const { data: profile } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", session.user.id)
-      .maybeSingle()
+      .maybeSingle();
 
     if (profile) {
-      cachedProfile = { id: session.user.id, profile }
-      setState((prev) => ({ ...prev, profile }))
+      cachedProfile = { id: session.user.id, profile };
+      setState((prev) => ({ ...prev, profile }));
     }
-  }, [supabase])
+  }, [supabase]);
 
   useEffect(() => {
-    loadSession()
+    loadSession();
 
     const {
       data: { subscription },
@@ -85,7 +86,7 @@ export function useAuth() {
           user: session?.user ?? null,
           session,
           status: "authenticated",
-        }))
+        }));
         if (session?.user) {
           supabase
             .from("profiles")
@@ -94,31 +95,31 @@ export function useAuth() {
             .maybeSingle()
             .then(({ data }) => {
               if (data) {
-                cachedProfile = { id: session.user.id, profile: data }
-                setState((prev) => ({ ...prev, profile: data }))
+                cachedProfile = { id: session.user.id, profile: data };
+                setState((prev) => ({ ...prev, profile: data }));
               }
-            })
+            });
         }
       } else if (event === "SIGNED_OUT") {
-        cachedProfile = null
-        setState({ user: null, profile: null, session: null, status: "unauthenticated" })
+        cachedProfile = null;
+        setState({ user: null, profile: null, session: null, status: "unauthenticated" });
       }
-    })
+    });
 
-    return () => subscription.unsubscribe()
-  }, [supabase, loadSession])
+    return () => subscription.unsubscribe();
+  }, [supabase, loadSession]);
 
   const signIn = useCallback(
     async (email: string, password: string) => {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
-      })
-      if (error) throw error
-      return data
+      });
+      if (error) {throw error;}
+      return data;
     },
     [supabase],
-  )
+  );
 
   const signUp = useCallback(
     async (email: string, password: string, name?: string) => {
@@ -129,30 +130,30 @@ export function useAuth() {
           data: { name },
           emailRedirectTo: `${window.location.origin}/auth/callback`,
         },
-      })
-      if (error) throw error
-      return data
+      });
+      if (error) {throw error;}
+      return data;
     },
     [supabase],
-  )
+  );
 
   const signOut = useCallback(async () => {
-    await supabase.auth.signOut()
-    cachedProfile = null
-  }, [supabase])
+    await supabase.auth.signOut();
+    cachedProfile = null;
+  }, [supabase]);
 
   const refreshProfile = useCallback(async () => {
-    if (!state.user) return
+    if (!state.user) {return;}
     const { data } = await supabase
       .from("profiles")
       .select("*")
       .eq("id", state.user.id)
-      .maybeSingle()
+      .maybeSingle();
     if (data) {
-      cachedProfile = { id: state.user.id, profile: data }
-      setState((prev) => ({ ...prev, profile: data }))
+      cachedProfile = { id: state.user.id, profile: data };
+      setState((prev) => ({ ...prev, profile: data }));
     }
-  }, [supabase, state.user])
+  }, [supabase, state.user]);
 
   return {
     ...state,
@@ -161,5 +162,5 @@ export function useAuth() {
     signOut,
     refreshProfile,
     isAdmin: state.profile?.role === "ADMIN",
-  }
+  };
 }

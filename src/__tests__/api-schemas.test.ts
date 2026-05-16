@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 const itemSchema = z.object({
   title: z.string().min(1),
@@ -15,7 +15,7 @@ describe("API Schema Validation", () => {
       type: "BOOK",
       status: "AVAILABLE",
     };
-    expect(itemSchema.parse(validItem)).toEqual(validItem)
+    expect(itemSchema.parse(validItem)).toEqual(validItem);
   });
 
   test("itemSchema fails on invalid data", () => {
@@ -23,7 +23,7 @@ describe("API Schema Validation", () => {
       title: "",
       type: "INVALID_TYPE",
     };
-    const result = itemSchema.safeParse(invalidItem)
-    expect(result.success).toBe(false)
+    const result = itemSchema.safeParse(invalidItem);
+    expect(result.success).toBe(false);
   });
 });

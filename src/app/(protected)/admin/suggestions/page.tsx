@@ -1,13 +1,13 @@
 // src/app/(protected)/admin/suggestions/page.tsx
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
 type ItemRequestType = "BORROWED_ITEM" | "SUGGESTION"
@@ -25,24 +25,24 @@ type ItemRequest = {
 };
 
 export default function AdminSuggestionsPage() {
-  const [requests, setRequests] = useState<ItemRequest[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [requests, setRequests] = useState<ItemRequest[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchRequests()
+    fetchRequests();
   }, []);
 
   async function fetchRequests() {
     try {
-      const response = await fetch("/api/suggestions")
+      const response = await fetch("/api/suggestions");
       if (response.ok) {
-        const data = await response.json()
-        setRequests(data)
+        const data = await response.json();
+        setRequests(data);
       }
     } catch (error) {
-      console.error("Failed to fetch requests", error)
+      console.error("Failed to fetch requests", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -58,15 +58,15 @@ export default function AdminSuggestionsPage() {
         setRequests(
           requests.map((r) => (r.id === requestId ? { ...r, status: newStatus as ItemRequestStatus } : r)),
         );
-        toast.success("Status updated")
+        toast.success("Status updated");
       }
     } catch (error) {
-      toast.error("Failed to update status")
+      toast.error("Failed to update status");
     }
   }
 
   if (isLoading) {
-    return <div className="p-8 text-center">Loading requests...</div>
+    return <div className="p-8 text-center">Loading requests...</div>;
   }
 
   return (

@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Item {
   id: string
@@ -29,16 +29,16 @@ interface Comment {
 }
 
 async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-  return res.json()
+  const res = await fetch(url, init);
+  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
+  return res.json();
 }
 
 export function useItems() {
   return useQuery({
     queryKey: ["items"],
     queryFn: () => fetchJSON<Item[]>("/api/items"),
-  })
+  });
 }
 
 export function useItem(itemId: string) {
@@ -46,7 +46,7 @@ export function useItem(itemId: string) {
     queryKey: ["item", itemId],
     queryFn: () => fetchJSON<Item>(`/api/items/${itemId}`),
     enabled: !!itemId,
-  })
+  });
 }
 
 export function useLikes(itemId: string) {
@@ -54,11 +54,11 @@ export function useLikes(itemId: string) {
     queryKey: ["likes", itemId],
     queryFn: () => fetchJSON<LikesState>(`/api/items/${itemId}/likes`),
     enabled: !!itemId,
-  })
+  });
 }
 
 export function useToggleLike(itemId: string) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () =>
@@ -66,25 +66,25 @@ export function useToggleLike(itemId: string) {
         method: "POST",
       }),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ["likes", itemId] })
-      const previous = queryClient.getQueryData<LikesState>(["likes", itemId])
+      await queryClient.cancelQueries({ queryKey: ["likes", itemId] });
+      const previous = queryClient.getQueryData<LikesState>(["likes", itemId]);
       if (previous) {
         queryClient.setQueryData<LikesState>(["likes", itemId], {
           count: previous.isLiked ? previous.count - 1 : previous.count + 1,
           isLiked: !previous.isLiked,
-        })
+        });
       }
-      return { previous }
+      return { previous };
     },
     onError: (_err, _vars, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(["likes", itemId], context.previous)
+        queryClient.setQueryData(["likes", itemId], context.previous);
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["likes", itemId] })
+      queryClient.invalidateQueries({ queryKey: ["likes", itemId] });
     },
-  })
+  });
 }
 
 export function useComments(itemId: string) {
@@ -92,11 +92,11 @@ export function useComments(itemId: string) {
     queryKey: ["comments", itemId],
     queryFn: () => fetchJSON<Comment[]>(`/api/items/${itemId}/comments`),
     enabled: !!itemId,
-  })
+  });
 }
 
 export function useAddComment(itemId: string) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (content: string) =>
@@ -108,7 +108,7 @@ export function useAddComment(itemId: string) {
     onSuccess: (newComment) => {
       queryClient.setQueryData<Comment[]>(["comments", itemId], (old) =>
         old ? [newComment, ...old] : [newComment],
-      )
+      );
     },
-  })
+  });
 }

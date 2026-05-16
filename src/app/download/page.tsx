@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 
 export default function DownloadPage() {
   return (
@@ -45,5 +45,5 @@ export default function DownloadPage() {
         </div>
       </section>
     </main>
-  )
+  );
 }

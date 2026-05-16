@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { toast } from "sonner"
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
 interface RequestActionButtonsProps {
   loanId: string;
 }
 
 export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleAction(status: "APPROVED" | "REJECTED") {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/loans/${loanId}`, {
         method: "PATCH",
@@ -26,15 +26,15 @@ export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update request")
+        throw new Error("Failed to update request");
       }
 
-      toast.success(`Request ${status.toLowerCase()} successfully`)
-      router.refresh()
+      toast.success(`Request ${status.toLowerCase()} successfully`);
+      router.refresh();
     } catch (error) {
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 

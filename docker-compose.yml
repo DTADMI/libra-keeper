@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_INITDB_ARGS: "--data-checksums --auth-host=scram-sha-256"
       POSTGRES_HOST_AUTH_METHOD: "scram-sha-256"
-      
+
       # Custom variables for initialization script
       DB_ROOT_USER: ${DB_ROOT_USER}
       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
@@ -27,7 +27,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
       - ./docker/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DB_ROOT_USER:-postgres} -d ${DB_NAME:-librakeeper}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_ROOT_USER:-postgres} -d ${DB_NAME:-librakeeper}"]
       interval: 5s
       timeout: 5s
       retries: 5

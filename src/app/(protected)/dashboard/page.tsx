@@ -1,12 +1,13 @@
 // src/app/dashboard/page.tsx
-import Link from "next/link"
-import { ActivityFeed } from "@/components/activity/activity-feed"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { SearchBar } from "@/components/search-bar"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import Link from "next/link";
+
+import { ActivityFeed } from "@/components/activity/activity-feed";
+import { SearchBar } from "@/components/search-bar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 const TYPE_SUBTITLE: Record<string, string> = {
   BOOK: "by",
@@ -16,10 +17,10 @@ const TYPE_SUBTITLE: Record<string, string> = {
   TOY: "Brand:",
   CLOTHES: "Brand:",
   OTHER: "by",
-}
+};
 
 export default async function DashboardPage() {
-  const session = await getServerAuth()
+  const session = await getServerAuth();
 
   type ItemWithTags = {
     id: string
@@ -33,7 +34,7 @@ export default async function DashboardPage() {
   const items = (await prisma.item.findMany({
     include: { tags: true },
     orderBy: { createdAt: "desc" },
-  })) as ItemWithTags[]
+  })) as ItemWithTags[];
 
   return (
     <div className="container mx-auto p-4">

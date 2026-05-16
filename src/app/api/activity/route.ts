@@ -1,14 +1,14 @@
 // src/app/api/activity/route.ts
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 export async function GET() {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const [loans, comments, requests] = await Promise.all([
@@ -33,7 +33,7 @@ export async function GET() {
         orderBy: { createdAt: "desc" },
         include: { requestedBy: { select: { id: true, name: true } } },
       }),
-    ])
+    ]);
 
     const activities = [
       ...loans.map((l) => ({
@@ -76,11 +76,11 @@ export async function GET() {
       })),
     ]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 15)
+      .slice(0, 15);
 
-    return NextResponse.json(activities)
+    return NextResponse.json(activities);
   } catch (error) {
-    console.error("Activity feed error:", error)
-    return new NextResponse("Internal server error", { status: 500 })
+    console.error("Activity feed error:", error);
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

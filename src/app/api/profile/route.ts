@@ -1,9 +1,9 @@
 // src/app/api/profile/route.ts
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 const profileSchema = z.object({
   name: z.string().min(1).optional(),
@@ -12,9 +12,9 @@ const profileSchema = z.object({
 
 export async function GET() {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const user = await prisma.user.findUnique({
@@ -29,32 +29,32 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(user)
+    return NextResponse.json(user);
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function PATCH(req: Request) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const json = await req.json()
-    const body = profileSchema.parse(json)
+    const json = await req.json();
+    const body = profileSchema.parse(json);
 
     const user = await prisma.user.update({
       where: { id: session.user.id },
       data: body,
     });
 
-    return NextResponse.json(user)
+    return NextResponse.json(user);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 })
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

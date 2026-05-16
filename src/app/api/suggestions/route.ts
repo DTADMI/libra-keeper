@@ -1,9 +1,9 @@
 // src/app/api/suggestions/route.ts
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 const suggestionSchema = z.object({
   title: z.string().min(1),
@@ -15,13 +15,13 @@ const suggestionSchema = z.object({
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const json = await req.json()
-    const body = suggestionSchema.parse(json)
+    const json = await req.json();
+    const body = suggestionSchema.parse(json);
 
     const request = await prisma.itemRequest.create({
       data: {
@@ -30,20 +30,20 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(request, { status: 201 })
+    return NextResponse.json(request, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 })
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     const requests = await prisma.itemRequest.findMany({
@@ -56,8 +56,8 @@ export async function GET(req: Request) {
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(requests)
+    return NextResponse.json(requests);
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

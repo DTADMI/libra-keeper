@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
 interface FeatureFlag {
   id?: string;
@@ -17,30 +17,30 @@ interface FeatureFlag {
 }
 
 export function FeatureFlagManager() {
-  const [flags, setFlags] = useState<FeatureFlag[]>([])
+  const [flags, setFlags] = useState<FeatureFlag[]>([]);
   const [newFlag, setNewFlag] = useState<FeatureFlag>({
     name: "",
     description: "",
     isEnabled: false,
-  })
-  const [loading, setLoading] = useState(true)
+  });
+  const [loading, setLoading] = useState(true);
 
   const fetchFlags = async () => {
     try {
-      const res = await fetch("/api/admin/flags")
+      const res = await fetch("/api/admin/flags");
       if (res.ok) {
-        const data = await res.json()
-        setFlags(data)
+        const data = await res.json();
+        setFlags(data);
       }
     } catch (error) {
-      toast.error("Failed to fetch feature flags")
+      toast.error("Failed to fetch feature flags");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchFlags()
+    fetchFlags();
   }, []);
 
   const handleSave = async (flag: FeatureFlag) => {
@@ -52,26 +52,26 @@ export function FeatureFlagManager() {
       });
 
       if (res.ok) {
-        toast.success("Feature flag saved")
-        fetchFlags()
+        toast.success("Feature flag saved");
+        fetchFlags();
       } else {
-        toast.error("Failed to save feature flag")
+        toast.error("Failed to save feature flag");
       }
     } catch (error) {
-      toast.error("Error saving feature flag")
+      toast.error("Error saving feature flag");
     }
   };
 
   const handleAdd = async () => {
     if (!newFlag.name) {
-      return toast.error("Name is required")
+      return toast.error("Name is required");
     }
-    await handleSave(newFlag)
-    setNewFlag({ name: "", description: "", isEnabled: false })
+    await handleSave(newFlag);
+    setNewFlag({ name: "", description: "", isEnabled: false });
   };
 
   if (loading) {
-    return <div>Loading flags...</div>
+    return <div>Loading flags...</div>;
   }
 
   return (

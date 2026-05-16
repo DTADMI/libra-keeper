@@ -1,31 +1,31 @@
 // src/app/(protected)/profile/page.tsx
-"use client"
+"use client";
 
-import { useSession } from "@/hooks/use-session"
-import { useEffect, useState } from "react"
-import { toast } from "sonner"
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useSession } from "@/hooks/use-session";
 
 export default function ProfilePage() {
-  const { data: session, update } = useSession()
-  const [isLoading, setIsLoading] = useState(false)
-  const [name, setName] = useState("")
-  const [image, setImage] = useState("")
+  const { data: session, update } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
     if (session?.user) {
-      setName(session.user.name || "")
-      setImage(session.user.image || "")
+      setName(session.user.name || "");
+      setImage(session.user.image || "");
     }
   }, [session]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
+    event.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/profile", {
@@ -35,22 +35,22 @@ export default function ProfilePage() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to update profile")
+        throw new Error("Failed to update profile");
       }
 
-      await update({ name, image })
-      toast.success("Profile updated successfully")
+      await update({ name, image });
+      toast.success("Profile updated successfully");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message)
+        toast.error(error.message);
       } else if (typeof error === "string") {
-        toast.error(error || "Failed to update profile")
+        toast.error(error || "Failed to update profile");
       } else {
-        toast.error("An unexpected error occurred")
+        toast.error("An unexpected error occurred");
       }
-      console.error(error)
+      console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 

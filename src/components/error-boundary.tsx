@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
-import { Component, ReactNode } from "react"
-import { Button } from "@/components/ui/button"
+import { Component, ReactNode } from "react";
+
+import { Button } from "@/components/ui/button";
 
 interface ErrorBoundaryProps {
   children: ReactNode
@@ -16,22 +17,22 @@ interface ErrorBoundaryState {
 
 export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false, error: null }
+    super(props);
+    this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error }
+    return { hasError: true, error };
   }
 
   handleRetry = () => {
-    this.setState({ hasError: false, error: null })
-    this.props.onRetry?.()
-  }
+    this.setState({ hasError: false, error: null });
+    this.props.onRetry?.();
+  };
 
   render() {
     if (this.state.hasError) {
-      if (this.props.fallback) return this.props.fallback
+      if (this.props.fallback) {return this.props.fallback;}
 
       return (
         <div className="flex flex-col items-center justify-center py-12 space-y-4">
@@ -45,9 +46,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
             Try Again
           </Button>
         </div>
-      )
+      );
     }
 
-    return this.props.children
+    return this.props.children;
   }
 }

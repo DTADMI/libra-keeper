@@ -1,6 +1,6 @@
 // jest.config.ts
-import type { Config } from "jest"
-import nextJest from "next/jest.js"
+import type { Config } from "jest";
+import nextJest from "next/jest.js";
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
@@ -42,15 +42,15 @@ const config: Config = {
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-const asyncConfig = createJestConfig(config)
+const asyncConfig = createJestConfig(config);
 
 export default async () => {
-  const res = await asyncConfig()
+  const res = await asyncConfig();
   res.transformIgnorePatterns = res.transformIgnorePatterns?.map((pattern: string) => {
     if (pattern === "/node_modules/") {
-      return "/node_modules/(?!(@auth|next-auth|@prisma)/)"
+      return "/node_modules/(?!(@auth|next-auth|@prisma)/)";
     }
-    return pattern
+    return pattern;
   }) || ["/node_modules/(?!(@auth|next-auth|@prisma)/)"];
-  return res
+  return res;
 };

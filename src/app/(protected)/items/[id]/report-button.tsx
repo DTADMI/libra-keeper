@@ -1,10 +1,10 @@
 // src/app/(protected)/items/[id]/report-button.tsx
-"use client"
+"use client";
 
-import { useState } from "react"
-import { toast } from "sonner"
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Icons } from "@/components/icons"
+import { Icons } from "@/components/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,25 +15,25 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ReportButtonProps {
   itemId: string;
 }
 
 export function ReportButton({ itemId }: ReportButtonProps) {
-  const [reason, setReason] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
+  const [reason, setReason] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   async function onReport() {
     if (!reason.trim()) {
-      return
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/items/${itemId}/report`, {
         method: "POST",
@@ -42,23 +42,23 @@ export function ReportButton({ itemId }: ReportButtonProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to send report")
+        throw new Error("Failed to send report");
       }
 
-      toast.success("Report sent to admin")
-      setIsOpen(false)
-      setReason("")
+      toast.success("Report sent to admin");
+      setIsOpen(false);
+      setReason("");
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message)
+        toast.error(error.message);
       } else if (typeof error === "string") {
-        toast.error(error || "Failed to send report")
+        toast.error(error || "Failed to send report");
       } else {
-        toast.error("An unexpected error occurred")
+        toast.error("An unexpected error occurred");
       }
-      console.error(error)
+      console.error(error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -89,8 +89,8 @@ export function ReportButton({ itemId }: ReportButtonProps) {
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
-              e.preventDefault()
-              onReport()
+              e.preventDefault();
+              onReport();
             }}
             disabled={isLoading || !reason.trim()}
           >

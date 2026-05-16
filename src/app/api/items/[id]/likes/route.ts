@@ -1,16 +1,17 @@
 // src/app/api/items/[id]/likes/route.ts
-import { NextResponse } from "next/server"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { NextResponse } from "next/server";
+
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { id } = await params
+    const { id } = await params;
 
     const existingLike = await prisma.like.findUnique({
       where: {
@@ -27,7 +28,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           id: existingLike.id,
         },
       });
-      return NextResponse.json({ liked: false })
+      return NextResponse.json({ liked: false });
     }
 
     await prisma.like.create({
@@ -37,16 +38,16 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       },
     });
 
-    return NextResponse.json({ liked: true })
+    return NextResponse.json({ liked: true });
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerAuth()
-    const { id } = await params
+    const session = await getServerAuth();
+    const { id } = await params;
 
     const [likesCount, userLike] = await Promise.all([
       prisma.like.count({
@@ -69,6 +70,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       isLiked: !!userLike,
     });
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

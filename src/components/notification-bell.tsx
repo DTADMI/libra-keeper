@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import { Bell } from "lucide-react"
-import { formatDistanceToNow } from "date-fns"
-import Link from "next/link"
-import { useState, useRef, useEffect } from "react"
+import { formatDistanceToNow } from "date-fns";
+import { Bell } from "lucide-react";
+import Link from "next/link";
+import { useEffect,useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { useNotifications, useMarkNotificationRead, useMarkAllRead } from "@/hooks/use-notifications"
+import { Button } from "@/components/ui/button";
+import { useMarkAllRead,useMarkNotificationRead, useNotifications } from "@/hooks/use-notifications";
 
 export function NotificationBell() {
-  const { data: notifications = [] } = useNotifications()
-  const markRead = useMarkNotificationRead()
-  const markAllRead = useMarkAllRead()
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+  const { data: notifications = [] } = useNotifications();
+  const markRead = useMarkNotificationRead();
+  const markAllRead = useMarkAllRead();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const unreadCount = notifications.filter((n) => !n.isRead).length
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (ref.current && !ref.current.contains(e.target as Node)) {setOpen(false);}
     }
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [])
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="relative" ref={ref}>
@@ -62,8 +62,8 @@ export function NotificationBell() {
                   !n.isRead ? "bg-accent/50" : ""
                 }`}
                 onClick={() => {
-                  markRead.mutate(n.id)
-                  if (n.link) window.location.href = n.link
+                  markRead.mutate(n.id);
+                  if (n.link) {window.location.href = n.link;}
                 }}
               >
                 <div className="flex items-start gap-2">
@@ -82,5 +82,5 @@ export function NotificationBell() {
         </div>
       )}
     </div>
-  )
+  );
 }

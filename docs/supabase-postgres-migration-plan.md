@@ -8,11 +8,11 @@
 
 ## Why This Approach
 
-| Option | Pros | Cons | Recommendation |
-| --- | --- | --- | --- |
-| Supabase as managed Postgres host only | Fastest path, minimal app-layer churn, keeps Prisma workflow | No immediate RLS/Auth platform rewrite | Adopt now |
-| Full Supabase migration (Auth + policy model rewrite) | Potential long-term platform consolidation | High implementation risk and timeline cost | Defer |
-| Keep current DB hosting model | No immediate migration effort | Ongoing ops overhead and less managed tooling | Keep as fallback only |
+| Option                                                | Pros                                                         | Cons                                          | Recommendation        |
+| ----------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------- | --------------------- |
+| Supabase as managed Postgres host only                | Fastest path, minimal app-layer churn, keeps Prisma workflow | No immediate RLS/Auth platform rewrite        | Adopt now             |
+| Full Supabase migration (Auth + policy model rewrite) | Potential long-term platform consolidation                   | High implementation risk and timeline cost    | Defer                 |
+| Keep current DB hosting model                         | No immediate migration effort                                | Ongoing ops overhead and less managed tooling | Keep as fallback only |
 
 ## Migration Phases
 
@@ -44,22 +44,22 @@
 
 ## Remaining Gaps and Tasks
 
-| Status | Gap / Task | Owner | Notes |
-| --- | --- | --- | --- |
-| Done | CI command issues corrected (`pnpm test --coverage`, deterministic setup) | Engineering | Prevents prior CI failures |
-| Done | Vercel build blocker in dashboard typecheck fixed | Engineering | Removed implicit-any failure |
-| Pending | Supabase staging/prod projects and credentials provisioning | Ops | Required before rehearsals |
-| Pending | Rehearsal runbook with data verification queries | Engineering | Must be scripted/repeatable |
-| Pending | Release checklist for secret rotation and rollback trigger | Engineering + Ops | Required before prod cutover |
-| Pending | Assess Prisma `DIRECT_URL` split for migrations | Engineering | Recommended for pooled environments |
+| Status  | Gap / Task                                                                | Owner             | Notes                               |
+| ------- | ------------------------------------------------------------------------- | ----------------- | ----------------------------------- |
+| Done    | CI command issues corrected (`pnpm test --coverage`, deterministic setup) | Engineering       | Prevents prior CI failures          |
+| Done    | Vercel build blocker in dashboard typecheck fixed                         | Engineering       | Removed implicit-any failure        |
+| Pending | Supabase staging/prod projects and credentials provisioning               | Ops               | Required before rehearsals          |
+| Pending | Rehearsal runbook with data verification queries                          | Engineering       | Must be scripted/repeatable         |
+| Pending | Release checklist for secret rotation and rollback trigger                | Engineering + Ops | Required before prod cutover        |
+| Pending | Assess Prisma `DIRECT_URL` split for migrations                           | Engineering       | Recommended for pooled environments |
 
 ## Risks and Mitigations
 
-| Risk | Mitigation |
-| --- | --- |
+| Risk                                       | Mitigation                                                        |
+| ------------------------------------------ | ----------------------------------------------------------------- |
 | Runtime failures due to missing env values | Add environment checklist and verify in CI + Vercel before deploy |
-| Query/perf regressions after cutover | Compare baseline metrics and run focused performance smoke tests |
-| Rollback complexity | Keep previous DB snapshot and scripted rollback connection switch |
+| Query/perf regressions after cutover       | Compare baseline metrics and run focused performance smoke tests  |
+| Rollback complexity                        | Keep previous DB snapshot and scripted rollback connection switch |
 
 ## Alternatives
 

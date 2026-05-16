@@ -1,5 +1,5 @@
 // src/components/icons.tsx
-"use client"
+"use client";
 
 import {
   AlertCircle,
@@ -30,8 +30,8 @@ import {
   Upload,
   User,
   X,
-} from "lucide-react"
-import * as React from "react"
+} from "lucide-react";
+import * as React from "react";
 
 export const Icons = {
   google: (props: React.SVGProps<SVGSVGElement>) => (

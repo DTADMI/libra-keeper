@@ -1,15 +1,16 @@
-import { notFound, redirect } from "next/navigation"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { notFound, redirect } from "next/navigation";
 
-import { EditItemForm } from "./edit-item-form"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
+
+import { EditItemForm } from "./edit-item-form";
 
 export default async function EditItemPage(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params
-  const session = await getServerAuth()
+  const params = await props.params;
+  const session = await getServerAuth();
 
   if (!session?.user || session.user.role !== "ADMIN") {
-    redirect("/dashboard")
+    redirect("/dashboard");
   }
 
   const item = await prisma.item.findUnique({
@@ -18,7 +19,7 @@ export default async function EditItemPage(props: { params: Promise<{ id: string
   });
 
   if (!item) {
-    notFound()
+    notFound();
   }
 
   return (

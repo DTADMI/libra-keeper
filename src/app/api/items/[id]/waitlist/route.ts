@@ -1,15 +1,16 @@
-import { NextResponse } from "next/server"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { NextResponse } from "next/server";
+
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { id: itemId } = await params
+    const { id: itemId } = await params;
 
     // Check if item exists and is borrowed
     const item = await prisma.item.findUnique({
@@ -18,11 +19,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
 
     if (!item) {
-      return new NextResponse("Item not found", { status: 404 })
+      return new NextResponse("Item not found", { status: 404 });
     }
 
     if (item.status !== "BORROWED") {
-      return new NextResponse("Item is not borrowed", { status: 400 })
+      return new NextResponse("Item is not borrowed", { status: 400 });
     }
 
     // Check if user is already in waitlist
@@ -36,7 +37,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
 
     if (existingEntry) {
-      return new NextResponse("Already in waitlist", { status: 400 })
+      return new NextResponse("Already in waitlist", { status: 400 });
     }
 
     // Add to waitlist
@@ -47,21 +48,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       },
     });
 
-    return NextResponse.json(waitlistEntry)
+    return NextResponse.json(waitlistEntry);
   } catch (error) {
-    console.error("[WAITLIST_POST]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.error("[WAITLIST_POST]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { id: itemId } = await params
+    const { id: itemId } = await params;
 
     await prisma.waitlistEntry.delete({
       where: {
@@ -72,16 +73,16 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
       },
     });
 
-    return new NextResponse(null, { status: 204 })
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.error("[WAITLIST_DELETE]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.error("[WAITLIST_DELETE]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id: itemId } = await params
+    const { id: itemId } = await params;
 
     const waitlist = await prisma.waitlistEntry.findMany({
       where: { itemId },
@@ -97,9 +98,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       orderBy: { createdAt: "asc" },
     });
 
-    return NextResponse.json(waitlist)
+    return NextResponse.json(waitlist);
   } catch (error) {
-    console.error("[WAITLIST_GET]", error)
-    return new NextResponse("Internal Error", { status: 500 })
+    console.error("[WAITLIST_GET]", error);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }

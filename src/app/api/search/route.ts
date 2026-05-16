@@ -1,14 +1,14 @@
 // src/app/api/search/route.ts
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
-import { prisma } from "@/lib/db"
+import { prisma } from "@/lib/db";
 
 export async function GET(req: Request) {
-  const url = new URL(req.url)
-  const q = url.searchParams.get("q")?.trim() ?? ""
+  const url = new URL(req.url);
+  const q = url.searchParams.get("q")?.trim() ?? "";
 
   if (q.length < 2) {
-    return NextResponse.json([])
+    return NextResponse.json([]);
   }
 
   try {
@@ -39,7 +39,7 @@ export async function GET(req: Request) {
       ORDER BY rank DESC
       LIMIT 20`,
       q,
-    )
+    );
 
     const items = results.map((r) => ({
       id: r.id,
@@ -52,11 +52,11 @@ export async function GET(req: Request) {
         likes: r.likes_count,
         comments: r.comments_count,
       },
-    }))
+    }));
 
-    return NextResponse.json(items)
+    return NextResponse.json(items);
   } catch (error) {
-    console.error("Search error:", error)
-    return NextResponse.json([], { status: 200 })
+    console.error("Search error:", error);
+    return NextResponse.json([], { status: 200 });
   }
 }

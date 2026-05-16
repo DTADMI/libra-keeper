@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { formatDistanceToNow } from "date-fns"
-import { BookOpen, MessageCircle, Send } from "lucide-react"
-import Link from "next/link"
+import { formatDistanceToNow } from "date-fns";
+import { BookOpen, MessageCircle, Send } from "lucide-react";
+import Link from "next/link";
 
-import { useActivity } from "@/hooks/use-activity"
+import { useActivity } from "@/hooks/use-activity";
 
 const ICONS = {
   LOAN: BookOpen,
   COMMENT: MessageCircle,
   REQUEST: Send,
-} as const
+} as const;
 
 export function ActivityFeed() {
-  const { data: activities = [], isLoading, error } = useActivity()
+  const { data: activities = [], isLoading, error } = useActivity();
 
   if (isLoading) {
     return (
@@ -28,21 +28,21 @@ export function ActivityFeed() {
           </div>
         ))}
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <p className="text-sm text-destructive">Failed to load activity.</p>
+    return <p className="text-sm text-destructive">Failed to load activity.</p>;
   }
 
   if (activities.length === 0) {
-    return <p className="text-sm text-muted-foreground">No recent activity.</p>
+    return <p className="text-sm text-muted-foreground">No recent activity.</p>;
   }
 
   return (
     <div className="space-y-3">
       {activities.map((activity) => {
-        const Icon = ICONS[activity.type as keyof typeof ICONS] ?? BookOpen
+        const Icon = ICONS[activity.type as keyof typeof ICONS] ?? BookOpen;
 
         return (
           <div key={activity.id} className="flex gap-3 text-sm">
@@ -67,8 +67,8 @@ export function ActivityFeed() {
               </p>
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

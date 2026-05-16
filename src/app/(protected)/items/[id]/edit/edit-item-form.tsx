@@ -1,18 +1,18 @@
 // src/app/(protected)/items/[id]/edit/edit-item-form.tsx
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { useForm, useWatch } from "react-hook-form"
-import { toast } from "sonner"
-import * as z from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import * as z from "zod";
 
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -38,7 +38,7 @@ const itemSchema = z.object({
     })
     .optional()
     .nullable(),
-})
+});
 
 export type Item = z.infer<typeof itemSchema> & { id: string }
 
@@ -47,27 +47,27 @@ type ItemType = z.infer<typeof itemSchema>["type"]
 const CREATOR_LABELS: Record<ItemType, string> = {
   BOOK: "Author", MUSIC: "Artist", MOVIE: "Director", GAME: "Developer",
   TOY: "Brand", CLOTHES: "Brand", OTHER: "Creator",
-}
+};
 
 const IDENTIFIER_LABELS: Record<ItemType, string> = {
   BOOK: "ISBN", MUSIC: "UPC", MOVIE: "UPC", GAME: "UPC",
   TOY: "Barcode / EAN", CLOTHES: "SKU / EAN", OTHER: "Identifier",
-}
+};
 
 const MAKER_LABELS: Record<ItemType, string> = {
   BOOK: "Publisher", MUSIC: "Label", MOVIE: "Studio", GAME: "Publisher",
   TOY: "Manufacturer", CLOTHES: "Manufacturer", OTHER: "Maker",
-}
+};
 
 interface EditItemFormProps {
   item: Item
 }
 
 export function EditItemForm({ item }: EditItemFormProps) {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const meta = (item as Record<string, unknown>).metadata as Record<string, unknown> | undefined
+  const meta = (item as Record<string, unknown>).metadata as Record<string, unknown> | undefined;
 
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
@@ -93,31 +93,31 @@ export function EditItemForm({ item }: EditItemFormProps) {
         duration: (meta?.duration as string) || "",
       },
     },
-  })
+  });
 
-  const watchedType = useWatch({ control: form.control, name: "type" }) as ItemType
+  const watchedType = useWatch({ control: form.control, name: "type" }) as ItemType;
 
   async function onSubmit(values: z.infer<typeof itemSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/items/${item.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
-      })
-      if (!response.ok) throw new Error("Failed to update item")
-      toast.success("Item updated successfully")
-      router.push(`/items/${item.id}`)
-      router.refresh()
+      });
+      if (!response.ok) {throw new Error("Failed to update item");}
+      toast.success("Item updated successfully");
+      router.push(`/items/${item.id}`);
+      router.refresh();
     } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Failed to update item")
+      toast.error(error instanceof Error ? error.message : "Failed to update item");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
-  const showISBNLike = watchedType !== "OTHER"
-  const showMetadataFields = ["TOY", "CLOTHES", "GAME", "MUSIC", "MOVIE"].includes(watchedType)
+  const showISBNLike = watchedType !== "OTHER";
+  const showMetadataFields = ["TOY", "CLOTHES", "GAME", "MUSIC", "MOVIE"].includes(watchedType);
 
   return (
     <Form {...form}>
@@ -329,5 +329,5 @@ export function EditItemForm({ item }: EditItemFormProps) {
         </div>
       </form>
     </Form>
-  )
+  );
 }

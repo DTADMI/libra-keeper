@@ -3,6 +3,7 @@
 
 import { createHash, randomBytes } from "crypto"
 import { cookies } from "next/headers"
+import { NextResponse } from "next/server"
 
 const CSRF_COOKIE = "csrf-token"
 const CSRF_HEADER = "x-csrf-token"
@@ -45,4 +46,21 @@ export async function getCsrfHeader(): Promise<Record<string, string>> {
   }
 
   return { [CSRF_HEADER]: token }
+}
+
+export function withCsrf(
+  handler: (req: Request, ctx: { params: Promise<Record<string, string>> }) => Promise<Response>,
+) {
+  return async (
+    req: Request,
+    ctx: { params: Promise<Record<string, string>> },
+  ): Promise<Response> => {
+    if (req.method !== "GET" && req.method !== "HEAD" && req.method !== "OPTIONS") {
+      const valid = await validateCsrf(req)
+      if (!valid) {
+        return new NextResponse("CSRF token missing or invalid", { status: 403 })
+      }
+    }
+    return handler(req, ctx);
+  }
 }

@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { useForm, useWatch } from "react-hook-form"
-import { toast } from "sonner"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
-import { ISBNLookup } from "@/components/isbn-lookup"
-import { Button } from "@/components/ui/button"
+import { ISBNLookup } from "@/components/isbn-lookup";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -17,16 +17,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -51,7 +51,7 @@ const itemSchema = z.object({
       duration: z.string().optional(),
     })
     .optional(),
-})
+});
 
 type ItemType = z.infer<typeof itemSchema>["type"]
 
@@ -63,7 +63,7 @@ const TYPE_LABELS: Record<ItemType, string> = {
   TOY: "Toy",
   CLOTHES: "Clothing",
   OTHER: "Other",
-}
+};
 
 const CREATOR_LABELS: Record<ItemType, string> = {
   BOOK: "Author",
@@ -73,7 +73,7 @@ const CREATOR_LABELS: Record<ItemType, string> = {
   TOY: "Brand",
   CLOTHES: "Brand",
   OTHER: "Creator",
-}
+};
 
 const IDENTIFIER_LABELS: Record<ItemType, string> = {
   BOOK: "ISBN",
@@ -83,7 +83,7 @@ const IDENTIFIER_LABELS: Record<ItemType, string> = {
   TOY: "Barcode / EAN",
   CLOTHES: "SKU / EAN",
   OTHER: "Identifier",
-}
+};
 
 const MAKER_LABELS: Record<ItemType, string> = {
   BOOK: "Publisher",
@@ -93,21 +93,21 @@ const MAKER_LABELS: Record<ItemType, string> = {
   TOY: "Manufacturer",
   CLOTHES: "Manufacturer",
   OTHER: "Maker",
-}
+};
 
-const USES_ISBN_LOOKUP: ItemType[] = ["BOOK"]
+const USES_ISBN_LOOKUP: ItemType[] = ["BOOK"];
 
 export default function NewItemPage() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(false)
-  const [collections, setCollections] = useState<{ id: string; name: string }[]>([])
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [collections, setCollections] = useState<{ id: string; name: string }[]>([]);
 
   useEffect(() => {
     fetch("/api/collections")
       .then((r) => r.json())
       .then(setCollections)
-      .catch(() => {})
-  }, [])
+      .catch(() => {});
+  }, []);
 
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
@@ -122,39 +122,39 @@ export default function NewItemPage() {
       collectionId: "",
       metadata: {},
     },
-  })
+  });
 
-  const watchedType = useWatch({ control: form.control, name: "type" })
+  const watchedType = useWatch({ control: form.control, name: "type" });
 
   async function onSubmit(values: z.infer<typeof itemSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       const response = await fetch("/api/items", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
-      })
-      if (!response.ok) throw new Error("Failed to create item")
-      toast.success("Item created successfully")
-      router.push("/dashboard")
-      router.refresh()
+      });
+      if (!response.ok) {throw new Error("Failed to create item");}
+      toast.success("Item created successfully");
+      router.push("/dashboard");
+      router.refresh();
     } catch {
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   function handleISBNFill(data: { title?: string; authors?: string[]; publisher?: string; coverImage?: string | null }) {
-    if (data.title) form.setValue("title", data.title)
-    if (data.authors?.length) form.setValue("author", data.authors[0])
-    if (data.publisher) form.setValue("publisher", data.publisher)
-    if (data.coverImage) form.setValue("coverImage", data.coverImage)
+    if (data.title) {form.setValue("title", data.title);}
+    if (data.authors?.length) {form.setValue("author", data.authors[0]);}
+    if (data.publisher) {form.setValue("publisher", data.publisher);}
+    if (data.coverImage) {form.setValue("coverImage", data.coverImage);}
   }
 
-  const showISBNLike = watchedType !== "OTHER"
-  const showBookFields = watchedType === "BOOK"
-  const showMetadataFields = ["TOY", "CLOTHES", "GAME", "MUSIC", "MOVIE"].includes(watchedType)
+  const showISBNLike = watchedType !== "OTHER";
+  const showBookFields = watchedType === "BOOK";
+  const showMetadataFields = ["TOY", "CLOTHES", "GAME", "MUSIC", "MOVIE"].includes(watchedType);
 
   return (
     <div className="container mx-auto max-w-2xl py-10">
@@ -483,5 +483,5 @@ export default function NewItemPage() {
         </form>
       </Form>
     </div>
-  )
+  );
 }

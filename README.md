@@ -109,6 +109,7 @@ libra-keeper/
 ### With Docker (Recommended)
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/yourusername/libra-keeper.git
    cd libra-keeper
@@ -117,6 +118,7 @@ libra-keeper/
 2. **Run the automated setup** (Recommended)
    This will automatically create your `.env` file with secure random secrets, start the Docker container, run
    migrations, and execute tests.
+
    ```bash
    pnpm install
    pnpm setup:local
@@ -126,22 +128,27 @@ libra-keeper/
    If you prefer to set up manually:
 
    a. **Create your `.env` file**:
+
    ```bash
    cp .env.example .env
    ```
-   *Note: If you use manual setup, ensure you update the secrets and database credentials in `.env`.*
+
+   _Note: If you use manual setup, ensure you update the secrets and database credentials in `.env`._
 
    b. **Start the database**:
+
    ```bash
    docker-compose up -d
    ```
 
    c. **Run migrations**:
+
    ```bash
    pnpm prisma migrate dev
    ```
 
 4. **Start the development server**
+
    ```bash
    pnpm dev
    ```
@@ -186,7 +193,7 @@ To completely reset your development database:
 pnpm setup:local
 ```
 
-*Note: This script handles stopping existing containers, cleaning up, and restarting everything fresh.*
+_Note: This script handles stopping existing containers, cleaning up, and restarting everything fresh._
 
 Or manually:
 
@@ -256,7 +263,7 @@ Comprehensive documentation can be found in the `docs` folder:
 ## ⚙️ Environment Variables
 
 | Variable                   | Description                       | Required | Default                 |
-|----------------------------|-----------------------------------|----------|-------------------------|
+| -------------------------- | --------------------------------- | -------- | ----------------------- |
 | `NODE_ENV`                 | Application environment           | No       | `development`           |
 | `NEXT_PUBLIC_APP_URL`      | Public URL of the application     | Yes      | `http://localhost:3000` |
 | `DATABASE_URL`             | PostgreSQL connection string      | Yes      | -                       |
@@ -317,6 +324,7 @@ Update your `.env.production` file with production credentials and never commit 
 For production deployments with Docker:
 
 1. Build the production image:
+
    ```bash
    docker build -t librakeeper .
    ```

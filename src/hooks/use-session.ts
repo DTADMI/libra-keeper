@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks/use-auth";
 
 export function useSession() {
-  const { user, profile, session, status, refreshProfile } = useAuth()
+  const { user, profile, session, status, refreshProfile } = useAuth();
 
   const augmentedUser = user
     ? {
@@ -13,15 +13,15 @@ export function useSession() {
         role: profile?.role ?? "USER",
         image: profile?.avatar_url ?? (user.user_metadata?.avatar_url as string | null),
       }
-    : null
+    : null;
 
   const update = async (_data?: Record<string, unknown>) => {
-    await refreshProfile()
-  }
+    await refreshProfile();
+  };
 
   return {
     data: augmentedUser ? { user: augmentedUser } : null,
     status: status as "loading" | "authenticated" | "unauthenticated",
     update,
-  }
+  };
 }

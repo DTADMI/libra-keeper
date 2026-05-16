@@ -1,65 +1,65 @@
 // src/app/(protected)/suggestions/page.tsx
-"use client"
+"use client";
 
-import { useState } from "react"
-import { toast } from "sonner"
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { useSession } from "@/hooks/use-session"
-import { useSuggestions, useCreateSuggestion } from "@/hooks/use-suggestions"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { useSession } from "@/hooks/use-session";
+import { useCreateSuggestion,useSuggestions } from "@/hooks/use-suggestions";
 
 const statusColors: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
   PROCESSING: "bg-blue-100 text-blue-800",
   COMPLETED: "bg-green-100 text-green-800",
   REJECTED: "bg-red-100 text-red-800",
-}
+};
 
 export default function SuggestionsPage() {
-  const { data: session } = useSession()
-  const { data: requests = [], isLoading: listLoading, error: listError } = useSuggestions()
-  const createSuggestion = useCreateSuggestion()
+  const { data: session } = useSession();
+  const { data: requests = [], isLoading: listLoading, error: listError } = useSuggestions();
+  const createSuggestion = useCreateSuggestion();
 
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [type, setType] = useState<"BORROWED_ITEM" | "SUGGESTION">("SUGGESTION")
-  const [author, setAuthor] = useState("")
-  const [isbn, setIsbn] = useState("")
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState<"BORROWED_ITEM" | "SUGGESTION">("SUGGESTION");
+  const [author, setAuthor] = useState("");
+  const [isbn, setIsbn] = useState("");
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!title.trim()) return
+    e.preventDefault();
+    if (!title.trim()) {return;}
 
     createSuggestion.mutate(
       { title: title.trim(), description: description.trim() || undefined, type, author: author.trim() || undefined, isbn: isbn.trim() || undefined },
       {
         onSuccess: () => {
-          toast.success("Suggestion submitted")
-          setTitle("")
-          setDescription("")
-          setAuthor("")
-          setIsbn("")
+          toast.success("Suggestion submitted");
+          setTitle("");
+          setDescription("");
+          setAuthor("");
+          setIsbn("");
         },
         onError: (error) => {
-          toast.error(error instanceof Error ? error.message : "Failed to submit suggestion")
+          toast.error(error instanceof Error ? error.message : "Failed to submit suggestion");
         },
       },
-    )
+    );
   }
 
-  const isAdmin = session?.user?.role === "ADMIN"
+  const isAdmin = session?.user?.role === "ADMIN";
 
   return (
     <div className="container mx-auto p-4 max-w-3xl">
@@ -131,5 +131,5 @@ export default function SuggestionsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

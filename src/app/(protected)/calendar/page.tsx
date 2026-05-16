@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { format, isSameDay } from "date-fns"
-import { Loader2 } from "lucide-react"
-import { useEffect, useState } from "react"
+import { format, isSameDay } from "date-fns";
+import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { Badge } from "@/components/ui/badge"
-import { Calendar } from "@/components/ui/calendar"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Calendar } from "@/components/ui/calendar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Loan {
   id: string;
@@ -21,33 +21,33 @@ interface Loan {
 }
 
 export default function CalendarPage() {
-  const [loans, setLoans] = useState<Loan[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date())
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
   useEffect(() => {
     const fetchLoans = async () => {
       try {
-        const response = await fetch("/api/loans")
+        const response = await fetch("/api/loans");
         if (response.ok) {
-          const data = await response.json()
-          setLoans(data)
+          const data = await response.json();
+          setLoans(data);
         }
       } catch (error) {
-        console.error("Failed to fetch loans", error)
+        console.error("Failed to fetch loans", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
 
-    fetchLoans()
+    fetchLoans();
   }, []);
 
   const loansOnSelectedDate = loans.filter(
     (loan) => loan.dueAt && isSameDay(new Date(loan.dueAt), selectedDate || new Date()),
   );
 
-  const dueDates = loans.filter((loan) => loan.dueAt).map((loan) => new Date(loan.dueAt!))
+  const dueDates = loans.filter((loan) => loan.dueAt).map((loan) => new Date(loan.dueAt!));
 
   if (isLoading) {
     return (

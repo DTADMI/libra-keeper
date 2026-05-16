@@ -1,29 +1,35 @@
-import { twMerge } from "tailwind-merge"
+import { twMerge } from "tailwind-merge";
 
-type ClassDictionary = Record<string, unknown>
-type ClassArray = ClassValue[]
-export type ClassValue = string | number | null | undefined | boolean | ClassDictionary | ClassArray
+type ClassDictionary = Record<string, unknown>;
+type ClassArray = ClassValue[];
+export type ClassValue =
+  | string
+  | number
+  | null
+  | undefined
+  | boolean
+  | ClassDictionary
+  | ClassArray;
 
 function toClassName(value: ClassValue): string {
   if (!value) {
-    return ""
+    return "";
   }
 
   if (typeof value === "string" || typeof value === "number") {
-    return String(value)
+    return String(value);
   }
 
   if (Array.isArray(value)) {
-    return value.map(toClassName).filter(Boolean).join(" ")
+    return value.map(toClassName).filter(Boolean).join(" ");
   }
 
   return Object.entries(value)
     .filter(([, shouldInclude]) => Boolean(shouldInclude))
     .map(([className]) => className)
-    .join(" ")
+    .join(" ");
 }
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(inputs.map(toClassName).filter(Boolean).join(" "))
+  return twMerge(inputs.map(toClassName).filter(Boolean).join(" "));
 }
-

@@ -6,22 +6,22 @@
 //   Server:  import { isFeatureEnabled } from "@/lib/feature-flags"
 //   Client:  import { useFeatureFlag } from "@/hooks/use-feature-flags"
 
-import { prisma } from "@/lib/db"
-import { redis } from "@/lib/redis"
+import { prisma } from "@/lib/db";
+import { redis } from "@/lib/redis";
 
-export type FlagType = "boolean" | "percentage" | "user_list"
+export type FlagType = "boolean" | "percentage" | "user_list";
 
 export interface FeatureFlag {
-  name: string
-  description?: string
-  type: FlagType
-  enabled: boolean
-  percentage?: number
-  userIds?: string[]
+  name: string;
+  description?: string;
+  type: FlagType;
+  enabled: boolean;
+  percentage?: number;
+  userIds?: string[];
 }
 
-const CACHE_KEY = "feature-flags:all"
-const CACHE_TTL = 30
+const CACHE_KEY = "feature-flags:all";
+const CACHE_TTL = 30;
 
 export const DEFAULT_FEATURE_FLAGS: FeatureFlag[] = [
   {
@@ -104,79 +104,82 @@ export const DEFAULT_FEATURE_FLAGS: FeatureFlag[] = [
     type: "boolean",
     enabled: false,
   },
-]
+];
 
 async function loadFlagsFromDB(): Promise<FeatureFlag[]> {
-  const dbFlags = await prisma.featureFlag.findMany()
+  const dbFlags = await prisma.featureFlag.findMany();
   return dbFlags.map((f) => ({
     name: f.name,
     description: f.description ?? undefined,
     type: "boolean" as FlagType,
     enabled: f.isEnabled,
-  }))
+  }));
 }
 
 async function getAllFlags(): Promise<FeatureFlag[]> {
   try {
-    const cached = await redis.get(CACHE_KEY)
+    const cached = await redis.get(CACHE_KEY);
     if (cached) {
-      const parsed: FeatureFlag[] = JSON.parse(cached)
-      if (parsed.length > 0) return parsed
+      const parsed: FeatureFlag[] = JSON.parse(cached);
+      if (parsed.length > 0) {return parsed;}
     }
-  } catch { /* cache miss */ }
+  } catch {
+    /* cache miss */
+  }
 
   try {
-    const dbFlags = await loadFlagsFromDB()
+    const dbFlags = await loadFlagsFromDB();
     if (dbFlags.length > 0) {
       const merged = DEFAULT_FEATURE_FLAGS.map((d) => {
-        const db = dbFlags.find((f) => f.name === d.name)
-        return db ? { ...d, enabled: db.enabled } : d
-      })
-      await redis.set(CACHE_KEY, JSON.stringify(merged), { ex: CACHE_TTL })
-      return merged
+        const db = dbFlags.find((f) => f.name === d.name);
+        return db ? { ...d, enabled: db.enabled } : d;
+      });
+      await redis.set(CACHE_KEY, JSON.stringify(merged), { ex: CACHE_TTL });
+      return merged;
     }
-  } catch { /* DB unavailable */ }
+  } catch {
+    /* DB unavailable */
+  }
 
-  await redis.set(CACHE_KEY, JSON.stringify(DEFAULT_FEATURE_FLAGS), { ex: CACHE_TTL })
-  return DEFAULT_FEATURE_FLAGS
+  await redis.set(CACHE_KEY, JSON.stringify(DEFAULT_FEATURE_FLAGS), { ex: CACHE_TTL });
+  return DEFAULT_FEATURE_FLAGS;
 }
 
 function evaluateFlag(flag: FeatureFlag, userId?: string): boolean {
-  if (!flag.enabled) return false
+  if (!flag.enabled) {return false;}
 
   switch (flag.type) {
     case "boolean":
-      return true
+      return true;
     case "percentage":
-      return (flag.percentage ?? 0) >= 100
+      return (flag.percentage ?? 0) >= 100;
     case "user_list":
-      return userId ? (flag.userIds ?? []).includes(userId) : false
+      return userId ? (flag.userIds ?? []).includes(userId) : false;
     default:
-      return false
+      return false;
   }
 }
 
 export async function isFeatureEnabled(name: string, userId?: string): Promise<boolean> {
-  const flags = await getAllFlags()
-  const flag = flags.find((f) => f.name === name)
-  if (!flag) return false
-  return evaluateFlag(flag, userId)
+  const flags = await getAllFlags();
+  const flag = flags.find((f) => f.name === name);
+  if (!flag) {return false;}
+  return evaluateFlag(flag, userId);
 }
 
-export async function isFeatureEnabledForUser(
-  name: string,
-  userId: string,
-): Promise<boolean> {
-  return isFeatureEnabled(name, userId)
+export async function isFeatureEnabledForUser(name: string, userId: string): Promise<boolean> {
+  return isFeatureEnabled(name, userId);
 }
 
 export async function getAllFeatureFlags(): Promise<FeatureFlag[]> {
-  return getAllFlags()
+  return getAllFlags();
 }
 
 export async function invalidateFlagCache(name: string): Promise<void> {
   try {
-    await redis.del(CACHE_KEY)
-    await redis.del(`ff:${name}`)
-  } catch { /* silent */ }
+    await redis.del(CACHE_KEY);
+    await redis.del(`ff:${name}`);
+  } catch {
+    /* silent */
+  }
 }

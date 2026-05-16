@@ -1,9 +1,9 @@
-import Link from "next/link"
-import { getTranslations } from "next-intl/server"
+import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 
 export default async function NotFound() {
   // Use getTranslations on the server
-  const t = await getTranslations("NotFound")
+  const t = await getTranslations("NotFound");
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">

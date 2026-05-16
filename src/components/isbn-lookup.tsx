@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { toast } from "sonner"
+import { Loader2, Search } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Loader2, Search } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface BookMetadata {
   title: string
@@ -23,28 +23,28 @@ interface ISBNLookupProps {
 }
 
 export function ISBNLookup({ onFill }: ISBNLookupProps) {
-  const [isbn, setIsbn] = useState("")
-  const [isLoading, setIsLoading] = useState(false)
+  const [isbn, setIsbn] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleLookup() {
-    const clean = isbn.replace(/[-\s]/g, "")
-    if (!clean) return
+    const clean = isbn.replace(/[-\s]/g, "");
+    if (!clean) {return;}
 
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       // Try Google Books API first (no API key needed for basic queries)
       const res = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(clean)}`,
-      )
-      if (!res.ok) throw new Error("Lookup failed")
+      );
+      if (!res.ok) {throw new Error("Lookup failed");}
 
-      const data = await res.json()
+      const data = await res.json();
       if (!data.items?.length) {
-        toast.error("No book found for this ISBN")
-        return
+        toast.error("No book found for this ISBN");
+        return;
       }
 
-      const info = data.items[0].volumeInfo
+      const info = data.items[0].volumeInfo;
       const metadata: Partial<BookMetadata> = {
         title: info.title,
         authors: info.authors ?? [],
@@ -53,14 +53,14 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
         description: info.description,
         isbn: clean,
         coverImage: info.imageLinks?.thumbnail?.replace("http:", "https:") ?? null,
-      }
+      };
 
-      onFill(metadata)
-      toast.success(`Found: ${metadata.title}`)
+      onFill(metadata);
+      toast.success(`Found: ${metadata.title}`);
     } catch (error) {
-      toast.error("Failed to look up ISBN. Try entering details manually.")
+      toast.error("Failed to look up ISBN. Try entering details manually.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -74,7 +74,7 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
           value={isbn}
           onChange={(e) => setIsbn(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") handleLookup()
+            if (e.key === "Enter") {handleLookup();}
           }}
           aria-label="Look up book by ISBN"
         />
@@ -89,5 +89,5 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

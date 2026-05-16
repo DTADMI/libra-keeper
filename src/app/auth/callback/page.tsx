@@ -1,27 +1,27 @@
-"use client"
+"use client";
 
-import { useRouter, useSearchParams } from "next/navigation"
-import { Suspense, useEffect, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 
-import { createBrowserClient } from "@/lib/supabase/client"
+import { createBrowserClient } from "@/lib/supabase/client";
 
 function CallbackHandler() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get("redirect") ?? "/dashboard"
-  const [error, setError] = useState<string | null>(null)
-  const supabase = createBrowserClient()
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") ?? "/dashboard";
+  const [error, setError] = useState<string | null>(null);
+  const supabase = createBrowserClient();
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_IN") {
-        router.push(redirect)
-        router.refresh()
+        router.push(redirect);
+        router.refresh();
       }
-    })
+    });
 
-    return () => data.subscription.unsubscribe()
-  }, [supabase, router, redirect])
+    return () => data.subscription.unsubscribe();
+  }, [supabase, router, redirect]);
 
   if (error) {
     return (
@@ -33,7 +33,7 @@ function CallbackHandler() {
           <p className="text-muted-foreground">{error}</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -43,7 +43,7 @@ function CallbackHandler() {
         <p className="text-muted-foreground">Completing sign in...</p>
       </div>
     </div>
-  )
+  );
 }
 
 export default function AuthCallbackPage() {
@@ -57,5 +57,5 @@ export default function AuthCallbackPage() {
     >
       <CallbackHandler />
     </Suspense>
-  )
+  );
 }

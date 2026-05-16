@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface User {
   id: string
@@ -30,20 +30,20 @@ interface ExportData {
 }
 
 async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-  return res.json()
+  const res = await fetch(url, init);
+  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
+  return res.json();
 }
 
 export function useAdminUsers() {
   return useQuery({
     queryKey: ["admin", "users"],
     queryFn: () => fetchJSON<User[]>("/api/admin/users"),
-  })
+  });
 }
 
 export function useChangeUserRole() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ userId, role }: { userId: string; role: string }) =>
@@ -53,20 +53,20 @@ export function useChangeUserRole() {
         body: JSON.stringify({ userId, role }),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "users"] })
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
     },
-  })
+  });
 }
 
 export function useAdminFlags() {
   return useQuery({
     queryKey: ["admin", "flags"],
     queryFn: () => fetchJSON<FeatureFlag[]>("/api/admin/flags"),
-  })
+  });
 }
 
 export function useUpdateFlag() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (flag: { name: string; isEnabled: boolean; description?: string }) =>
@@ -76,21 +76,21 @@ export function useUpdateFlag() {
         body: JSON.stringify(flag),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "flags"] })
-      queryClient.invalidateQueries({ queryKey: ["feature-flags"] })
+      queryClient.invalidateQueries({ queryKey: ["admin", "flags"] });
+      queryClient.invalidateQueries({ queryKey: ["feature-flags"] });
     },
-  })
+  });
 }
 
 export function useAdminSettings() {
   return useQuery({
     queryKey: ["admin", "settings"],
     queryFn: () => fetchJSON<AppSetting[]>("/api/admin/settings"),
-  })
+  });
 }
 
 export function useUpdateSetting() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (setting: { key: string; value: string; type: string }) =>
@@ -100,9 +100,9 @@ export function useUpdateSetting() {
         body: JSON.stringify(setting),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin", "settings"] })
+      queryClient.invalidateQueries({ queryKey: ["admin", "settings"] });
     },
-  })
+  });
 }
 
 export function useAdminExport() {
@@ -110,5 +110,5 @@ export function useAdminExport() {
     queryKey: ["admin", "export"],
     queryFn: () => fetchJSON<ExportData>("/api/admin/export"),
     enabled: false,
-  })
+  });
 }

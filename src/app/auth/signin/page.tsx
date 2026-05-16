@@ -1,66 +1,66 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Suspense, useState } from "react"
-import { toast } from "sonner"
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
+import { toast } from "sonner";
 
-import { Icons } from "@/components/icons"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { createBrowserClient } from "@/lib/supabase/client"
+import { Icons } from "@/components/icons";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { createBrowserClient } from "@/lib/supabase/client";
 
 function SignInForm() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const redirect = searchParams.get("redirect") ?? "/dashboard"
-  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") ?? "/dashboard";
+  const [isLoading, setIsLoading] = useState(false);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setIsLoading(true)
+    event.preventDefault();
+    setIsLoading(true);
 
-    const formData = new FormData(event.currentTarget)
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
     try {
-      const supabase = createBrowserClient()
+      const supabase = createBrowserClient();
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
-      })
+      });
 
-      if (error) throw error
+      if (error) {throw error;}
 
-      router.push(redirect)
-      router.refresh()
+      router.push(redirect);
+      router.refresh();
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : "Failed to sign in"
-      toast.error(message)
+        error instanceof Error ? error.message : "Failed to sign in";
+      toast.error(message);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   async function signInWithGoogle() {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      const supabase = createBrowserClient()
+      const supabase = createBrowserClient();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(redirect)}`,
         },
-      })
-      if (error) throw error
+      });
+      if (error) {throw error;}
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : "Failed to sign in with Google"
-      toast.error(message)
-      setIsLoading(false)
+        error instanceof Error ? error.message : "Failed to sign in with Google";
+      toast.error(message);
+      setIsLoading(false);
     }
   }
 
@@ -129,7 +129,7 @@ function SignInForm() {
         </p>
       </div>
     </div>
-  )
+  );
 }
 
 export default function SignInPage() {
@@ -143,5 +143,5 @@ export default function SignInPage() {
     >
       <SignInForm />
     </Suspense>
-  )
+  );
 }

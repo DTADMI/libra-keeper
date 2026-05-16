@@ -1,24 +1,25 @@
 // src/app/api/admin/export/route.ts
-import { NextResponse } from "next/server"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { NextResponse } from "next/server";
+
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { searchParams } = new URL(req.url)
-    const format = searchParams.get("format") || "json"
+    const { searchParams } = new URL(req.url);
+    const format = searchParams.get("format") || "json";
 
     const items = await prisma.item.findMany({
       include: { tags: true },
     });
 
     if (format === "csv") {
-      const headers = ["id", "title", "author", "type", "status", "isbn", "publisher", "createdAt"]
+      const headers = ["id", "title", "author", "type", "status", "isbn", "publisher", "createdAt"];
       const rows = items.map((item) => [
         item.id,
         `"${item.title.replace(/"/g, '""')}"`,
@@ -30,7 +31,7 @@ export async function GET(req: Request) {
         item.createdAt.toISOString(),
       ]);
 
-      const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n")
+      const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
 
       return new NextResponse(csvContent, {
         headers: {
@@ -46,6 +47,6 @@ export async function GET(req: Request) {
       },
     });
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

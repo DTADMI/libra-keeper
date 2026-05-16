@@ -15,19 +15,19 @@ class Logger {
   }
 
   public info(message: string, ...args: unknown[]) {
-    this.log("info", message, ...args)
+    this.log("info", message, ...args);
   }
 
   public warn(message: string, ...args: unknown[]) {
-    this.log("warn", message, ...args)
+    this.log("warn", message, ...args);
   }
 
   public error(message: string, ...args: unknown[]) {
-    this.log("error", message, ...args)
+    this.log("error", message, ...args);
   }
 
   public debug(message: string, ...args: unknown[]) {
-    this.log("debug", message, ...args)
+    this.log("debug", message, ...args);
   }
 
   private log(level: LogLevel, message: string, ...args: unknown[]) {

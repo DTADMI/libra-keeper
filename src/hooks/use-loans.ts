@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Loan {
   id: string
@@ -16,20 +16,20 @@ interface Loan {
 }
 
 async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  if (!res.ok) throw new Error(`Request failed: ${res.status}`)
-  return res.json()
+  const res = await fetch(url, init);
+  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
+  return res.json();
 }
 
 export function useMyLoans() {
   return useQuery({
     queryKey: ["loans"],
     queryFn: () => fetchJSON<Loan[]>("/api/loans"),
-  })
+  });
 }
 
 export function useBorrowItem(itemId: string) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: () =>
@@ -39,14 +39,14 @@ export function useBorrowItem(itemId: string) {
         body: JSON.stringify({ itemId }),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["loans"] })
-      queryClient.invalidateQueries({ queryKey: ["item", itemId] })
+      queryClient.invalidateQueries({ queryKey: ["loans"] });
+      queryClient.invalidateQueries({ queryKey: ["item", itemId] });
     },
-  })
+  });
 }
 
 export function useUpdateLoan(loanId: string) {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (status: string) =>
@@ -56,7 +56,7 @@ export function useUpdateLoan(loanId: string) {
         body: JSON.stringify({ status }),
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["loans"] })
+      queryClient.invalidateQueries({ queryKey: ["loans"] });
     },
-  })
+  });
 }

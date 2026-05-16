@@ -1,9 +1,9 @@
 // src/app/api/items/[id]/comments/route.ts
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 const commentSchema = z.object({
   content: z.string().min(1),
@@ -11,14 +11,14 @@ const commentSchema = z.object({
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const session = await getServerAuth()
+    const session = await getServerAuth();
     if (!session?.user) {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const json = await req.json()
-    const { content } = commentSchema.parse(json)
-    const { id } = await params
+    const json = await req.json();
+    const { content } = commentSchema.parse(json);
+    const { id } = await params;
 
     const comment = await prisma.comment.create({
       data: {
@@ -30,7 +30,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         user: { select: { name: true, image: true } },
         item: { select: { title: true } },
       },
-    })
+    });
 
     if (comment.item.title) {
       await prisma.notification.create({
@@ -41,21 +41,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           body: `You commented on "${comment.item.title}"`,
           link: `/items/${id}`,
         },
-      })
+      });
     }
 
-    return NextResponse.json(comment)
+    return NextResponse.json(comment);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 })
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
+    const { id } = await params;
 
     const comments = await prisma.comment.findMany({
       where: { itemId: id },
@@ -72,8 +72,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       },
     });
 
-    return NextResponse.json(comments)
+    return NextResponse.json(comments);
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }

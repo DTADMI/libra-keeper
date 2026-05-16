@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { Loader2, UserMinus, UserPlus } from "lucide-react"
-import { toast } from "sonner"
+import { Loader2, UserMinus, UserPlus } from "lucide-react";
+import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button"
-import { useWaitlist } from "@/hooks/use-suggestions"
+import { Button } from "@/components/ui/button";
+import { useWaitlist } from "@/hooks/use-suggestions";
 
 interface WaitlistButtonProps {
   itemId: string;
@@ -12,18 +12,18 @@ interface WaitlistButtonProps {
 }
 
 export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
-  const waitlist = useWaitlist(itemId)
+  const waitlist = useWaitlist(itemId);
 
   const handleToggleWaitlist = () => {
     waitlist.mutate(isJoined ? "leave" : "join", {
       onSuccess: () => {
-        toast.success(isJoined ? "Left the waitlist" : "Joined the waitlist")
+        toast.success(isJoined ? "Left the waitlist" : "Joined the waitlist");
       },
       onError: () => {
-        toast.error("Something went wrong")
+        toast.error("Something went wrong");
       },
-    })
-  }
+    });
+  };
 
   return (
     <Button

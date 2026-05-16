@@ -1,16 +1,17 @@
-import { redirect } from "next/navigation"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { redirect } from "next/navigation";
 
-import { RequestActionButtons } from "./request-action-buttons"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
+
+import { RequestActionButtons } from "./request-action-buttons";
 
 export default async function AdminRequestsPage() {
-  const session = await getServerAuth()
+  const session = await getServerAuth();
 
   if (!session?.user || session.user.role !== "ADMIN") {
-    redirect("/dashboard")
+    redirect("/dashboard");
   }
 
   const loans = await prisma.loan.findMany({

@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { Html5QrcodeScanner } from "html5-qrcode"
-import { ScanLine } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { Html5QrcodeScanner } from "html5-qrcode";
+import { ScanLine } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 interface BarcodeScannerProps {
   onScan: (decodedText: string) => void;
 }
 
 export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
-  const [isOpen, setIsOpen] = useState(false)
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null)
+  const [isOpen, setIsOpen] = useState(false);
+  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -29,10 +29,10 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
 
       scannerRef.current.render(
         (decodedText) => {
-          onScan(decodedText)
-          setIsOpen(false)
+          onScan(decodedText);
+          setIsOpen(false);
           if (scannerRef.current) {
-            scannerRef.current.clear()
+            scannerRef.current.clear();
           }
         },
         (error) => {
@@ -44,7 +44,7 @@ export function BarcodeScanner({ onScan }: BarcodeScannerProps) {
     return () => {
       if (scannerRef.current) {
         scannerRef.current.clear().catch((error) => {
-          console.error("Failed to clear scanner", error)
+          console.error("Failed to clear scanner", error);
         });
       }
     };

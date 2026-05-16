@@ -1,18 +1,18 @@
 // eslint.config.mjs
-import js from "@eslint/js"
-import tseslint from "@typescript-eslint/eslint-plugin"
-import tsPlugin from "@typescript-eslint/eslint-plugin"
-import tsparser from "@typescript-eslint/parser"
-import react from "eslint-plugin-react"
-import hooks from "eslint-plugin-react-hooks"
-import a11y from "eslint-plugin-jsx-a11y"
-import simpleImportSort from "eslint-plugin-simple-import-sort"
-import globals from "globals"
-import path from "path"
-import { fileURLToPath } from "url"
+import js from "@eslint/js";
+import tseslint from "@typescript-eslint/eslint-plugin";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tsparser from "@typescript-eslint/parser";
+import react from "eslint-plugin-react";
+import hooks from "eslint-plugin-react-hooks";
+import a11y from "eslint-plugin-jsx-a11y";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
+import globals from "globals";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Common TypeScript parser options
 const tsParserOptions = {
@@ -23,7 +23,7 @@ const tsParserOptions = {
   ecmaVersion: "latest",
   sourceType: "module",
   project: "./tsconfig.json",
-}
+};
 
 export default [
   // Global ignores
@@ -106,7 +106,7 @@ export default [
       "react-hooks/exhaustive-deps": "warn",
 
       // TypeScript
-      "@typescript-eslint/no-unused-vars": "off"/*[
+      "@typescript-eslint/no-unused-vars": "off" /*[
         "warn",
         {
           argsIgnorePattern: "^_",

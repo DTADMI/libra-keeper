@@ -1,38 +1,38 @@
 // src/app/(protected)/messages/page.tsx
-"use client"
+"use client";
 
-import { useState } from "react"
-import { toast } from "sonner"
+import { useState } from "react";
+import { toast } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { useConversations, useMessages, useSendMessage } from "@/hooks/use-messages"
-import { useSession } from "@/hooks/use-session"
-import { cn } from "@/lib/utils"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { useConversations, useMessages, useSendMessage } from "@/hooks/use-messages";
+import { useSession } from "@/hooks/use-session";
+import { cn } from "@/lib/utils";
 
 export default function MessagesPage() {
-  const { data: session } = useSession()
-  const { data: conversations = [], isLoading: conversationsLoading, error: conversationsError } = useConversations()
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(null)
-  const { data: messages = [], isLoading: messagesLoading } = useMessages(selectedUserId)
-  const [newMessage, setNewMessage] = useState("")
-  const sendMessage = useSendMessage(selectedUserId ?? "")
+  const { data: session } = useSession();
+  const { data: conversations = [], isLoading: conversationsLoading, error: conversationsError } = useConversations();
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const { data: messages = [], isLoading: messagesLoading } = useMessages(selectedUserId);
+  const [newMessage, setNewMessage] = useState("");
+  const sendMessage = useSendMessage(selectedUserId ?? "");
 
-  const selectedConversation = conversations.find((c) => c.user.id === selectedUserId)
+  const selectedConversation = conversations.find((c) => c.user.id === selectedUserId);
 
   function handleSend() {
-    if (!newMessage.trim() || !selectedUserId) return
+    if (!newMessage.trim() || !selectedUserId) {return;}
     sendMessage.mutate(newMessage, {
       onSuccess: () => setNewMessage(""),
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : "Failed to send message")
+        toast.error(error instanceof Error ? error.message : "Failed to send message");
       },
-    })
+    });
   }
 
-  const currentUserId = session?.user?.id
+  const currentUserId = session?.user?.id;
 
   return (
     <div className="container mx-auto p-4">
@@ -122,8 +122,8 @@ export default function MessagesPage() {
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault()
-                      handleSend()
+                      e.preventDefault();
+                      handleSend();
                     }
                   }}
                   disabled={sendMessage.isPending}
@@ -141,5 +141,5 @@ export default function MessagesPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

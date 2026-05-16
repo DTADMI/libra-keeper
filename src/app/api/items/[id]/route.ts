@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server"
-import { z } from "zod"
+import { NextResponse } from "next/server";
+import { z } from "zod";
 
-import { getServerAuth } from "@/lib/auth-utils"
-import { prisma } from "@/lib/db"
+import { getServerAuth } from "@/lib/auth-utils";
+import { prisma } from "@/lib/db";
 
 const itemSchema = z.object({
   title: z.string().min(1),
@@ -20,7 +20,7 @@ const itemSchema = z.object({
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
+    const { id } = await params;
     const item = await prisma.item.findUnique({
       where: { id },
       include: {
@@ -40,27 +40,27 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     });
 
     if (!item) {
-      return new NextResponse("Not Found", { status: 404 })
+      return new NextResponse("Not Found", { status: 404 });
     }
 
-    return NextResponse.json(item)
+    return NextResponse.json(item);
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const session = await getServerAuth()
+    const { id } = await params;
+    const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const json = await req.json()
-    const body = itemSchema.parse(json)
+    const json = await req.json();
+    const body = itemSchema.parse(json);
 
-    const { tags, metadata, ...itemData } = body
+    const { tags, metadata, ...itemData } = body;
 
     const item = await prisma.item.update({
       where: { id },
@@ -81,29 +81,29 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       },
     });
 
-    return NextResponse.json(item)
+    return NextResponse.json(item);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return new NextResponse(JSON.stringify(error.issues), { status: 422 })
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
     }
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = await params
-    const session = await getServerAuth()
+    const { id } = await params;
+    const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
-      return new NextResponse("Unauthorized", { status: 401 })
+      return new NextResponse("Unauthorized", { status: 401 });
     }
 
     await prisma.item.delete({
       where: { id },
     });
 
-    return new NextResponse(null, { status: 204 })
+    return new NextResponse(null, { status: 204 });
   } catch (error) {
-    return new NextResponse("Internal server error", { status: 500 })
+    return new NextResponse("Internal server error", { status: 500 });
   }
 }
