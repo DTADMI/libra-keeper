@@ -1,0 +1,20 @@
+{
+  "name": "librakeep-local",
+  "interface": {
+    "displayName": "Libra Keeper Local"
+  },
+  "plugins": [
+    {
+      "name": "librakeep-integrations",
+      "source": {
+        "source": "local",
+        "path": "./plugins/librakeep-integrations"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

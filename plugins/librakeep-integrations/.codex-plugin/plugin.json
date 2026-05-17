@@ -1,0 +1,24 @@
+{
+  "name": "librakeep-integrations",
+  "version": "0.1.0",
+  "description": "Libra Keeper repo-local MCP bundle for GitHub, Supabase, and Vercel.",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Libra Keeper Integrations",
+    "shortDescription": "GitHub, Supabase, and Vercel MCP bundle.",
+    "longDescription": "Repo-local plugin metadata for the GitHub, Supabase, and Vercel MCP servers used during Libra Keeper work.",
+    "developerName": "Libra Keeper Engineering",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Read",
+      "Integrations"
+    ],
+    "defaultPrompt": [
+      "Inspect the Libra Keeper GitHub work items.",
+      "Inspect the Libra Keeper Supabase project context.",
+      "Inspect the Libra Keeper Vercel deployment status.",
+      "Use all Libra Keeper MCP targets for context."
+    ],
+    "brandColor": "#6d28d9"
+  }
+}
