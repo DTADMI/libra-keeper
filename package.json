@@ -36,7 +36,15 @@
     "db:down": "docker compose down",
     "db:logs": "docker compose logs -f",
     "db:init": "pnpm exec prisma migrate dev --name init",
-    "setup:local": "node scripts/setup-local.js"
+    "setup:local": "node scripts/setup-local.js",
+    "docker:up": "docker compose -f docker-compose.local.yml up -d",
+    "docker:down": "docker compose -f docker-compose.local.yml down",
+    "docker:stop": "docker compose -f docker-compose.local.yml stop",
+    "docker:logs": "docker compose -f docker-compose.local.yml logs -f",
+    "supabase:start": "supabase start",
+    "supabase:stop": "supabase stop",
+    "supabase:status": "supabase status",
+    "dev:local": "pnpm docker:up && pnpm supabase:start && pnpm dev"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

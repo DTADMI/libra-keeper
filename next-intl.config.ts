@@ -14,7 +14,7 @@ export default getRequestConfig(async ({ locale }) => {
 
   return {
     locale: currentLocale,
-    messages: (await import(`./src/i18n/messages/${currentLocale}.json`)).default,
+    messages: (await import(`./i18n/messages/${currentLocale}.json`)).default,
     // You can add other i18n options here
   };
 });

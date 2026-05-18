@@ -26,11 +26,11 @@ Read these first when the task touches the matching area:
 
 ## Repository Map
 
-- `src/app/` Next.js App Router pages and API routes
-- `src/components/` shared UI components
-- `src/hooks/` client hooks
-- `src/lib/` shared logic, feature flags, Supabase helpers
-- `src/types/` TypeScript type definitions
+- `app/` Next.js App Router pages and API routes
+- `components/` shared UI components
+- `hooks/` client hooks
+- `lib/` shared logic, feature flags, Supabase helpers
+- `types/` TypeScript type definitions
 - `scripts/` validation, build, and agent support scripts
 - `supabase/` config and edge functions
 - `docs/` product, business, and technical documentation
@@ -90,6 +90,6 @@ Read these first when the task touches the matching area:
 
 ## Feature Flags
 
-- Feature flags are defined in `src/lib/flags.ts`.
+- Feature flags are defined in `lib/feature-flags.ts`.
 - UI and API enforcement must be kept in sync.
 - All new features must be behind feature flags.

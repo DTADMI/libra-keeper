@@ -14,19 +14,19 @@ const config: Config = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
+    "^@/(.*)$": "<rootDir>/$1",
   },
   modulePathIgnorePatterns: ["<rootDir>/.next/"],
   testPathIgnorePatterns: ["<rootDir>/e2e/"],
   collectCoverageFrom: [
-    "src/lib/**/*.{js,jsx,ts,tsx}",
-    "src/app/api/items/route.ts",
-    "!src/lib/db.ts",
-    "!src/lib/prisma.ts",
-    "!src/lib/mail.ts",
-    "!src/lib/utils.ts",
-    "!src/**/*.d.ts",
-    "!src/__tests__/**",
+    "lib/**/*.{js,jsx,ts,tsx}",
+    "app/api/items/route.ts",
+    "!lib/db.ts",
+    "!lib/prisma.ts",
+    "!lib/mail.ts",
+    "!lib/utils.ts",
+    "!**/*.d.ts",
+    "!__tests__/**",
   ],
   coverageThreshold: {
     global: {
