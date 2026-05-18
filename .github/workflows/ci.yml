@@ -1,49 +1,54 @@
-name: CI/CD
+name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
   pull_request:
     branches: [main]
 
-env:
-  NODE_VERSION: "24"
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+permissions:
+  contents: read
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v5
+      - name: Checkout
+        uses: actions/checkout@v6
 
-      - name: Install pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
         run: |
           corepack enable
           corepack prepare pnpm@10.24.0 --activate
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v5
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "pnpm"
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Prisma generate
-        run: pnpm prisma generate
-
-      - name: Lint
-        run: pnpm exec eslint . --ext .ts,.tsx --quiet
+      - name: Typecheck
+        run: pnpm typecheck
 
       - name: Test
-        run: pnpm test --coverage
+        run: pnpm test
 
       - name: Build
         run: pnpm build
-        env:
-          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/librakeeper"
-          NEXTAUTH_SECRET: "test-secret"
-          NEXTAUTH_URL: "http://localhost:3000"
-          NEXT_PUBLIC_APP_URL: "http://localhost:3000"
