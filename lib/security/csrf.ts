@@ -34,7 +34,9 @@ export async function validateCsrf(request: Request): Promise<boolean> {
   if (!cookieToken || !headerToken) return false
   if (cookieToken.length !== TOKEN_LENGTH * 2) return false
 
-  return cookieToken === headerToken
+  const a = Buffer.from(cookieToken, "utf-8")
+  const b = Buffer.from(headerToken, "utf-8")
+  return a.length === b.length && crypto.timingSafeEqual(a, b)
 }
 
 export async function getCsrfHeader(): Promise<Record<string, string>> {
