@@ -1,15 +1,16 @@
+// hooks/use-feature-flags.tsx
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { createContext, useContext, useMemo } from "react";
-import useSWR from "swr";
+
+import { apiClient } from "@/lib/api-client";
 
 interface FeatureFlag {
   id: string
   name: string
   description: string | null
   isEnabled: boolean
-  type?: string
-  value?: unknown
 }
 
 interface FeatureFlagsContextValue {
@@ -24,23 +25,13 @@ const FeatureFlagsContext = createContext<FeatureFlagsContextValue>({
   error: null,
 });
 
-const fetcher = async (url: string): Promise<FeatureFlag[]> => {
-  const res = await fetch(url);
-  if (!res.ok) {throw new Error("Failed to fetch feature flags");}
-  return res.json();
-};
-
 export function FeatureFlagsProvider({ children }: { children: React.ReactNode }) {
-  const { data, error, isLoading } = useSWR<FeatureFlag[]>(
-    "/api/feature-flags",
-    fetcher,
-    {
-      dedupingInterval: 30000,
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      fallbackData: [],
-    },
-  );
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["feature-flags"],
+    queryFn: () => apiClient<FeatureFlag[]>("/api/feature-flags"),
+    staleTime: 30_000,
+    placeholderData: [],
+  });
 
   const value = useMemo<FeatureFlagsContextValue>(() => {
     const flags = new Map<string, FeatureFlag>();
@@ -68,21 +59,11 @@ export function useFeatureFlag(name: string): {
   loading: boolean
   flag: FeatureFlag | undefined
 } {
-  const { data, error, isLoading } = useSWR<FeatureFlag[]>(
-    "/api/feature-flags",
-    fetcher,
-    {
-      dedupingInterval: 30000,
-      revalidateOnFocus: false,
-      fallbackData: [],
-    },
-  );
-
-  const flag = data?.find((f) => f.name === name);
-
+  const { flags, loading } = useFeatureFlags();
+  const flag = flags.get(name);
   return {
     enabled: flag?.isEnabled ?? false,
-    loading: isLoading && !data,
+    loading,
     flag,
   };
 }

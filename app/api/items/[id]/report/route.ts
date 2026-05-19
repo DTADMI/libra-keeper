@@ -1,9 +1,15 @@
 // src/app/api/items/[id]/report/route.ts
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
+
+const reportSchema = z.object({
+  description: z.string().optional(),
+});
+
 async function _POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
@@ -12,7 +18,9 @@ async function _POST(req: Request, { params }: { params: Promise<{ id: string }>
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Create a special ItemRequest for a missing item
+    const json = await req.json();
+    const body = reportSchema.parse(json);
+
     const item = await prisma.item.findUnique({
       where: { id },
     });
@@ -24,18 +32,19 @@ async function _POST(req: Request, { params }: { params: Promise<{ id: string }>
     const request = await prisma.itemRequest.create({
       data: {
         title: `MISSING: ${item.title}`,
-        description: `User ${session.user.name || session.user.email} reported this item as missing.`,
-        type: "BORROWED_ITEM", // Reusing this type or we could add 'REPORT'
+        description: body.description
+          ?? `User ${session.user.name || session.user.email} reported this item as missing.`,
+        type: "BORROWED_ITEM",
         status: "PENDING",
         requestedById: session.user.id,
       },
     });
 
-    // Optionally update item status to LOST?
-    // Let's wait for admin approval.
-
     return NextResponse.json(request, { status: 201 });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return new NextResponse(JSON.stringify(error.issues), { status: 422 });
+    }
     return new NextResponse("Internal server error", { status: 500 });
   }
 }

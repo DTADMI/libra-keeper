@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -8,83 +9,56 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { useAdminFlags, useUpdateFlag } from "@/hooks/use-admin";
 
 interface FeatureFlag {
-  id?: string;
   name: string;
-  description?: string;
+  description: string;
   isEnabled: boolean;
 }
 
 export function FeatureFlagManager() {
-  const [flags, setFlags] = useState<FeatureFlag[]>([]);
+  const t = useTranslations("Admin");
+  const tc = useTranslations("Common");
+  const { data: flags = [], isLoading } = useAdminFlags();
+  const updateFlag = useUpdateFlag();
+
   const [newFlag, setNewFlag] = useState<FeatureFlag>({
     name: "",
     description: "",
     isEnabled: false,
   });
-  const [loading, setLoading] = useState(true);
 
-  const fetchFlags = async () => {
-    try {
-      const res = await fetch("/api/admin/flags");
-      if (res.ok) {
-        const data = await res.json();
-        setFlags(data);
-      }
-    } catch (error) {
-      toast.error("Failed to fetch feature flags");
-    } finally {
-      setLoading(false);
-    }
+  const handleSave = (flag: { name: string; isEnabled: boolean; description?: string }) => {
+    updateFlag.mutate(flag, {
+      onSuccess: () => toast.success(t("flagUpdated")),
+      onError: () => toast.error(tc("error")),
+    });
   };
 
-  useEffect(() => {
-    fetchFlags();
-  }, []);
-
-  const handleSave = async (flag: FeatureFlag) => {
-    try {
-      const res = await fetch("/api/admin/flags", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(flag),
-      });
-
-      if (res.ok) {
-        toast.success("Feature flag saved");
-        fetchFlags();
-      } else {
-        toast.error("Failed to save feature flag");
-      }
-    } catch (error) {
-      toast.error("Error saving feature flag");
-    }
-  };
-
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!newFlag.name) {
-      return toast.error("Name is required");
+      return toast.error(t("nameRequired"));
     }
-    await handleSave(newFlag);
+    handleSave(newFlag);
     setNewFlag({ name: "", description: "", isEnabled: false });
   };
 
-  if (loading) {
-    return <div>Loading flags...</div>;
+  if (isLoading) {
+    return <div>{t("loading")}</div>;
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Feature Flags</CardTitle>
-        <CardDescription>Enable or disable specific application features.</CardDescription>
+        <CardTitle>{t("featureFlags")}</CardTitle>
+        <CardDescription>{t("flagsDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 gap-4 items-end border-b pb-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="flag-name">Flag Name</Label>
+              <Label htmlFor="flag-name">{t("flagName")}</Label>
               <Input
                 id="flag-name"
                 value={newFlag.name}
@@ -93,7 +67,7 @@ export function FeatureFlagManager() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="flag-desc">Description</Label>
+              <Label htmlFor="flag-desc">{t("description")}</Label>
               <Input
                 id="flag-desc"
                 value={newFlag.description}
@@ -109,9 +83,9 @@ export function FeatureFlagManager() {
                 checked={newFlag.isEnabled}
                 onCheckedChange={(checked) => setNewFlag({ ...newFlag, isEnabled: checked })}
               />
-              <Label htmlFor="flag-enabled">Enabled by default</Label>
+              <Label htmlFor="flag-enabled">{t("enabledByDefault")}</Label>
             </div>
-            <Button onClick={handleAdd}>Add Flag</Button>
+            <Button onClick={handleAdd}>{t("addFlag")}</Button>
           </div>
         </div>
 
@@ -125,7 +99,9 @@ export function FeatureFlagManager() {
               <div className="flex items-center gap-4">
                 <Switch
                   checked={flag.isEnabled}
-                  onCheckedChange={(checked) => handleSave({ ...flag, isEnabled: checked })}
+                  onCheckedChange={(checked) =>
+                    handleSave({ name: flag.name, isEnabled: checked, description: flag.description ?? undefined })
+                  }
                 />
               </div>
             </div>

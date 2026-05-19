@@ -2,46 +2,18 @@
 
 import { format, isSameDay } from "date-fns";
 import { Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface Loan {
-  id: string;
-  itemId: string;
-  dueAt: string | null;
-  item: {
-    title: string;
-  };
-  user: {
-    name: string | null;
-  };
-}
+import { useMyLoans } from "@/hooks/use-loans";
 
 export default function CalendarPage() {
-  const [loans, setLoans] = useState<Loan[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslations("Calendar");
+  const { data: loans = [], isLoading } = useMyLoans();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-
-  useEffect(() => {
-    const fetchLoans = async () => {
-      try {
-        const response = await fetch("/api/loans");
-        if (response.ok) {
-          const data = await response.json();
-          setLoans(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch loans", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLoans();
-  }, []);
 
   const loansOnSelectedDate = loans.filter(
     (loan) => loan.dueAt && isSameDay(new Date(loan.dueAt), selectedDate || new Date()),
@@ -59,11 +31,11 @@ export default function CalendarPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="mb-8 text-3xl font-bold">Loan Calendar</h1>
+      <h1 className="mb-8 text-3xl font-bold">{t("title")}</h1>
       <div className="grid gap-8 md:grid-cols-[1fr_300px]">
         <Card>
           <CardHeader>
-            <CardTitle>Calendar</CardTitle>
+            <CardTitle>{t("calendar")}</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center">
             <Calendar
@@ -84,25 +56,25 @@ export default function CalendarPage() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>{selectedDate ? format(selectedDate, "PPP") : "Select a date"}</CardTitle>
+              <CardTitle>{selectedDate ? format(selectedDate, "PPP") : t("selectDate")}</CardTitle>
             </CardHeader>
             <CardContent>
               {loansOnSelectedDate.length > 0 ? (
                 <ul className="space-y-4">
                   {loansOnSelectedDate.map((loan) => (
                     <li key={loan.id} className="border-b pb-2 last:border-0">
-                      <p className="font-semibold">{loan.item.title}</p>
+                      <p className="font-semibold">{loan.item?.title}</p>
                       <p className="text-sm text-muted-foreground">
-                        Borrowed by: {loan.user.name || "User"}
+                        {t("borrowedBy")} {loan.user?.name || t("unknownUser")}
                       </p>
                       <Badge variant="destructive" className="mt-1">
-                        Due
+                        {t("due")}
                       </Badge>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted-foreground">No loans due on this day.</p>
+                <p className="text-muted-foreground">{t("noLoansDue")}</p>
               )}
             </CardContent>
           </Card>

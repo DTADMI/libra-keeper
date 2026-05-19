@@ -1,6 +1,9 @@
+// hooks/use-items.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface Item {
   id: string
@@ -28,32 +31,29 @@ interface Comment {
   user: { name: string | null; image: string | null }
 }
 
-async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useItems() {
   return useQuery({
     queryKey: ["items"],
-    queryFn: () => fetchJSON<Item[]>("/api/items"),
+    queryFn: () => apiClient<Item[]>("/api/items"),
+    staleTime: 30_000,
   });
 }
 
 export function useItem(itemId: string) {
   return useQuery({
     queryKey: ["item", itemId],
-    queryFn: () => fetchJSON<Item>(`/api/items/${itemId}`),
+    queryFn: () => apiClient<Item>(`/api/items/${itemId}`),
     enabled: !!itemId,
+    staleTime: 30_000,
   });
 }
 
 export function useLikes(itemId: string) {
   return useQuery({
     queryKey: ["likes", itemId],
-    queryFn: () => fetchJSON<LikesState>(`/api/items/${itemId}/likes`),
+    queryFn: () => apiClient<LikesState>(`/api/items/${itemId}/likes`),
     enabled: !!itemId,
+    staleTime: 10_000,
   });
 }
 
@@ -62,7 +62,7 @@ export function useToggleLike(itemId: string) {
 
   return useMutation({
     mutationFn: () =>
-      fetchJSON<{ liked: boolean }>(`/api/items/${itemId}/likes`, {
+      apiClient<{ liked: boolean }>(`/api/items/${itemId}/likes`, {
         method: "POST",
       }),
     onMutate: async () => {
@@ -90,8 +90,9 @@ export function useToggleLike(itemId: string) {
 export function useComments(itemId: string) {
   return useQuery({
     queryKey: ["comments", itemId],
-    queryFn: () => fetchJSON<Comment[]>(`/api/items/${itemId}/comments`),
+    queryFn: () => apiClient<Comment[]>(`/api/items/${itemId}/comments`),
     enabled: !!itemId,
+    staleTime: 10_000,
   });
 }
 
@@ -100,15 +101,34 @@ export function useAddComment(itemId: string) {
 
   return useMutation({
     mutationFn: (content: string) =>
-      fetchJSON<Comment>(`/api/items/${itemId}/comments`, {
+      apiClient<Comment>(`/api/items/${itemId}/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content }),
       }),
-    onSuccess: (newComment) => {
+    onMutate: async (content) => {
+      await queryClient.cancelQueries({ queryKey: ["comments", itemId] });
+      const previous = queryClient.getQueryData<Comment[]>(["comments", itemId]);
+      const optimistic: Comment = {
+        id: "temp-" + Date.now(),
+        content,
+        itemId,
+        userId: "",
+        createdAt: new Date().toISOString(),
+        user: { name: null, image: null },
+      };
       queryClient.setQueryData<Comment[]>(["comments", itemId], (old) =>
-        old ? [newComment, ...old] : [newComment],
+        old ? [optimistic, ...old] : [optimistic],
       );
+      return { previous };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) {
+        queryClient.setQueryData(["comments", itemId], context.previous);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", itemId] });
     },
   });
 }

@@ -1,6 +1,9 @@
+// hooks/use-notifications.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface Notification {
   id: string
@@ -13,17 +16,11 @@ interface Notification {
   createdAt: string
 }
 
-async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useNotifications() {
   return useQuery({
     queryKey: ["notifications"],
-    queryFn: () => fetchJSON<Notification[]>("/api/notifications"),
-    refetchInterval: 30000,
+    queryFn: () => apiClient<Notification[]>("/api/notifications"),
+    staleTime: 15_000,
   });
 }
 
@@ -32,8 +29,11 @@ export function useMarkNotificationRead() {
 
   return useMutation({
     mutationFn: (id: string) =>
-      fetchJSON<{ success: boolean }>(`/api/notifications/${id}`, { method: "PATCH" }),
-    onSuccess: () => {
+      apiClient<{ success: boolean }>(`/api/notifications/${id}`, { method: "PATCH" }),
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });
@@ -44,12 +44,15 @@ export function useMarkAllRead() {
 
   return useMutation({
     mutationFn: () =>
-      fetchJSON<{ success: boolean }>("/api/notifications", {
+      apiClient<{ success: boolean }>("/api/notifications", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ markAllRead: true }),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
   });

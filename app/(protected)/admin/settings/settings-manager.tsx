@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -8,80 +9,54 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useAdminSettings, useUpdateSetting } from "@/hooks/use-admin";
 
 type SettingType = "STRING" | "BOOLEAN" | "NUMBER" | "JSON"
 
 interface Setting {
-  id?: string;
   key: string;
   value: string;
   type: SettingType;
 }
 
 export function SettingsManager() {
-  const [settings, setSettings] = useState<Setting[]>([]);
+  const t = useTranslations("Admin");
+  const tc = useTranslations("Common");
+  const { data: settings = [], isLoading } = useAdminSettings();
+  const updateSetting = useUpdateSetting();
+
   const [newSetting, setNewSetting] = useState<Setting>({ key: "", value: "", type: "STRING" });
-  const [loading, setLoading] = useState(true);
+  const [editingValues, setEditingValues] = useState<Record<string, string>>({});
 
-  const fetchSettings = async () => {
-    try {
-      const res = await fetch("/api/admin/settings");
-      if (res.ok) {
-        const data = await res.json();
-        setSettings(data);
-      }
-    } catch (error) {
-      toast.error("Failed to fetch settings");
-    } finally {
-      setLoading(false);
-    }
+  const handleSave = (setting: { key: string; value: string; type: string }) => {
+    updateSetting.mutate(setting, {
+      onSuccess: () => toast.success(t("settingUpdated")),
+      onError: () => toast.error(tc("error")),
+    });
   };
 
-  useEffect(() => {
-    fetchSettings();
-  }, []);
-
-  const handleSave = async (setting: Setting) => {
-    try {
-      const res = await fetch("/api/admin/settings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(setting),
-      });
-
-      if (res.ok) {
-        toast.success("Setting saved");
-        fetchSettings();
-      } else {
-        toast.error("Failed to save setting");
-      }
-    } catch (error) {
-      toast.error("Error saving setting");
-    }
-  };
-
-  const handleAdd = async () => {
+  const handleAdd = () => {
     if (!newSetting.key) {
-      return toast.error("Key is required");
+      return toast.error(t("keyRequired"));
     }
-    await handleSave(newSetting);
+    handleSave(newSetting);
     setNewSetting({ key: "", value: "", type: "STRING" });
   };
 
-  if (loading) {
-    return <div>Loading settings...</div>;
+  if (isLoading) {
+    return <div>{t("loading")}</div>;
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>App Settings</CardTitle>
-        <CardDescription>Configure global application parameters.</CardDescription>
+        <CardTitle>{t("appSettings")}</CardTitle>
+        <CardDescription>{t("settingsDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-4 gap-4 items-end border-b pb-4">
           <div className="space-y-2">
-            <Label htmlFor="new-key">Key</Label>
+            <Label htmlFor="new-key">{t("key")}</Label>
             <Input
               id="new-key"
               value={newSetting.key}
@@ -90,7 +65,7 @@ export function SettingsManager() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="new-value">Value</Label>
+            <Label htmlFor="new-value">{t("value")}</Label>
             <Input
               id="new-value"
               value={newSetting.value}
@@ -99,10 +74,10 @@ export function SettingsManager() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="new-type">Type</Label>
+            <Label htmlFor="new-type">{t("type")}</Label>
             <Select
               value={newSetting.type}
-              onValueChange={(v: SettingType) => setNewSetting({ ...newSetting, type: v as SettingType })}
+              onValueChange={(v: SettingType) => setNewSetting({ ...newSetting, type: v })}
             >
               <SelectTrigger id="new-type">
                 <SelectValue placeholder="Type" />
@@ -115,7 +90,7 @@ export function SettingsManager() {
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={handleAdd}>Add Setting</Button>
+          <Button onClick={handleAdd}>{t("addSetting")}</Button>
         </div>
 
         <div className="space-y-4">
@@ -123,17 +98,23 @@ export function SettingsManager() {
             <div key={setting.id} className="grid grid-cols-4 gap-4 items-end">
               <div className="font-mono text-sm">{setting.key}</div>
               <Input
-                value={setting.value}
-                onChange={(e) => {
-                  const newSettings = settings.map((s) =>
-                    s.key === setting.key ? { ...s, value: e.target.value } : s,
-                  );
-                  setSettings(newSettings);
-                }}
+                value={editingValues[setting.key] ?? setting.value}
+                onChange={(e) =>
+                  setEditingValues({ ...editingValues, [setting.key]: e.target.value })
+                }
               />
               <div className="text-xs uppercase text-muted-foreground">{setting.type}</div>
-              <Button variant="secondary" onClick={() => handleSave(setting)}>
-                Update
+              <Button
+                variant="secondary"
+                onClick={() =>
+                  handleSave({
+                    key: setting.key,
+                    value: editingValues[setting.key] ?? setting.value,
+                    type: setting.type,
+                  })
+                }
+              >
+                {t("update")}
               </Button>
             </div>
           ))}

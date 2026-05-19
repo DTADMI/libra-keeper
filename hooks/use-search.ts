@@ -1,6 +1,9 @@
+// hooks/use-search.ts
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface SearchResult {
   id: string;
@@ -12,17 +15,11 @@ interface SearchResult {
   _count: { likes: number; comments: number };
 }
 
-async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url);
-  if (!res.ok) {throw new Error(`Search failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useSearch(query: string) {
   return useQuery({
     queryKey: ["search", query],
-    queryFn: () => fetchJSON<SearchResult[]>(`/api/search?q=${encodeURIComponent(query)}`),
+    queryFn: () => apiClient<SearchResult[]>(`/api/search?q=${encodeURIComponent(query)}`),
     enabled: query.length >= 2,
-    staleTime: 10000,
+    staleTime: 10_000,
   });
 }

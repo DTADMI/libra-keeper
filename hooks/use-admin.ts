@@ -1,12 +1,16 @@
+// hooks/use-admin.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface User {
   id: string
   name: string | null
   email: string
   role: string
+  createdAt: string
 }
 
 interface FeatureFlag {
@@ -29,16 +33,11 @@ interface ExportData {
   users: unknown[]
 }
 
-async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useAdminUsers() {
   return useQuery({
     queryKey: ["admin", "users"],
-    queryFn: () => fetchJSON<User[]>("/api/admin/users"),
+    queryFn: () => apiClient<User[]>("/api/admin/users"),
+    staleTime: 30_000,
   });
 }
 
@@ -47,12 +46,15 @@ export function useChangeUserRole() {
 
   return useMutation({
     mutationFn: ({ userId, role }: { userId: string; role: string }) =>
-      fetchJSON<User>(`/api/admin/users`, {
+      apiClient<User>("/api/admin/users", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, role }),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
     },
   });
@@ -61,7 +63,8 @@ export function useChangeUserRole() {
 export function useAdminFlags() {
   return useQuery({
     queryKey: ["admin", "flags"],
-    queryFn: () => fetchJSON<FeatureFlag[]>("/api/admin/flags"),
+    queryFn: () => apiClient<FeatureFlag[]>("/api/admin/flags"),
+    staleTime: 30_000,
   });
 }
 
@@ -70,12 +73,15 @@ export function useUpdateFlag() {
 
   return useMutation({
     mutationFn: (flag: { name: string; isEnabled: boolean; description?: string }) =>
-      fetchJSON<FeatureFlag>("/api/admin/flags", {
+      apiClient<FeatureFlag>("/api/admin/flags", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(flag),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "flags"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "flags"] });
       queryClient.invalidateQueries({ queryKey: ["feature-flags"] });
     },
@@ -85,7 +91,8 @@ export function useUpdateFlag() {
 export function useAdminSettings() {
   return useQuery({
     queryKey: ["admin", "settings"],
-    queryFn: () => fetchJSON<AppSetting[]>("/api/admin/settings"),
+    queryFn: () => apiClient<AppSetting[]>("/api/admin/settings"),
+    staleTime: 30_000,
   });
 }
 
@@ -94,12 +101,15 @@ export function useUpdateSetting() {
 
   return useMutation({
     mutationFn: (setting: { key: string; value: string; type: string }) =>
-      fetchJSON<AppSetting>("/api/admin/settings", {
+      apiClient<AppSetting>("/api/admin/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(setting),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "settings"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["admin", "settings"] });
     },
   });
@@ -108,7 +118,7 @@ export function useUpdateSetting() {
 export function useAdminExport() {
   return useQuery({
     queryKey: ["admin", "export"],
-    queryFn: () => fetchJSON<ExportData>("/api/admin/export"),
+    queryFn: () => apiClient<ExportData>("/api/admin/export"),
     enabled: false,
   });
 }

@@ -1,15 +1,17 @@
+// hooks/use-realtime.ts
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 import { createBrowserClient } from "@/lib/supabase/client";
 
 export function useRealtimeItem(itemId: string) {
   const queryClient = useQueryClient();
-  const supabase = createBrowserClient();
+  const supabaseRef = useRef(createBrowserClient());
 
   useEffect(() => {
+    const supabase = supabaseRef.current;
     const channel = supabase
       .channel(`item-${itemId}`)
       .on(
@@ -55,14 +57,15 @@ export function useRealtimeItem(itemId: string) {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [itemId, supabase, queryClient]);
+  }, [itemId, queryClient]);
 }
 
 export function useRealtimeActivity() {
   const queryClient = useQueryClient();
-  const supabase = createBrowserClient();
+  const supabaseRef = useRef(createBrowserClient());
 
   useEffect(() => {
+    const supabase = supabaseRef.current;
     const channel = supabase
       .channel("activity-updates")
       .on(
@@ -93,5 +96,5 @@ export function useRealtimeActivity() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [supabase, queryClient]);
+  }, [queryClient]);
 }

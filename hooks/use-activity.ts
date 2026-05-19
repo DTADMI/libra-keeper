@@ -1,6 +1,9 @@
+// hooks/use-activity.ts
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface Activity {
   id: string
@@ -11,16 +14,10 @@ interface Activity {
   item?: { id: string; title: string }
 }
 
-async function fetchJSON<T>(url: string): Promise<T> {
-  const res = await fetch(url);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useActivity() {
   return useQuery({
     queryKey: ["activity"],
-    queryFn: () => fetchJSON<Activity[]>("/api/activity"),
-    refetchInterval: 30000,
+    queryFn: () => apiClient<Activity[]>("/api/activity"),
+    staleTime: 15_000,
   });
 }

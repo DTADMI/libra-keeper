@@ -1,41 +1,32 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { useUpdateLoan } from "@/hooks/use-loans";
 
 interface RequestActionButtonsProps {
   loanId: string;
 }
 
 export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
+  const t = useTranslations("Loans");
+  const tc = useTranslations("Common");
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const updateLoan = useUpdateLoan(loanId);
 
-  async function handleAction(status: "APPROVED" | "REJECTED") {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/loans/${loanId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ status }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update request");
-      }
-
-      toast.success(`Request ${status.toLowerCase()} successfully`);
-      router.refresh();
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
+  function handleAction(status: "APPROVED" | "REJECTED") {
+    updateLoan.mutate(status, {
+      onSuccess: () => {
+        toast.success(status === "APPROVED" ? t("approved") : t("rejected"));
+        router.refresh();
+      },
+      onError: () => {
+        toast.error(tc("error"));
+      },
+    });
   }
 
   return (
@@ -45,12 +36,12 @@ export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
         variant="outline"
         className="text-destructive hover:bg-destructive/10"
         onClick={() => handleAction("REJECTED")}
-        disabled={isLoading}
+        disabled={updateLoan.isPending}
       >
-        Reject
+        {t("reject")}
       </Button>
-      <Button size="sm" onClick={() => handleAction("APPROVED")} disabled={isLoading}>
-        Approve
+      <Button size="sm" onClick={() => handleAction("APPROVED")} disabled={updateLoan.isPending}>
+        {t("approve")}
       </Button>
     </div>
   );

@@ -1,6 +1,9 @@
+// hooks/use-messages.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface Conversation {
   user: { id: string; name: string | null; image: string | null }
@@ -17,16 +20,11 @@ interface Message {
   sender: { name: string | null; image: string | null }
 }
 
-async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useConversations() {
   return useQuery({
     queryKey: ["conversations"],
-    queryFn: () => fetchJSON<Conversation[]>("/api/messages"),
+    queryFn: () => apiClient<Conversation[]>("/api/messages"),
+    staleTime: 10_000,
   });
 }
 
@@ -34,8 +32,9 @@ export function useMessages(userId: string | null) {
   return useQuery({
     queryKey: ["messages", userId],
     queryFn: () =>
-      fetchJSON<Message[]>(`/api/messages?userId=${encodeURIComponent(userId!)}`),
+      apiClient<Message[]>(`/api/messages?userId=${encodeURIComponent(userId!)}`),
     enabled: !!userId,
+    staleTime: 5_000,
   });
 }
 
@@ -44,7 +43,7 @@ export function useSendMessage(receiverId: string) {
 
   return useMutation({
     mutationFn: (content: string) =>
-      fetchJSON<Message>("/api/messages", {
+      apiClient<Message>("/api/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ receiverId, content }),

@@ -1,6 +1,9 @@
+// hooks/use-item-images.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 export interface ItemImage {
   id: string
@@ -15,12 +18,9 @@ export interface ItemImage {
 export function useItemImages(itemId: string) {
   return useQuery({
     queryKey: ["item-images", itemId],
-    queryFn: async () => {
-      const res = await fetch(`/api/items/${itemId}/images`);
-      if (!res.ok) {throw new Error("Failed to load images");}
-      return res.json() as Promise<ItemImage[]>;
-    },
+    queryFn: () => apiClient<ItemImage[]>(`/api/items/${itemId}/images`),
     enabled: !!itemId,
+    staleTime: 30_000,
   });
 }
 
@@ -35,15 +35,16 @@ export function useUploadImage(itemId: string) {
       if (!uploadRes.ok) {throw new Error("Upload failed");}
       const { url } = await uploadRes.json();
 
-      const res = await fetch(`/api/items/${itemId}/images`, {
+      return apiClient<ItemImage>(`/api/items/${itemId}/images`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url, caption: file.name }),
       });
-      if (!res.ok) {throw new Error("Failed to save image");}
-      return res.json();
     },
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["item-images", itemId] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["item-images", itemId] });
       queryClient.invalidateQueries({ queryKey: ["item", itemId] });
     },

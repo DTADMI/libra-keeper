@@ -1,6 +1,9 @@
+// hooks/use-suggestions.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface Suggestion {
   id: string;
@@ -13,16 +16,11 @@ interface Suggestion {
   createdAt: string;
 }
 
-async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useSuggestions() {
   return useQuery({
     queryKey: ["suggestions"],
-    queryFn: () => fetchJSON<Suggestion[]>("/api/suggestions"),
+    queryFn: () => apiClient<Suggestion[]>("/api/suggestions"),
+    staleTime: 30_000,
   });
 }
 
@@ -37,12 +35,15 @@ export function useCreateSuggestion() {
       author?: string;
       isbn?: string;
     }) =>
-      fetchJSON<Suggestion>("/api/suggestions", {
+      apiClient<Suggestion>("/api/suggestions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["suggestions"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["suggestions"] });
     },
   });
@@ -53,10 +54,13 @@ export function useWaitlist(itemId: string) {
 
   return useMutation({
     mutationFn: (action: "join" | "leave") =>
-      fetchJSON<{ success: boolean }>(`/api/items/${itemId}/waitlist`, {
+      apiClient<{ success: boolean }>(`/api/items/${itemId}/waitlist`, {
         method: action === "join" ? "POST" : "DELETE",
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["item", itemId] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["item", itemId] });
     },
   });

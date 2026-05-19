@@ -1,90 +1,58 @@
 // src/app/(protected)/admin/suggestions/page.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useSuggestions } from "@/hooks/use-suggestions";
 
-type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED"
-type ItemRequestType = "BORROWED_ITEM" | "SUGGESTION"
-type ItemRequest = {
-  id: string;
-  title: string;
-  author: string | null;
-  type: ItemRequestType;
-  status: ItemRequestStatus;
-  createdAt: string;
-  requestedBy: {
-    name: string | null;
-    email: string;
-  };
-};
+type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED";
 
 export default function AdminSuggestionsPage() {
-  const [requests, setRequests] = useState<ItemRequest[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  async function fetchRequests() {
-    try {
-      const response = await fetch("/api/suggestions");
-      if (response.ok) {
-        const data = await response.json();
-        setRequests(data);
-      }
-    } catch (error) {
-      console.error("Failed to fetch requests", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  const t = useTranslations("Admin");
+  const { data: requests = [], isLoading } = useSuggestions();
 
   async function updateStatus(requestId: string, newStatus: string) {
     try {
-      const response = await fetch(`/api/suggestions/${requestId}`, {
+      const res = await fetch(`/api/suggestions/${requestId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
-
-      if (response.ok) {
-        setRequests(
-          requests.map((r) => (r.id === requestId ? { ...r, status: newStatus as ItemRequestStatus } : r)),
-        );
-        toast.success("Status updated");
+      if (res.ok) {
+        toast.success(t("statusUpdated"));
+      } else {
+        toast.error(t("statusFailed"));
       }
-    } catch (error) {
-      toast.error("Failed to update status");
+    } catch {
+      toast.error(t("statusFailed"));
     }
   }
 
   if (isLoading) {
-    return <div className="p-8 text-center">Loading requests...</div>;
+    return <div className="p-8 text-center">{t("loading")}</div>;
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Manage Suggestions & Requests</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("suggestions")}</h1>
       <Card>
         <CardHeader>
-          <CardTitle>All Requests</CardTitle>
+          <CardTitle>{t("suggestions")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Title</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Submitted</TableHead>
+                <TableHead>{t("title")}</TableHead>
+                <TableHead>{t("user")}</TableHead>
+                <TableHead>{t("type")}</TableHead>
+                <TableHead>{t("status")}</TableHead>
+                <TableHead>{t("submitted")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -93,13 +61,17 @@ export default function AdminSuggestionsPage() {
                   <TableCell>
                     <div>
                       <p className="font-medium">{req.title}</p>
-                      <p className="text-xs text-muted-foreground">{req.author}</p>
+                      {req.author && <p className="text-xs text-muted-foreground">{req.author}</p>}
                     </div>
                   </TableCell>
-                  <TableCell>{req.requestedBy.name || req.requestedBy.email}</TableCell>
+                  <TableCell>
+                    {(req as { requestedBy?: { name?: string | null; email?: string } }).requestedBy?.name ||
+                     (req as { requestedBy?: { name?: string | null; email?: string } }).requestedBy?.email ||
+                     t("nA")}
+                  </TableCell>
                   <TableCell>
                     <Badge variant="outline">
-                      {req.type === "SUGGESTION" ? "Suggestion" : "Borrowed"}
+                      {req.type === "SUGGESTION" ? t("suggestion") : t("borrowed")}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -111,10 +83,10 @@ export default function AdminSuggestionsPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="PENDING">Pending</SelectItem>
-                        <SelectItem value="PROCESSING">Processing</SelectItem>
-                        <SelectItem value="COMPLETED">Completed</SelectItem>
-                        <SelectItem value="REJECTED">Rejected</SelectItem>
+                        <SelectItem value="PENDING">{t("pending")}</SelectItem>
+                        <SelectItem value="PROCESSING">{t("processing")}</SelectItem>
+                        <SelectItem value="COMPLETED">{t("completed")}</SelectItem>
+                        <SelectItem value="REJECTED">{t("rejected")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
@@ -124,7 +96,7 @@ export default function AdminSuggestionsPage() {
               {requests.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
-                    No requests found.
+                    {t("noRequests")}
                   </TableCell>
                 </TableRow>
               )}

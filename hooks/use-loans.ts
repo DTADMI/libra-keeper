@@ -1,6 +1,9 @@
+// hooks/use-loans.ts
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { apiClient } from "@/lib/api-client";
 
 interface Loan {
   id: string
@@ -15,16 +18,11 @@ interface Loan {
   user?: { id: string; name: string | null; image: string | null }
 }
 
-async function fetchJSON<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init);
-  if (!res.ok) {throw new Error(`Request failed: ${res.status}`);}
-  return res.json();
-}
-
 export function useMyLoans() {
   return useQuery({
     queryKey: ["loans"],
-    queryFn: () => fetchJSON<Loan[]>("/api/loans"),
+    queryFn: () => apiClient<Loan[]>("/api/loans"),
+    staleTime: 30_000,
   });
 }
 
@@ -33,12 +31,15 @@ export function useBorrowItem(itemId: string) {
 
   return useMutation({
     mutationFn: () =>
-      fetchJSON<Loan>("/api/loans", {
+      apiClient<Loan>("/api/loans", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ itemId }),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["item", itemId] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["loans"] });
       queryClient.invalidateQueries({ queryKey: ["item", itemId] });
     },
@@ -50,12 +51,15 @@ export function useUpdateLoan(loanId: string) {
 
   return useMutation({
     mutationFn: (status: string) =>
-      fetchJSON<Loan>(`/api/loans/${loanId}`, {
+      apiClient<Loan>(`/api/loans/${loanId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       }),
-    onSuccess: () => {
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["loans"] });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["loans"] });
     },
   });
