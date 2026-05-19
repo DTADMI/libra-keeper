@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2, Search } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -23,6 +24,7 @@ interface ISBNLookupProps {
 }
 
 export function ISBNLookup({ onFill }: ISBNLookupProps) {
+  const t = useTranslations("ISBN");
   const [isbn, setIsbn] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,7 +34,6 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
 
     setIsLoading(true);
     try {
-      // Try Google Books API first (no API key needed for basic queries)
       const res = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(clean)}`,
       );
@@ -40,7 +41,7 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
 
       const data = await res.json();
       if (!data.items?.length) {
-        toast.error("No book found for this ISBN");
+        toast.error(t("notFound"));
         return;
       }
 
@@ -56,9 +57,9 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
       };
 
       onFill(metadata);
-      toast.success(`Found: ${metadata.title}`);
+      toast.success(t("found", { title: metadata.title ?? "" }));
     } catch (error) {
-      toast.error("Failed to look up ISBN. Try entering details manually.");
+      toast.error(t("lookupFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -66,24 +67,24 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="isbn-lookup">ISBN Lookup</Label>
+      <Label htmlFor="isbn-lookup">{t("lookupLabel")}</Label>
       <div className="flex gap-2">
         <Input
           id="isbn-lookup"
-          placeholder="Enter ISBN..."
+          placeholder={t("lookupPlaceholder")}
           value={isbn}
           onChange={(e) => setIsbn(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {handleLookup();}
           }}
-          aria-label="Look up book by ISBN"
+          aria-label={t("searchLabel")}
         />
         <Button
           type="button"
           variant="outline"
           onClick={handleLookup}
           disabled={isLoading || !isbn.trim()}
-          aria-label="Search ISBN"
+          aria-label={t("searchButton")}
         >
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
         </Button>

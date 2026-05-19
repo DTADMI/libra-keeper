@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -10,6 +11,7 @@ interface BeforeInstallPromptEvent extends Event {
 const DISMISS_KEY = "librakeeper-install-dismissed";
 
 export function PWAInstallPrompt() {
+  const t = useTranslations("PWA");
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [show, setShow] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -60,11 +62,11 @@ export function PWAInstallPrompt() {
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-50 rounded-lg border border-border bg-background p-4 shadow-xl md:left-auto md:max-w-md">
-      <p className="text-sm font-semibold">Install LibraKeeper</p>
+      <p className="text-sm font-semibold">{t("installTitle")}</p>
       <p className="mt-1 text-xs text-muted-foreground">
         {isIOS
-          ? 'On iOS Safari, tap Share and choose "Add to Home Screen".'
-          : "Install the app for quick access and better offline behavior."}
+          ? t("iosInstructions")
+          : t("installDescription")}
       </p>
       <div className="mt-3 flex gap-2">
         <button
@@ -72,7 +74,7 @@ export function PWAInstallPrompt() {
           onClick={dismiss}
           className="rounded-md border border-border px-3 py-2 text-xs font-medium"
         >
-          Not now
+          {t("notNow")}
         </button>
         {!isIOS && deferredPrompt ? (
           <button
@@ -80,7 +82,7 @@ export function PWAInstallPrompt() {
             onClick={install}
             className="rounded-md bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground"
           >
-            Install
+            {t("install")}
           </button>
         ) : null}
       </div>

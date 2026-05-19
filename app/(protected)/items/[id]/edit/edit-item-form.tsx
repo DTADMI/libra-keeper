@@ -3,7 +3,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -13,6 +13,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useUpdateItem } from "@/hooks/use-items";
+
+const ITEM_TYPES = ["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"] as const;
+type ItemType = (typeof ITEM_TYPES)[number];
+
+const STATUS_VALUES = ["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"] as const;
+
+const CONDITION_VALUES = ["New", "Like New", "Good", "Fair", "Poor"] as const;
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -42,30 +50,16 @@ const itemSchema = z.object({
 
 export type Item = z.infer<typeof itemSchema> & { id: string }
 
-type ItemType = z.infer<typeof itemSchema>["type"]
-
-const CREATOR_LABELS: Record<ItemType, string> = {
-  BOOK: "Author", MUSIC: "Artist", MOVIE: "Director", GAME: "Developer",
-  TOY: "Brand", CLOTHES: "Brand", OTHER: "Creator",
-};
-
-const IDENTIFIER_LABELS: Record<ItemType, string> = {
-  BOOK: "ISBN", MUSIC: "UPC", MOVIE: "UPC", GAME: "UPC",
-  TOY: "Barcode / EAN", CLOTHES: "SKU / EAN", OTHER: "Identifier",
-};
-
-const MAKER_LABELS: Record<ItemType, string> = {
-  BOOK: "Publisher", MUSIC: "Label", MOVIE: "Studio", GAME: "Publisher",
-  TOY: "Manufacturer", CLOTHES: "Manufacturer", OTHER: "Maker",
-};
-
 interface EditItemFormProps {
   item: Item
 }
 
 export function EditItemForm({ item }: EditItemFormProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations("Items");
+  const tc = useTranslations("Common");
+
+  const updateItem = useUpdateItem(item.id);
 
   const meta = (item as Record<string, unknown>).metadata as Record<string, unknown> | undefined;
 
@@ -95,25 +89,17 @@ export function EditItemForm({ item }: EditItemFormProps) {
     },
   });
 
-  const watchedType = useWatch({ control: form.control, name: "type" }) as ItemType;
+  const watchedType = (useWatch({ control: form.control, name: "type" }) as ItemType) || "BOOK";
 
-  async function onSubmit(values: z.infer<typeof itemSchema>) {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/items/${item.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      if (!response.ok) {throw new Error("Failed to update item");}
-      toast.success("Item updated successfully");
-      router.push(`/items/${item.id}`);
-      router.refresh();
-    } catch (error: unknown) {
-      toast.error(error instanceof Error ? error.message : "Failed to update item");
-    } finally {
-      setIsLoading(false);
-    }
+  function onSubmit(values: z.infer<typeof itemSchema>) {
+    updateItem.mutate(values, {
+      onSuccess: () => {
+        toast.success(t("itemUpdated"));
+      },
+      onError: () => {
+        toast.error(tc("error"));
+      },
+    });
   }
 
   const showISBNLike = watchedType !== "OTHER";
@@ -127,9 +113,9 @@ export function EditItemForm({ item }: EditItemFormProps) {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t("titleLabel")}</FormLabel>
               <FormControl>
-                <Input placeholder="Item title" {...field} />
+                <Input placeholder={t("titlePlaceholder")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -141,21 +127,19 @@ export function EditItemForm({ item }: EditItemFormProps) {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Type</FormLabel>
+                <FormLabel>{t("type")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value as string}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
+                      <SelectValue placeholder={t("selectType")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="BOOK">Book</SelectItem>
-                    <SelectItem value="MUSIC">Music</SelectItem>
-                    <SelectItem value="MOVIE">Movie</SelectItem>
-                    <SelectItem value="GAME">Game</SelectItem>
-                    <SelectItem value="TOY">Toy</SelectItem>
-                    <SelectItem value="CLOTHES">Clothing</SelectItem>
-                    <SelectItem value="OTHER">Other</SelectItem>
+                    {ITEM_TYPES.map((value) => (
+                      <SelectItem key={value} value={value}>
+                        {t(`types.${value}`)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -167,20 +151,19 @@ export function EditItemForm({ item }: EditItemFormProps) {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
+                <FormLabel>{t("status")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select status" />
+                      <SelectValue placeholder={t("selectStatus")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="AVAILABLE">Available</SelectItem>
-                    <SelectItem value="BORROWED">Borrowed</SelectItem>
-                    <SelectItem value="RESERVED">Reserved</SelectItem>
-                    <SelectItem value="UNAVAILABLE">Unavailable</SelectItem>
-                    <SelectItem value="GIVEN_AWAY">Given Away</SelectItem>
-                    <SelectItem value="LOST">Lost</SelectItem>
+                    {STATUS_VALUES.map((value) => (
+                      <SelectItem key={value} value={value}>
+                        {t(`statuses.${value}`)}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -193,9 +176,9 @@ export function EditItemForm({ item }: EditItemFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t("description")}</FormLabel>
               <FormControl>
-                <Textarea placeholder="Item description" {...field} value={field.value ?? ""} />
+                <Textarea placeholder={t("descriptionPlaceholder")} {...field} value={field.value ?? ""} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -207,9 +190,9 @@ export function EditItemForm({ item }: EditItemFormProps) {
             name="author"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{CREATOR_LABELS[watchedType]}</FormLabel>
+                <FormLabel>{t(`creators.${watchedType}`)}</FormLabel>
                 <FormControl>
-                  <Input placeholder={CREATOR_LABELS[watchedType]} {...field} value={field.value ?? ""} />
+                  <Input placeholder={t(`creatorPlaceholders.${watchedType}`)} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -220,9 +203,9 @@ export function EditItemForm({ item }: EditItemFormProps) {
             name="coverImage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cover Image URL</FormLabel>
+                <FormLabel>{t("coverImage")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="https://example.com/image.jpg" {...field} value={field.value ?? ""} />
+                  <Input placeholder={t("coverImagePlaceholder")} {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -236,9 +219,9 @@ export function EditItemForm({ item }: EditItemFormProps) {
               name="isbn"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{IDENTIFIER_LABELS[watchedType]}</FormLabel>
+                  <FormLabel>{t(`identifiers.${watchedType}`)}</FormLabel>
                   <FormControl>
-                    <Input placeholder={IDENTIFIER_LABELS[watchedType]} {...field} value={field.value ?? ""} />
+                    <Input placeholder={t(`identifierPlaceholders.${watchedType}`)} {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -249,9 +232,9 @@ export function EditItemForm({ item }: EditItemFormProps) {
               name="publisher"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{MAKER_LABELS[watchedType]}</FormLabel>
+                  <FormLabel>{t(`makers.${watchedType}`)}</FormLabel>
                   <FormControl>
-                    <Input placeholder={MAKER_LABELS[watchedType]} {...field} value={field.value ?? ""} />
+                    <Input placeholder={t(`makerPlaceholders.${watchedType}`)} {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -263,27 +246,27 @@ export function EditItemForm({ item }: EditItemFormProps) {
         {showMetadataFields && (
           <div className="rounded-md border p-4 space-y-4">
             <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              {watchedType} Details
+              {t(`types.${watchedType}`)} {t("details")}
             </h2>
             <div className="grid grid-cols-2 gap-4">
               {["TOY", "CLOTHES"].includes(watchedType) && (
                 <>
                   <FormField control={form.control} name="metadata.brand" render={({ field }) => (
-                    <FormItem><FormLabel>Brand</FormLabel><FormControl><Input placeholder="Brand" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>{t("brand")}</FormLabel><FormControl><Input placeholder={t("brandPlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="metadata.material" render={({ field }) => (
-                    <FormItem><FormLabel>Material</FormLabel><FormControl><Input placeholder="Material" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>{t("material")}</FormLabel><FormControl><Input placeholder={t("materialPlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="metadata.condition" render={({ field }) => (
-                    <FormItem><FormLabel>Condition</FormLabel>
+                    <FormItem><FormLabel>{t("condition")}</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value ?? ""}>
-                        <FormControl><SelectTrigger><SelectValue placeholder="Select condition" /></SelectTrigger></FormControl>
+                        <FormControl><SelectTrigger><SelectValue placeholder={t("selectCondition")} /></SelectTrigger></FormControl>
                         <SelectContent>
-                          <SelectItem value="New">New</SelectItem>
-                          <SelectItem value="Like New">Like New</SelectItem>
-                          <SelectItem value="Good">Good</SelectItem>
-                          <SelectItem value="Fair">Fair</SelectItem>
-                          <SelectItem value="Poor">Poor</SelectItem>
+                          {CONDITION_VALUES.map((value) => (
+                            <SelectItem key={value} value={value}>
+                              {t(`conditions.${value.replace(/ /g, "")}`)}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                       <FormMessage /></FormItem>
@@ -292,27 +275,27 @@ export function EditItemForm({ item }: EditItemFormProps) {
               )}
               {watchedType === "TOY" && (
                 <FormField control={form.control} name="metadata.ageRange" render={({ field }) => (
-                  <FormItem><FormLabel>Age Range</FormLabel><FormControl><Input placeholder="e.g. 3-6 years" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>{t("ageRange")}</FormLabel><FormControl><Input placeholder={t("ageRangePlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                 )} />
               )}
               {watchedType === "CLOTHES" && (
                 <FormField control={form.control} name="metadata.size" render={({ field }) => (
-                  <FormItem><FormLabel>Size</FormLabel><FormControl><Input placeholder="e.g. M, 42" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>{t("size")}</FormLabel><FormControl><Input placeholder={t("sizePlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                 )} />
               )}
               {["MUSIC", "MOVIE"].includes(watchedType) && (
                 <>
                   <FormField control={form.control} name="metadata.genre" render={({ field }) => (
-                    <FormItem><FormLabel>Genre</FormLabel><FormControl><Input placeholder="Genre" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>{t("genre")}</FormLabel><FormControl><Input placeholder={t("genrePlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="metadata.duration" render={({ field }) => (
-                    <FormItem><FormLabel>Duration</FormLabel><FormControl><Input placeholder="e.g. 120 min" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                    <FormItem><FormLabel>{t("duration")}</FormLabel><FormControl><Input placeholder={t("durationPlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                   )} />
                 </>
               )}
               {watchedType === "GAME" && (
                 <FormField control={form.control} name="metadata.platform" render={({ field }) => (
-                  <FormItem><FormLabel>Platform</FormLabel><FormControl><Input placeholder="e.g. PS5, PC" {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
+                  <FormItem><FormLabel>{t("platform")}</FormLabel><FormControl><Input placeholder={t("platformPlaceholder")} {...field} value={field.value ?? ""} /></FormControl><FormMessage /></FormItem>
                 )} />
               )}
             </div>
@@ -320,11 +303,11 @@ export function EditItemForm({ item }: EditItemFormProps) {
         )}
 
         <div className="flex gap-4">
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Changes"}
+          <Button type="submit" disabled={updateItem.isPending}>
+            {updateItem.isPending ? t("saving") : t("saveChanges")}
           </Button>
-          <Button type="button" variant="outline" onClick={() => router.back()} disabled={isLoading}>
-            Cancel
+          <Button type="button" variant="outline" onClick={() => router.back()} disabled={updateItem.isPending}>
+            {tc("cancel")}
           </Button>
         </div>
       </form>

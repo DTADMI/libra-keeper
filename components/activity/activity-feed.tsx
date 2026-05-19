@@ -3,6 +3,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { BookOpen, MessageCircle, Send } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { useActivity } from "@/hooks/use-activity";
 import { useRealtimeActivity } from "@/hooks/use-realtime";
@@ -14,6 +15,7 @@ const ICONS = {
 } as const;
 
 export function ActivityFeed() {
+  const t = useTranslations("Dashboard");
   const { data: activities = [], isLoading, error } = useActivity();
   useRealtimeActivity();
 
@@ -34,11 +36,11 @@ export function ActivityFeed() {
   }
 
   if (error) {
-    return <p className="text-sm text-destructive">Failed to load activity.</p>;
+    return <p className="text-sm text-destructive">{t("failedActivity")}</p>;
   }
 
   if (activities.length === 0) {
-    return <p className="text-sm text-muted-foreground">No recent activity.</p>;
+    return <p className="text-sm text-muted-foreground">{t("noActivity")}</p>;
   }
 
   return (

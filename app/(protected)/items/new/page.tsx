@@ -1,8 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -27,6 +28,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useCreateItem } from "@/hooks/use-items";
+import { apiClient } from "@/lib/api-client";
+
+const ITEM_TYPES = ["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"] as const;
+type ItemType = (typeof ITEM_TYPES)[number];
+
+const CONDITION_VALUES = ["New", "Like New", "Good", "Fair", "Poor"] as const;
 
 const itemSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -53,61 +61,19 @@ const itemSchema = z.object({
     .optional(),
 });
 
-type ItemType = z.infer<typeof itemSchema>["type"]
-
-const TYPE_LABELS: Record<ItemType, string> = {
-  BOOK: "Book",
-  MUSIC: "Music",
-  MOVIE: "Movie",
-  GAME: "Game",
-  TOY: "Toy",
-  CLOTHES: "Clothing",
-  OTHER: "Other",
-};
-
-const CREATOR_LABELS: Record<ItemType, string> = {
-  BOOK: "Author",
-  MUSIC: "Artist",
-  MOVIE: "Director",
-  GAME: "Developer",
-  TOY: "Brand",
-  CLOTHES: "Brand",
-  OTHER: "Creator",
-};
-
-const IDENTIFIER_LABELS: Record<ItemType, string> = {
-  BOOK: "ISBN",
-  MUSIC: "UPC",
-  MOVIE: "UPC",
-  GAME: "UPC",
-  TOY: "Barcode / EAN",
-  CLOTHES: "SKU / EAN",
-  OTHER: "Identifier",
-};
-
-const MAKER_LABELS: Record<ItemType, string> = {
-  BOOK: "Publisher",
-  MUSIC: "Label",
-  MOVIE: "Studio",
-  GAME: "Publisher",
-  TOY: "Manufacturer",
-  CLOTHES: "Manufacturer",
-  OTHER: "Maker",
-};
-
 const USES_ISBN_LOOKUP: ItemType[] = ["BOOK"];
 
 export default function NewItemPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [collections, setCollections] = useState<{ id: string; name: string }[]>([]);
+  const t = useTranslations("Items");
+  const tc = useTranslations("Common");
 
-  useEffect(() => {
-    fetch("/api/collections")
-      .then((r) => r.json())
-      .then(setCollections)
-      .catch(() => {});
-  }, []);
+  const { data: collections = [] } = useQuery({
+    queryKey: ["collections"],
+    queryFn: () => apiClient<{ id: string; name: string }[]>("/api/collections"),
+  });
+
+  const createItem = useCreateItem();
 
   const form = useForm<z.infer<typeof itemSchema>>({
     resolver: zodResolver(itemSchema),
@@ -124,42 +90,34 @@ export default function NewItemPage() {
     },
   });
 
-  const watchedType = useWatch({ control: form.control, name: "type" });
+  const watchedType = (useWatch({ control: form.control, name: "type" }) as ItemType) || "BOOK";
 
-  async function onSubmit(values: z.infer<typeof itemSchema>) {
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/items", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-      if (!response.ok) {throw new Error("Failed to create item");}
-      toast.success("Item created successfully");
-      router.push("/dashboard");
-      router.refresh();
-    } catch {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
+  function onSubmit(values: z.infer<typeof itemSchema>) {
+    createItem.mutate(values, {
+      onSuccess: () => {
+        toast.success(t("itemCreated"));
+        router.push("/dashboard");
+      },
+      onError: () => {
+        toast.error(tc("error"));
+      },
+    });
   }
 
   function handleISBNFill(data: { title?: string; authors?: string[]; publisher?: string; coverImage?: string | null }) {
-    if (data.title) {form.setValue("title", data.title);}
-    if (data.authors?.length) {form.setValue("author", data.authors[0]);}
-    if (data.publisher) {form.setValue("publisher", data.publisher);}
-    if (data.coverImage) {form.setValue("coverImage", data.coverImage);}
+    if (data.title) { form.setValue("title", data.title); }
+    if (data.authors?.length) { form.setValue("author", data.authors[0]); }
+    if (data.publisher) { form.setValue("publisher", data.publisher); }
+    if (data.coverImage) { form.setValue("coverImage", data.coverImage); }
   }
 
   const showISBNLike = watchedType !== "OTHER";
-  const showBookFields = watchedType === "BOOK";
   const showMetadataFields = ["TOY", "CLOTHES", "GAME", "MUSIC", "MOVIE"].includes(watchedType);
 
   return (
     <div className="container mx-auto max-w-2xl py-10">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Add New Item</h1>
+        <h1 className="text-3xl font-bold">{t("addNew")}</h1>
         {USES_ISBN_LOOKUP.includes(watchedType) && <ISBNLookup onFill={handleISBNFill} />}
       </div>
       <Form {...form}>
@@ -169,9 +127,9 @@ export default function NewItemPage() {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>{t("titleLabel")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter item name" {...field} />
+                  <Input placeholder={t("titlePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -183,17 +141,17 @@ export default function NewItemPage() {
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Type</FormLabel>
+                  <FormLabel>{t("type")}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select type" />
+                        <SelectValue placeholder={t("selectType")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.entries(TYPE_LABELS).map(([value, label]) => (
+                      {ITEM_TYPES.map((value) => (
                         <SelectItem key={value} value={value}>
-                          {label}
+                          {t(`types.${value}`)}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -207,9 +165,9 @@ export default function NewItemPage() {
               name="author"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{CREATOR_LABELS[watchedType]}</FormLabel>
+                  <FormLabel>{t(`creators.${watchedType}`)}</FormLabel>
                   <FormControl>
-                    <Input placeholder={`Enter ${CREATOR_LABELS[watchedType].toLowerCase()}`} {...field} />
+                    <Input placeholder={t(`creatorPlaceholders.${watchedType}`)} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -221,10 +179,10 @@ export default function NewItemPage() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>{t("description")}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Add a description..."
+                    placeholder={t("descriptionPlaceholder")}
                     className="resize-none"
                     {...field}
                   />
@@ -238,11 +196,11 @@ export default function NewItemPage() {
             name="coverImage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cover Image URL</FormLabel>
+                <FormLabel>{t("coverImage")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="https://example.com/image.jpg" {...field} />
+                  <Input placeholder={t("coverImagePlaceholder")} {...field} />
                 </FormControl>
-                <FormDescription>Link to a hosted image for the item.</FormDescription>
+                <FormDescription>{t("coverImageDescription")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -254,9 +212,9 @@ export default function NewItemPage() {
                 name="isbn"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{IDENTIFIER_LABELS[watchedType]}</FormLabel>
+                    <FormLabel>{t(`identifiers.${watchedType}`)}</FormLabel>
                     <FormControl>
-                      <Input placeholder={`Enter ${IDENTIFIER_LABELS[watchedType].toLowerCase()}`} {...field} />
+                      <Input placeholder={t(`identifierPlaceholders.${watchedType}`)} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -267,9 +225,9 @@ export default function NewItemPage() {
                 name="publisher"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{MAKER_LABELS[watchedType]}</FormLabel>
+                    <FormLabel>{t(`makers.${watchedType}`)}</FormLabel>
                     <FormControl>
-                      <Input placeholder={`Enter ${MAKER_LABELS[watchedType].toLowerCase()}`} {...field} />
+                      <Input placeholder={t(`makerPlaceholders.${watchedType}`)} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -281,7 +239,7 @@ export default function NewItemPage() {
           {showMetadataFields && (
             <div className="rounded-md border p-4 space-y-4">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                {watchedType} Details
+                {t(`types.${watchedType}`)} {t("details")}
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 {["TOY", "CLOTHES"].includes(watchedType) && (
@@ -291,9 +249,9 @@ export default function NewItemPage() {
                       name="metadata.brand"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Brand</FormLabel>
+                          <FormLabel>{t("brand")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. LEGO, Nike" {...field} />
+                            <Input placeholder={t("brandPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -304,9 +262,9 @@ export default function NewItemPage() {
                       name="metadata.material"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Material</FormLabel>
+                          <FormLabel>{t("material")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. Plastic, Cotton" {...field} />
+                            <Input placeholder={t("materialPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -317,19 +275,19 @@ export default function NewItemPage() {
                       name="metadata.condition"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Condition</FormLabel>
+                          <FormLabel>{t("condition")}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select condition" />
+                                <SelectValue placeholder={t("selectCondition")} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="New">New</SelectItem>
-                              <SelectItem value="Like New">Like New</SelectItem>
-                              <SelectItem value="Good">Good</SelectItem>
-                              <SelectItem value="Fair">Fair</SelectItem>
-                              <SelectItem value="Poor">Poor</SelectItem>
+                              {CONDITION_VALUES.map((value) => (
+                                <SelectItem key={value} value={value}>
+                                  {t(`conditions.${value.replace(/ /g, "")}`)}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -344,9 +302,9 @@ export default function NewItemPage() {
                     name="metadata.ageRange"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Age Range</FormLabel>
+                        <FormLabel>{t("ageRange")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. 3-6 years" {...field} />
+                          <Input placeholder={t("ageRangePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -359,9 +317,9 @@ export default function NewItemPage() {
                     name="metadata.size"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Size</FormLabel>
+                        <FormLabel>{t("size")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. M, 42, 10" {...field} />
+                          <Input placeholder={t("sizePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -375,9 +333,9 @@ export default function NewItemPage() {
                       name="metadata.genre"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Genre</FormLabel>
+                          <FormLabel>{t("genre")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. Rock, Sci-Fi" {...field} />
+                            <Input placeholder={t("genrePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -388,9 +346,9 @@ export default function NewItemPage() {
                       name="metadata.duration"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Duration</FormLabel>
+                          <FormLabel>{t("duration")}</FormLabel>
                           <FormControl>
-                            <Input placeholder="e.g. 120 min" {...field} />
+                            <Input placeholder={t("durationPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -404,9 +362,9 @@ export default function NewItemPage() {
                     name="metadata.artist"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Artist</FormLabel>
+                        <FormLabel>{t("artist")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. The Beatles" {...field} />
+                          <Input placeholder={t("artistPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -419,9 +377,9 @@ export default function NewItemPage() {
                     name="metadata.director"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Director</FormLabel>
+                        <FormLabel>{t("director")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Christopher Nolan" {...field} />
+                          <Input placeholder={t("directorPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -434,9 +392,9 @@ export default function NewItemPage() {
                     name="metadata.platform"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Platform</FormLabel>
+                        <FormLabel>{t("platform")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. PS5, PC, Board" {...field} />
+                          <Input placeholder={t("platformPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -452,15 +410,15 @@ export default function NewItemPage() {
             name="collectionId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Collection</FormLabel>
+                <FormLabel>{t("collection")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a collection" />
+                      <SelectValue placeholder={t("selectCollection")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="">No Collection</SelectItem>
+                    <SelectItem value="">{t("noCollection")}</SelectItem>
                     {collections.map((c) => (
                       <SelectItem key={c.id} value={c.id}>
                         {c.name}
@@ -474,10 +432,10 @@ export default function NewItemPage() {
           />
           <div className="flex justify-end gap-4">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              Cancel
+              {tc("cancel")}
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Item"}
+            <Button type="submit" disabled={createItem.isPending}>
+              {createItem.isPending ? t("saving") : t("saveItem")}
             </Button>
           </div>
         </form>

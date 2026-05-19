@@ -1,6 +1,7 @@
 // src/app/(protected)/items/[id]/borrow-button.tsx
 "use client";
 
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -12,22 +13,25 @@ interface BorrowButtonProps {
 }
 
 export function BorrowButton({ itemId, disabled }: BorrowButtonProps) {
+  const t = useTranslations("Items");
   const borrowItem = useBorrowItem(itemId);
 
   function onBorrow() {
     borrowItem.mutate(undefined, {
       onSuccess: () => {
-        toast.success("Borrow request sent successfully");
+        toast.success(t("requestSent"));
       },
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : "Failed to send borrow request");
+        toast.error(
+          error instanceof Error ? error.message : t("requestFailed")
+        );
       },
     });
   }
 
   return (
     <Button onClick={onBorrow} disabled={borrowItem.isPending || disabled} size="lg">
-      {borrowItem.isPending ? "Sending Request..." : "Request to Borrow"}
+      {borrowItem.isPending ? t("sendingRequest") : t("requestBorrow")}
     </Button>
   );
 }

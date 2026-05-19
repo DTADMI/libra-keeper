@@ -2,19 +2,21 @@
 "use client";
 
 import { formatDistanceToNow } from "date-fns";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useAddComment,useComments } from "@/hooks/use-items";
+import { useAddComment, useComments } from "@/hooks/use-items";
 
 interface CommentsSectionProps {
   itemId: string;
 }
 
 export function CommentsSection({ itemId }: CommentsSectionProps) {
+  const t = useTranslations("Items");
   const { data: comments = [], isLoading } = useComments(itemId);
   const addComment = useAddComment(itemId);
   const [newComment, setNewComment] = useState("");
@@ -25,31 +27,33 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
     addComment.mutate(newComment, {
       onSuccess: () => {
         setNewComment("");
-        toast.success("Comment posted");
+        toast.success(t("commentPosted"));
       },
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : "Failed to post comment");
+        toast.error(
+          error instanceof Error ? error.message : t("commentFailed")
+        );
       },
     });
   }
 
   if (isLoading) {
-    return <p className="text-muted-foreground text-center py-10">Loading comments...</p>;
+    return <p className="text-muted-foreground text-center py-10">{t("loadingComments")}</p>;
   }
 
   return (
     <div className="space-y-8">
-      <h3 className="text-2xl font-bold">Comments</h3>
+      <h3 className="text-2xl font-bold">{t("comments")}</h3>
 
       <div className="space-y-4">
         <Textarea
-          placeholder="Leave a comment..."
+          placeholder={t("leaveComment")}
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           disabled={addComment.isPending}
         />
         <Button onClick={onSubmit} disabled={addComment.isPending || !newComment.trim()}>
-          Post Comment
+          {t("postComment")}
         </Button>
       </div>
 
@@ -72,7 +76,7 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
           </div>
         ))}
         {comments.length === 0 && (
-          <p className="text-muted-foreground text-center py-10">No comments yet.</p>
+          <p className="text-muted-foreground text-center py-10">{t("noComments")}</p>
         )}
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,10 +15,13 @@ export default async function AdminRequestsPage() {
     redirect("/dashboard");
   }
 
+  const t = await getTranslations("Admin");
+
   const loans = await prisma.loan.findMany({
     where: {
       status: "PENDING",
     },
+    take: 20,
     include: {
       item: true,
       user: true,
@@ -31,7 +35,7 @@ export default async function AdminRequestsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Borrowing Requests</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("requests")}</h1>
 
       <div className="grid gap-4">
         {loans.map((loan: LoanWithItemAndUser) => (
@@ -41,7 +45,7 @@ export default async function AdminRequestsPage() {
                 <div>
                   <CardTitle className="text-lg">{loan.item.title}</CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    Requested by: {loan.user.name} ({loan.user.email})
+                    {t("requestedBy")} {loan.user.name} ({loan.user.email})
                   </p>
                 </div>
                 <Badge>{loan.status}</Badge>
@@ -50,7 +54,7 @@ export default async function AdminRequestsPage() {
             <CardContent>
               <div className="flex justify-between items-center">
                 <p className="text-xs text-muted-foreground">
-                  Requested on: {new Date(loan.createdAt).toLocaleDateString()}
+                  {t("requestedOn")} {new Date(loan.createdAt).toLocaleDateString()}
                 </p>
                 <RequestActionButtons loanId={loan.id} />
               </div>
@@ -59,7 +63,7 @@ export default async function AdminRequestsPage() {
         ))}
 
         {loans.length === 0 && (
-          <p className="text-center py-10 text-muted-foreground">No pending requests.</p>
+          <p className="text-center py-10 text-muted-foreground">{t("noPendingRequests")}</p>
         )}
       </div>
     </div>

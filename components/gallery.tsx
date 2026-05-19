@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight, Star,Upload, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -13,6 +14,7 @@ interface ItemGalleryProps {
 }
 
 export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
+  const t = useTranslations("Items");
   const { data: images = [], isLoading } = useItemImages(itemId);
   const uploadImage = useUploadImage(itemId);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -23,7 +25,7 @@ export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
 
     for (const file of Array.from(files)) {
       if (!file.type.startsWith("image/")) {
-        toast.error(`"${file.name}" is not an image`);
+        toast.error(t("notAnImage"));
         continue;
       }
       uploadImage.mutate(file);

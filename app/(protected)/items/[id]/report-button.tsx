@@ -1,6 +1,7 @@
 // src/app/(protected)/items/[id]/report-button.tsx
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,48 +19,36 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useReportItem } from "@/hooks/use-items";
 
 interface ReportButtonProps {
   itemId: string;
 }
 
 export function ReportButton({ itemId }: ReportButtonProps) {
+  const t = useTranslations("Items");
+  const tc = useTranslations("Common");
+  const reportItem = useReportItem(itemId);
   const [reason, setReason] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
-  async function onReport() {
+  function onReport() {
     if (!reason.trim()) {
       return;
     }
 
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/items/${itemId}/report`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to send report");
-      }
-
-      toast.success("Report sent to admin");
-      setIsOpen(false);
-      setReason("");
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error(error.message);
-      } else if (typeof error === "string") {
-        toast.error(error || "Failed to send report");
-      } else {
-        toast.error("An unexpected error occurred");
-      }
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+    reportItem.mutate(reason.trim(), {
+      onSuccess: () => {
+        toast.success(t("reportSubmitted"));
+        setIsOpen(false);
+        setReason("");
+      },
+      onError: (error) => {
+        toast.error(
+          error instanceof Error ? error.message : t("reportFailed")
+        );
+      },
+    });
   }
 
   return (
@@ -67,34 +56,36 @@ export function ReportButton({ itemId }: ReportButtonProps) {
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive">
           <Icons.alertCircle className="h-4 w-4 mr-2" />
-          Report Issue
+          {t("reportMissing")}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Report an issue with this item</AlertDialogTitle>
+          <AlertDialogTitle>{t("reportMissing")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Please describe the issue (e.g., item is damaged, lost, or information is incorrect).
+            {t("description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="py-4">
           <Textarea
-            placeholder="Describe the issue..."
+            placeholder={t("reportReason")}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            disabled={isLoading}
+            disabled={reportItem.isPending}
           />
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+          <AlertDialogCancel disabled={reportItem.isPending}>
+            {tc("cancel")}
+          </AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
               e.preventDefault();
               onReport();
             }}
-            disabled={isLoading || !reason.trim()}
+            disabled={reportItem.isPending || !reason.trim()}
           >
-            {isLoading ? "Sending..." : "Send Report"}
+            {reportItem.isPending ? tc("loading") : tc("submit")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

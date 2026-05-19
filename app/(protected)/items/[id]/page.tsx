@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { CREATOR_LABELS, IDENTIFIER_LABELS, MAKER_LABELS } from "@/lib/labels";
 
 import { BorrowButton } from "./borrow-button";
 import { CommentsSection } from "./comments-section";
@@ -16,21 +17,6 @@ import { ReportButton } from "./report-button";
 import { WaitlistButton } from "./waitlist-button";
 
 type ItemType = "BOOK" | "MUSIC" | "MOVIE" | "GAME" | "TOY" | "CLOTHES" | "OTHER"
-
-const CREATOR_LABELS: Record<ItemType, string> = {
-  BOOK: "Author", MUSIC: "Artist", MOVIE: "Director", GAME: "Developer",
-  TOY: "Brand", CLOTHES: "Brand", OTHER: "Creator",
-};
-
-const ID_LABELS: Record<ItemType, string> = {
-  BOOK: "ISBN", MUSIC: "UPC", MOVIE: "UPC", GAME: "UPC",
-  TOY: "Barcode", CLOTHES: "SKU", OTHER: "Identifier",
-};
-
-const MAKER_LABELS: Record<ItemType, string> = {
-  BOOK: "Publisher", MUSIC: "Label", MOVIE: "Studio", GAME: "Publisher",
-  TOY: "Manufacturer", CLOTHES: "Manufacturer", OTHER: "Maker",
-};
 
 export default async function ItemDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -129,7 +115,7 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
             )}
             {item.isbn && (
               <div>
-                <p className="font-medium">{ID_LABELS[itemType]}</p>
+                <p className="font-medium">{IDENTIFIER_LABELS[itemType]}</p>
                 <p className="text-muted-foreground">{item.isbn}</p>
               </div>
             )}

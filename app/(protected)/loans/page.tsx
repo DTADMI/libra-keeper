@@ -16,6 +16,7 @@ export default async function MyLoansPage() {
     orderBy: {
       createdAt: "desc",
     },
+    take: 20,
   });
 
   return (
@@ -55,8 +56,7 @@ export default async function MyLoansPage() {
                   )}
                   {loan.dueAt && (
                     <p className="font-medium text-primary">
-                      Due: {new Date(loan.dueAt).toLocaleDateString()}
-                    </p>
+                      Due: {new Date(loan.dueAt).toLocaleDateString()}</p>
                   )}
                 </div>
                 {loan.status === "APPROVED" && (

@@ -132,3 +132,53 @@ export function useAddComment(itemId: string) {
     },
   });
 }
+
+export function useCreateItem() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) =>
+      apiClient<Item>("/api/items", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
+  });
+}
+
+export function useUpdateItem(itemId: string) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data: Record<string, unknown>) =>
+      apiClient<Item>(`/api/items/${itemId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }),
+    onError: (_err) => {
+      queryClient.invalidateQueries({ queryKey: ["item", itemId] });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["item", itemId] });
+      queryClient.invalidateQueries({ queryKey: ["items"] });
+    },
+  });
+}
+
+export function useReportItem(itemId: string) {
+  return useMutation({
+    mutationFn: (description?: string) =>
+      apiClient<{ id: string }>(`/api/items/${itemId}/report`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description }),
+      }),
+  });
+}

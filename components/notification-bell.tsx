@@ -2,13 +2,14 @@
 
 import { formatDistanceToNow } from "date-fns";
 import { Bell } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useEffect,useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useMarkAllRead,useMarkNotificationRead, useNotifications } from "@/hooks/use-notifications";
 
 export function NotificationBell() {
+  const t = useTranslations("Notifications");
   const { data: notifications = [] } = useNotifications();
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllRead();
@@ -32,7 +33,7 @@ export function NotificationBell() {
         size="icon"
         className="relative"
         onClick={() => setOpen(!open)}
-        aria-label={`Notifications${unreadCount ? ` (${unreadCount} unread)` : ""}`}
+        aria-label={t("notificationsLabel")}
       >
         <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
@@ -45,15 +46,15 @@ export function NotificationBell() {
       {open && (
         <div className="absolute right-0 top-full mt-2 w-80 rounded-md border bg-background shadow-lg z-50 max-h-96 overflow-y-auto">
           <div className="flex items-center justify-between p-3 border-b">
-            <h3 className="font-semibold text-sm">Notifications</h3>
+            <h3 className="font-semibold text-sm">{t("title")}</h3>
             {unreadCount > 0 && (
               <Button variant="ghost" size="sm" className="text-xs" onClick={() => markAllRead.mutate()}>
-                Mark all read
+                {t("markAllRead")}
               </Button>
             )}
           </div>
           {notifications.length === 0 ? (
-            <p className="p-4 text-sm text-muted-foreground text-center">No notifications</p>
+            <p className="p-4 text-sm text-muted-foreground text-center">{t("noNotifications")}</p>
           ) : (
             notifications.slice(0, 20).map((n) => (
               <div

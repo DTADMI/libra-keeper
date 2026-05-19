@@ -1,4 +1,3 @@
-// src/app/dashboard/page.tsx
 import Link from "next/link";
 
 import { ActivityFeed } from "@/components/activity/activity-feed";
@@ -8,16 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
-
-const TYPE_SUBTITLE: Record<string, string> = {
-  BOOK: "by",
-  MUSIC: "by",
-  MOVIE: "dir.",
-  GAME: "by",
-  TOY: "Brand:",
-  CLOTHES: "Brand:",
-  OTHER: "by",
-};
+import { TYPE_SUBTITLE } from "@/lib/labels";
 
 export default async function DashboardPage() {
   const session = await getServerAuth();
@@ -34,6 +24,7 @@ export default async function DashboardPage() {
   const items = (await prisma.item.findMany({
     include: { tags: true },
     orderBy: { createdAt: "desc" },
+    take: 20,
   })) as ItemWithTags[];
 
   return (

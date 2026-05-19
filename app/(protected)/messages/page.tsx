@@ -1,6 +1,7 @@
 // src/app/(protected)/messages/page.tsx
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -13,6 +14,8 @@ import { useSession } from "@/hooks/use-session";
 import { cn } from "@/lib/utils";
 
 export default function MessagesPage() {
+  const t = useTranslations("Messages");
+  const tc = useTranslations("Common");
   const { data: session } = useSession();
   const { data: conversations = [], isLoading: conversationsLoading, error: conversationsError } = useConversations();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -27,7 +30,9 @@ export default function MessagesPage() {
     sendMessage.mutate(newMessage, {
       onSuccess: () => setNewMessage(""),
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : "Failed to send message");
+        toast.error(
+          error instanceof Error ? error.message : t("sendFailed")
+        );
       },
     });
   }
@@ -36,22 +41,22 @@ export default function MessagesPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Messages</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>Conversations</CardTitle>
+            <CardTitle>{t("conversations")}</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             {conversationsLoading && (
-              <p className="text-muted-foreground text-sm p-4">Loading...</p>
+              <p className="text-muted-foreground text-sm p-4">{t("loadingConversations")}</p>
             )}
             {conversationsError && (
-              <p className="text-destructive text-sm p-4">Failed to load conversations.</p>
+              <p className="text-destructive text-sm p-4">{t("failedConversations")}</p>
             )}
             {!conversationsLoading && conversations.length === 0 && (
-              <p className="text-muted-foreground text-sm p-4">No conversations yet.</p>
+              <p className="text-muted-foreground text-sm p-4">{t("noConversations")}</p>
             )}
             <div className="divide-y">
               {conversations.map((conv) => (
@@ -98,7 +103,7 @@ export default function MessagesPage() {
               </CardHeader>
               <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messagesLoading && (
-                  <p className="text-muted-foreground text-sm text-center">Loading messages...</p>
+                  <p className="text-muted-foreground text-sm text-center">{t("loadingMessages")}</p>
                 )}
                 {messages.map((msg) => (
                   <div
@@ -117,7 +122,7 @@ export default function MessagesPage() {
               </CardContent>
               <div className="border-t p-4 flex gap-2">
                 <Input
-                  placeholder="Type a message..."
+                  placeholder={t("typeMessage")}
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyDown={(e) => {
@@ -129,13 +134,13 @@ export default function MessagesPage() {
                   disabled={sendMessage.isPending}
                 />
                 <Button onClick={handleSend} disabled={sendMessage.isPending || !newMessage.trim()}>
-                  Send
+                  {t("send")}
                 </Button>
               </div>
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              Select a conversation to start messaging
+              {t("selectConversation")}
             </div>
           )}
         </Card>

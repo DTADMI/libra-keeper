@@ -145,8 +145,7 @@ Last updated: 2026-05-15
 > Scope: migrate DB hosting from Docker to Supabase. Keep Prisma. Auth already migrated (Phase 2a).
 
 | Status | Task                                               | Notes                                    |
-| ------ | -------------------------------------------------- | ---------------------------------------- |
-| ⛔     | Supabase staging/prod projects provisioning        | Requires account creation                |
+| ------ | -------------------------------------------------- | ---------------------------------------- || ⛔     | Supabase staging/prod projects provisioning        | Requires account creation                |
 | ✅     | Supabase Auth migration (NextAuth → Supabase Auth) | Phase 2a completed                       |
 | ✅     | `DATABASE_URL` / `DIRECT_URL` for Supabase pooler  | Documented in `.env.example`             |
 | ⛔     | Rehearsal runbook execution                        | Scripted validation queries              |
@@ -228,13 +227,3 @@ api/feature-flags/         → GET (list), POST (upsert)
 ```
 
 ---
-
-## Status Summary
-
-| Phase                               | Progress | Blockers                                       |
-| ----------------------------------- | -------- | ---------------------------------------------- |
-| Phase 1 — Security & Infrastructure | 0%       | Supabase + Upstash account provisioning needed |
-| Phase 2 — State Management & UX     | 0%       | Phase 1 completion needed                      |
-| Phase 3 — Hardening & Polish        | 0%       | Supabase provisioning needed for RLS           |
-| Phase 4 — Future                    | 0%       | Post-launch                                    |
-| Supabase Migration                  | 30%      | Account provisioning                           |

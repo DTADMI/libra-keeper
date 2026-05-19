@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2, UserMinus, UserPlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -12,15 +13,16 @@ interface WaitlistButtonProps {
 }
 
 export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
+  const t = useTranslations("Items");
   const waitlist = useWaitlist(itemId);
 
   const handleToggleWaitlist = () => {
     waitlist.mutate(isJoined ? "leave" : "join", {
       onSuccess: () => {
-        toast.success(isJoined ? "Left the waitlist" : "Joined the waitlist");
+        toast.success(isJoined ? t("leftWaitlist") : t("joinedWaitlist"));
       },
       onError: () => {
-        toast.error("Something went wrong");
+        toast.error(t("waitlistFailed"));
       },
     });
   };
@@ -40,7 +42,7 @@ export function WaitlistButton({ itemId, isJoined }: WaitlistButtonProps) {
       ) : (
         <UserPlus className="h-4 w-4" />
       )}
-      {isJoined ? "Leave Waitlist" : "Join Waitlist"}
+      {isJoined ? t("leaveWaitlist") : t("joinWaitlist")}
     </Button>
   );
 }
