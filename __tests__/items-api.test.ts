@@ -91,7 +91,8 @@ describe("Items API", () => {
       body: JSON.stringify(newItem),
     });
 
-    const response = await POST(request);
+    const ctx = { params: Promise.resolve({}) };
+    const response = await POST(request, ctx);
     expect(response.status).toBe(200);
   });
 
@@ -104,7 +105,8 @@ describe("Items API", () => {
       body: JSON.stringify({ title: "Item" }),
     });
 
-    const response = await POST(request);
+    const ctx = { params: Promise.resolve({}) };
+    const response = await POST(request, ctx);
     expect(response.status).toBe(401);
   });
 });

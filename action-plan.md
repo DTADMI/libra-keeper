@@ -84,13 +84,13 @@ Last updated: 2026-05-15
 
 | Priority | Item                                                                  | Status     | Notes                                                                                                        |
 | -------- | --------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------ |
-| 🔴       | Add `import "server-only"` guard to `lib/db.ts`                       | 🔜 UP NEXT | Prevents Prisma client from being bundled into client components. Match SF pattern.                          |
-| 🔴       | Create `supabase/migrations/` directory structure                     | 🔜 UP NEXT | Follow SF's dual-migration pattern: Prisma Migrate for schema, Supabase SQL for RLS/triggers.                |
-| 🔴       | Create initial Supabase SQL migration — schema mirroring Prisma       | 🔜 UP NEXT | `001_create_tables.sql` with idempotent `CREATE TABLE IF NOT EXISTS`.                                        |
-| 🔴       | Add RLS policies on all tables                                        | 🔜 UP NEXT | Enable RLS. Policies: "Users can only see their own data", "Admins can see all". Binary access model.        |
-| 🔴       | Add `set_updated_at()` trigger function                               | 🔜 UP NEXT | Auto-update `updated_at` columns.                                                                            |
-| 🔴       | Create `handle_new_user()` trigger for `public.profiles` sync         | 🔜 UP NEXT | Auto-create profile row when `auth.users` row is created.                                                    |
-| 🟡       | Create `docs/architecture-security.md` — dual-layer authorization doc | 🔜 UP NEXT | Document app-level guards + RLS defense-in-depth pattern. Mirror SF's doc.                                   |
+| 🔴       | Add `import "server-only"` guard to `lib/db.ts`                       | ✅ COMPLETED | Prevents Prisma client from being bundled into client components. Match SF pattern.                          |
+| 🔴       | Create `supabase/migrations/` directory structure                     | ✅ COMPLETED | Follow SF's dual-migration pattern: Prisma Migrate for schema, Supabase SQL for RLS/triggers.                |
+| 🔴       | Create initial Supabase SQL migration — schema mirroring Prisma       | ✅ COMPLETED | `001_create_tables.sql` with idempotent `CREATE TABLE IF NOT EXISTS`.                                        |
+| 🔴       | Add RLS policies on all tables                                        | ✅ COMPLETED | Enable RLS. Policies: "Users can only see their own data", "Admins can see all". Binary access model.        |
+| 🔴       | Add `set_updated_at()` trigger function                               | ✅ COMPLETED | Auto-update `updated_at` columns.                                                                            |
+| 🔴       | Create `handle_new_user()` trigger for `public.profiles` sync         | ✅ COMPLETED | Auto-create profile row when `auth.users` row is created.                                                    |
+| 🟡       | Create `docs/architecture-security.md` — dual-layer authorization doc | ✅ COMPLETED | Document app-level guards + RLS defense-in-depth pattern. Mirror SF's doc.                                   |
 | 🟡       | Add Supabase Realtime subscriptions for activity feed                 | 🗂️ BACKLOG | Automatically update UI when loans/comments change. See platform comparison doc Section 5 for code examples. |
 | 🟡       | Create `scripts/` migration tooling (apply, validate, report)         | 🗂️ BACKLOG | Match QH's `apply-migrations.mjs` pattern for multi-environment migration.                                   |
 

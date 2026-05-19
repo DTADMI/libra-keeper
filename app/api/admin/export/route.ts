@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { withProtection } from "@/lib/security/protection";
 
-export async function GET(req: Request) {
+async function _GET(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {
@@ -50,3 +51,5 @@ export async function GET(req: Request) {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const GET = withProtection(_GET, { scope: "admin", limit: 200, windowSeconds: 60 });

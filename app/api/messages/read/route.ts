@@ -4,12 +4,13 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { withProtection } from "@/lib/security/protection";
 
 const readSchema = z.object({
   messageIds: z.array(z.string()).min(1),
 });
 
-export async function POST(req: Request) {
+async function _POST(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session?.user) {
@@ -36,6 +37,8 @@ export async function POST(req: Request) {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });
 
 
 import { logger } from "@/lib/logger";

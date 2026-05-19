@@ -2,8 +2,9 @@
 import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db";
+import { withProtection } from "@/lib/security/protection";
 
-export async function GET(req: Request) {
+async function _GET(req: Request) {
   const url = new URL(req.url);
   const q = url.searchParams.get("q")?.trim() ?? "";
 
@@ -60,5 +61,7 @@ export async function GET(req: Request) {
     return NextResponse.json([], { status: 200 });
   }
 }
+
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 
 import { logger } from "@/lib/logger";

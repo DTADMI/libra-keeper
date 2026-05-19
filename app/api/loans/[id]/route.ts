@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
-import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
+import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { sendLoanStatusEmail } from "@/lib/mail";
-import { prisma } from "@/lib/db";
+import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
 const updateLoanSchema = z.object({
   status: z.enum(["APPROVED", "REJECTED", "RETURNED", "OVERDUE", "LOST", "DAMAGED"]),
   dueAt: z.string().datetime().optional(),

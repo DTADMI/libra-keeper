@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { withProtection } from "@/lib/security/protection";
 
-export async function GET() {
+async function _GET() {
   try {
     const session = await getServerAuth();
     if (!session?.user) {
@@ -84,5 +85,7 @@ export async function GET() {
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 
 import { logger } from "@/lib/logger";

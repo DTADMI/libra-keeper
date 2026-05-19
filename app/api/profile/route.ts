@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
-import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
 import { prisma } from "@/lib/db";
+import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
 const profileSchema = z.object({
   name: z.string().min(1).optional(),
   image: z.string().url().optional().nullable().or(z.literal("")),

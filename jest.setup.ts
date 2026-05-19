@@ -6,6 +6,8 @@ import { NextResponse } from "next/server";
 import { TextDecoder, TextEncoder } from "util";
 
 process.env.DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/librakeeper";
+process.env.NEXT_PUBLIC_SUPABASE_URL = "https://test.supabase.co";
+process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
 
 // Extend the global type to include our custom properties
 declare global {
@@ -22,14 +24,12 @@ global.TextDecoder = TextDecoder as typeof globalThis.TextDecoder;
 NextResponse.json = <T>(data: T, init?: ResponseInit): NextResponse => {
   const response = new NextResponse(JSON.stringify(data), init);
   response.headers.set("Content-Type", "application/json");
-  // @ts-ignore - Adding custom property for testing
   response._json = data;
   return response;
 };
 
 // Extend Response prototype for testing
 Response.prototype.json = async function <T>(): Promise<T> {
-  // @ts-ignore - Custom _json property for testing
   if (this._json) {
     return this._json as T;
   }

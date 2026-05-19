@@ -3,8 +3,8 @@
 
 import { NextResponse } from "next/server";
 
-import { validateCsrf, setCsrfCookie } from "@/lib/security/csrf";
 import { redis } from "@/lib/redis";
+import { setCsrfCookie,validateCsrf } from "@/lib/security/csrf";
 
 interface RateLimitConfig {
   scope: string;

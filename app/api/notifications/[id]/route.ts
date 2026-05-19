@@ -3,8 +3,9 @@ import { NextResponse } from "next/server";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { withProtection } from "@/lib/security/protection";
 
-export async function PATCH(
+async function _PATCH(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
@@ -26,3 +27,5 @@ export async function PATCH(
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
+
+export const PATCH = withProtection(_PATCH, { scope: "write", limit: 60, windowSeconds: 60 });

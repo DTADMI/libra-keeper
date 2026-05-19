@@ -6,10 +6,10 @@ import { redis } from "@/lib/redis";
 
 // Re-export from the canonical feature-flags module
 export {
-  isFeatureEnabled,
-  isFeatureEnabledForUser,
   getAllFeatureFlags,
   invalidateFlagCache,
+  isFeatureEnabled,
+  isFeatureEnabledForUser,
 } from "@/lib/feature-flags";
 
 const SETTING_CACHE_PREFIX = "setting:";
@@ -21,7 +21,7 @@ export async function getSetting(
 ): Promise<string | undefined> {
   try {
     const cached = await redis.get(`${SETTING_CACHE_PREFIX}${key}`);
-    if (cached !== null) return cached;
+    if (cached !== null) {return cached;}
 
     const setting = await prisma.appSettings.findUnique({ where: { key } });
     const value = setting?.value ?? defaultValue;

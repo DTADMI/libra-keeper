@@ -40,8 +40,11 @@ jest.mock("@/lib/auth-utils", () => ({
 describe("API Route Smoke Tests", () => {
   beforeEach(() => jest.clearAllMocks());
 
+  const ctx = { params: Promise.resolve({}) };
+
   test("GET /api/health returns status", async () => {
-    const response = await healthGet();
+    const req = new Request("http://localhost/api/health");
+    const response = await healthGet(req, ctx);
     const body = await response.json();
     expect(body).toHaveProperty("status");
     expect(body).toHaveProperty("checks");
@@ -49,14 +52,16 @@ describe("API Route Smoke Tests", () => {
   });
 
   test("GET /api/feature-flags returns array", async () => {
-    const response = await featureFlagsGet();
+    const req = new Request("http://localhost/api/feature-flags");
+    const response = await featureFlagsGet(req, ctx);
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(Array.isArray(body)).toBe(true);
   });
 
   test("GET /api/activity returns array", async () => {
-    const response = await activityGet();
+    const req = new Request("http://localhost/api/activity");
+    const response = await activityGet(req, ctx);
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(Array.isArray(body)).toBe(true);

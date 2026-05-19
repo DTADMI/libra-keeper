@@ -9,11 +9,11 @@ import { withProtection } from "@/lib/security/protection";
 async function _POST(req: Request) {
   try {
     const session = await getServerAuth();
-    if (!session?.user) return new NextResponse("Unauthorized", { status: 401 });
+    if (!session?.user) {return new NextResponse("Unauthorized", { status: 401 });}
 
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    if (!file) {return NextResponse.json({ error: "No file provided" }, { status: 400 });}
 
     const buffer = Buffer.from(await file.arrayBuffer());
     const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9._-]/g, "_")}`;

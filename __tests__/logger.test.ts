@@ -34,23 +34,21 @@ describe("Logger", () => {
   });
 
   it("should log debug messages in non-production environment", () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "development";
+    jest.replaceProperty(process.env, "NODE_ENV", "development");
 
     logger.debug("test debug");
     expect(debugSpy).toHaveBeenCalledWith(expect.stringContaining("[DEBUG] test debug"));
 
-    process.env.NODE_ENV = originalEnv;
+    jest.replaceProperty(process.env, "NODE_ENV", "test");
   });
 
   it("should not log debug messages in production environment", () => {
-    const originalEnv = process.env.NODE_ENV;
-    process.env.NODE_ENV = "production";
+    jest.replaceProperty(process.env, "NODE_ENV", "production");
 
     logger.debug("test debug");
     expect(debugSpy).not.toHaveBeenCalled();
 
-    process.env.NODE_ENV = originalEnv;
+    jest.replaceProperty(process.env, "NODE_ENV", "test");
   });
 
   it("should pass extra arguments to console methods", () => {

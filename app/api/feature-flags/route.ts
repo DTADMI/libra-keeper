@@ -3,11 +3,12 @@ import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db";
 import { redis } from "@/lib/redis";
+import { withProtection } from "@/lib/security/protection";
 
 const CACHE_KEY = "feature-flags:all";
 const CACHE_TTL = 30;
 
-export async function GET() {
+async function _GET() {
   try {
     const cached = await redis.get(CACHE_KEY);
     if (cached) {
@@ -26,5 +27,7 @@ export async function GET() {
     return NextResponse.json([], { status: 200 });
   }
 }
+
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 
 import { logger } from "@/lib/logger";

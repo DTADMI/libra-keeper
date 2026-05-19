@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
@@ -16,28 +16,28 @@ const envSchema = z.object({
   CRON_SECRET: z.string().optional(),
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
-})
+});
 
-const parsed = envSchema.safeParse(process.env)
+const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   console.error(
     "❌ Invalid environment variables:",
     JSON.stringify(parsed.error.flatten().fieldErrors, null, 2),
-  )
-  throw new Error("Invalid environment variables. Check .env file.")
+  );
+  throw new Error("Invalid environment variables. Check .env file.");
 }
 
-export const env = parsed.data
+export const env = parsed.data;
 
-const envObj = env as Record<string, string | undefined>
+const envObj = env as Record<string, string | undefined>;
 if (!envObj["NEXT_PUBLIC_SUPABASE_URL"]) {
   console.warn(
     "⚠️  NEXT_PUBLIC_SUPABASE_URL is not set. Supabase features will not work.",
-  )
+  );
 }
 if (!envObj["NEXT_PUBLIC_SUPABASE_ANON_KEY"]) {
   console.warn(
     "⚠️  NEXT_PUBLIC_SUPABASE_ANON_KEY is not set. Supabase auth will not work.",
-  )
+  );
 }

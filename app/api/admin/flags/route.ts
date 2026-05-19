@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
-import { withProtection, RATE_LIMITS } from "@/lib/security/protection";
+import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
 import { invalidateFlagCache } from "@/lib/settings";
 const flagSchema = z.object({
   name: z.string().min(1),
