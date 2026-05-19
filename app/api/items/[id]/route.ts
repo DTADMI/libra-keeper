@@ -3,12 +3,12 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
 const itemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional().nullable(),
   type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"]),
-  status: z.enum(["AVAILABLE", "BORROWED", "GIVEN_AWAY", "LOST"]).optional(),
+  status: z.enum(["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"]).optional(),
   coverImage: z.string().url().optional().nullable(),
   isbn: z.string().optional().nullable(),
   author: z.string().optional().nullable(),
@@ -18,19 +18,25 @@ const itemSchema = z.object({
   metadata: z.record(z.string(), z.any()).optional().nullable(),
 });
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const session = await getServerAuth();
+
     const item = await prisma.item.findUnique({
       where: { id },
       include: {
         tags: true,
         loans: {
-          include: { user: true },
+          include: {
+            user: { select: { id: true, name: true } },
+          },
           orderBy: { createdAt: "desc" },
         },
         comments: {
-          include: { user: true },
+          include: {
+            user: { select: { id: true, name: true } },
+          },
           orderBy: { createdAt: "desc" },
         },
         _count: {
@@ -108,6 +114,7 @@ async function _DELETE(req: Request, { params }: { params: Promise<{ id: string 
   }
 }
 
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const PATCH = withProtection(_PATCH, { scope: "write", limit: 60, windowSeconds: 60 });
 
 export const DELETE = withProtection(_DELETE, { scope: "write", limit: 60, windowSeconds: 60 });

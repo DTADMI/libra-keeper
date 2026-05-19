@@ -229,7 +229,8 @@
     "close": "Fermer",
     "submit": "Soumettre",
     "unauthorized": "Non autorisé",
-    "notFound": "Introuvable"
+    "notFound": "Introuvable",
+    "unexpectedError": "Une erreur inattendue est survenue"
   },
   "NotFound": {
     "title": "Page introuvable",

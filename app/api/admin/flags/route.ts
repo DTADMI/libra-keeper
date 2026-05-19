@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
 import { invalidateFlagCache } from "@/lib/settings";
 const flagSchema = z.object({
   name: z.string().min(1),
@@ -12,7 +12,7 @@ const flagSchema = z.object({
   isEnabled: z.boolean(),
 });
 
-export async function GET() {
+async function _GET() {
   try {
     const session = await getServerAuth();
     if (!session.user || session.user.role !== "ADMIN") {

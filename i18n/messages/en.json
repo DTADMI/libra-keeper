@@ -229,7 +229,8 @@
     "close": "Close",
     "submit": "Submit",
     "unauthorized": "Unauthorized",
-    "notFound": "Not Found"
+    "notFound": "Not Found",
+    "unexpectedError": "An unexpected error occurred"
   },
   "NotFound": {
     "title": "Page Not Found",

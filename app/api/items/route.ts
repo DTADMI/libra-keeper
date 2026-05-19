@@ -5,7 +5,7 @@ import { z } from "zod";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
 const itemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional().nullable(),
@@ -65,7 +65,7 @@ async function _POST(req: Request) {
   }
 }
 
-export async function GET() {
+async function _GET() {
   try {
     const items = await prisma.item.findMany({
       include: {
@@ -88,4 +88,5 @@ export async function GET() {
   }
 }
 
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });

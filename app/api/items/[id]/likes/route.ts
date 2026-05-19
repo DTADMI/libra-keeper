@@ -44,7 +44,7 @@ async function _POST(req: Request, { params }: { params: Promise<{ id: string }>
   }
 }
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerAuth();
     const { id } = await params;
@@ -74,4 +74,5 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });

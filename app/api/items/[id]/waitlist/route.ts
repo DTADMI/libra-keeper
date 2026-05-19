@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
 async function _POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const session = await getServerAuth();
@@ -81,7 +81,7 @@ async function _DELETE(req: Request, { params }: { params: Promise<{ id: string 
   }
 }
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+async function _GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: itemId } = await params;
 
@@ -106,6 +106,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   }
 }
 
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });
 
 export const DELETE = withProtection(_DELETE, { scope: "write", limit: 60, windowSeconds: 60 });

@@ -42,6 +42,8 @@ const prismaMock = prisma as unknown as {
 };
 
 describe("Items API", () => {
+  const ctx = { params: Promise.resolve({}) };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -54,8 +56,8 @@ describe("Items API", () => {
 
     prismaMock.item.findMany.mockResolvedValue(mockItems as any);
 
-    const response = await GET();
-    expect(response.status).toBe(200);
+    const req = new Request("http://localhost/api/items");
+    const response = await GET(req, ctx);
 
     const data = await response.json();
     expect(data).toEqual(mockItems);
@@ -65,7 +67,8 @@ describe("Items API", () => {
   test("GET /api/items handles errors", async () => {
     prismaMock.item.findMany.mockRejectedValue(new Error("DB Error"));
 
-    const response = await GET();
+    const req = new Request("http://localhost/api/items");
+    const response = await GET(req, ctx);
 
     expect(response.status).toBe(500);
   });

@@ -4,12 +4,12 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
+import { ReactNode } from "react";
 
-import { QueryProvider } from "@/components/providers/query-provider";
+import { AppProviders } from "@/components/providers/app-providers";
 import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,23 +26,19 @@ export const viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const headersList = await headers();
+  const acceptLanguage = headersList.get("accept-language") ?? "en";
+  const lang = acceptLanguage.startsWith("fr") ? "fr" : "en";
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={inter.className}>
         <ServiceWorkerRegistration />
         <PWAInstallPrompt />
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <QueryProvider>
-            {children}
-          </QueryProvider>
-          <Toaster position="top-center" />
-        </ThemeProvider>
+        <AppProviders>
+          {children}
+        </AppProviders>
         <Analytics />
         <SpeedInsights />
       </body>

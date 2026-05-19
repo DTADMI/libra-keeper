@@ -4,13 +4,13 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
 const profileSchema = z.object({
   name: z.string().min(1).optional(),
   image: z.string().url().optional().nullable().or(z.literal("")),
 });
 
-export async function GET() {
+async function _GET() {
   try {
     const session = await getServerAuth();
     if (!session?.user) {
@@ -59,4 +59,5 @@ async function _PATCH(req: Request) {
   }
 }
 
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const PATCH = withProtection(_PATCH, { scope: "write", limit: 60, windowSeconds: 60 });

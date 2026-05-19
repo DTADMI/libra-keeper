@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { sendLoanRequestEmail } from "@/lib/mail";
-import { RATE_LIMITS,withProtection } from "@/lib/security/protection";
+import { withProtection } from "@/lib/security/protection";
 const loanSchema = z.object({
   itemId: z.string().min(1),
 });
@@ -60,7 +60,7 @@ async function _POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+async function _GET(req: Request) {
   try {
     const session = await getServerAuth();
     if (!session?.user) {
@@ -82,4 +82,5 @@ export async function GET(req: Request) {
   }
 }
 
+export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });
