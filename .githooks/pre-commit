@@ -4,3 +4,4 @@ echo "[pre-commit] Libra Keeper checks..."
 pnpm lint
 pnpm typecheck
 pnpm test
+pnpm check:supabase-security
