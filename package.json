@@ -19,7 +19,7 @@
                                                   "unrs-resolver"
                                               ]
              },
-    "packageManager":  "pnpm@10.24.0",
+     "packageManager":  "pnpm@10.33.4",
     "scripts":  {
     "typecheck": "tsc --noEmit",
     "dev": "next dev --webpack",
@@ -146,8 +146,8 @@
                             "typescript":  "^5.9.3",
                             "whatwg-fetch":  "^3.6.20"
                         },
-    "engines":  {
-                    "node":  "\u003e=24.0.0 \u003c25.0.0",
-                    "pnpm":  "\u003e=10.24.0"
-                }
+     "engines":  {
+                     "node":  "\u003e=22.22.3",
+                     "pnpm":  "\u003e=10.33.4"
+                 }
 }
