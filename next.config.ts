@@ -16,9 +16,16 @@ const nextConfig: NextConfig = withNextIntl(
   withPWA({
     output: "standalone",
     outputFileTracingRoot: __dirname,
-
-    experimental: {},
-
+    experimental: {
+      staleTimes: {
+        dynamic: 30,
+        static: 300,
+      },
+      optimizePackageImports: [
+        "lucide-react",
+        "date-fns",
+      ],
+    },
     async headers() {
       return [
         {
