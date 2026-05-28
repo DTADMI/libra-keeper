@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 import { FeatureFlagManager } from "./feature-flag-manager";
 import { SettingsManager } from "./settings-manager";
+import { NotificationChannelManager } from "./notification-channel-manager";
 
 export default function AdminSettingsPage() {
   const t = useTranslations("Admin");
@@ -24,6 +25,7 @@ export default function AdminSettingsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <SettingsManager />
         <FeatureFlagManager />
+        <NotificationChannelManager />
         <Card>
           <CardHeader>
             <CardTitle>{t("dataExport")}</CardTitle>
