@@ -21,7 +21,7 @@
              },
      "packageManager":  "pnpm@10.33.4",
     "scripts":  {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "pnpm exec prisma generate && tsc --noEmit",
     "dev": "next dev --webpack",
                     "build":  "pnpm exec prisma generate \u0026\u0026 next build --webpack",
                     "start":  "next start",
