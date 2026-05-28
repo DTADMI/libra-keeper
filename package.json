@@ -46,7 +46,8 @@
                     "supabase:stop":  "supabase stop",
                     "supabase:status":  "supabase status",
                     "dev:local":  "pnpm docker:up \u0026\u0026 pnpm supabase:start \u0026\u0026 pnpm dev",
-                    "check:supabase-security": "node scripts/check-supabase-security.mjs"
+                    "check:supabase-security": "node scripts/check-supabase-security.mjs",
+                     "run-all-checks":  "pnpm lint:ci \u0026\u0026 pnpm typecheck \u0026\u0026 pnpm test \u0026\u0026 pnpm check:supabase-security \u0026\u0026 pnpm build"
                 },
     "dependencies":  {
                          "@hookform/resolvers":  "^5.2.2",

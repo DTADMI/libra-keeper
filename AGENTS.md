@@ -61,7 +61,7 @@ Read these first when the task touches the matching area:
 - Do not remove or overwrite user changes in a dirty worktree unless explicitly asked.
 - Avoid editing generated output or `.next/`.
 - Keep new features behind feature flags, controllable from the admin dashboard.
-- **Never use `--no-verify`, `--no-gpg-sign`, or any hook-skipping flag on git commits or pushes.** The pre-commit hook runs `pnpm lint`, `pnpm typecheck`, and `pnpm test:run`. These must pass before every commit. If a hook takes too long, increase the tool timeout — do not bypass the hook.
+- **Never use `--no-verify`, `--no-gpg-sign`, or any hook-skipping flag on git commits or pushes.** The pre-commit hook runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm check:supabase-security`, and `pnpm build`. These must pass before every commit. If a hook takes too long, increase the tool timeout — do not bypass the hook.
 
 ### Product, UX, And Content
 
@@ -112,7 +112,8 @@ Read these first when the task touches the matching area:
 
 - Active Codex lifecycle hooks live in `.codex/hooks.json`.
 - Repo Git hooks live in `.githooks/` and are installed by `node scripts/install-git-hooks.mjs`.
-- The pre-commit hook runs `pnpm lint`, `pnpm typecheck`, and `pnpm test:run`.
+- The pre-commit hook runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm check:supabase-security`, and `pnpm build`.
+- Run `pnpm run-all-checks` locally to verify everything passes before committing.
 
 ## MCP And Plugin Boundaries
 
