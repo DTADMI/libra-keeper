@@ -4,11 +4,11 @@ import { redirect } from "next/navigation";
 import { locales } from "@/i18n";
 
 // This page will redirect to the default locale
-// The root path (/) will redirect to /en or the default locale
+// The root path (/) will redirect to /fr or the default locale
 export default function RootPage() {
   // This will only be hit if the middleware didn't redirect
   // So we'll redirect to the default locale
-  const defaultLocale = locales[0] || "en";
+  const defaultLocale = locales[0] || "fr";
   redirect(`/${defaultLocale}`);
 
   // This won't be rendered, but it's here to make TypeScript happy

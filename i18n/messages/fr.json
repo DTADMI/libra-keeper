@@ -240,7 +240,8 @@
     "selectConversation": "Sélectionnez une conversation",
     "typeMessage": "Écrivez un message...",
     "send": "Envoyer",
-    "sendFailed": "Échec de l'envoi"
+    "sendFailed": "Échec de l'envoi",
+    "recordVoiceMessage": "Enregistrer un message vocal"
   },
   "Suggestions": {
     "title": "Suggestions d'articles",
@@ -418,5 +419,27 @@
     "title": "Page introuvable",
     "message": "La page que vous cherchez n'existe pas.",
     "backToHome": "Retour à l'accueil"
+  },
+  "voice": {
+    "recorder": {
+      "startRecording": "Commencer l'enregistrement",
+      "record": "Enregistrer",
+      "recording": "Enregistrement...",
+      "paused": "En pause",
+      "pause": "Pause",
+      "resume": "Reprendre",
+      "stop": "Arrêter",
+      "cancel": "Annuler",
+      "preview": "Aperçu",
+      "sendVoiceMessage": "Envoyer le message vocal",
+      "errorMicrophone": "Impossible d'accéder au microphone. Vérifiez les autorisations.",
+      "durationSeconds": "{{duration}}s"
+    },
+    "player": {
+      "play": "Lire",
+      "pause": "Pause",
+      "seek": "Rechercher"
+    },
+    "voiceMessageLabel": "Message vocal"
   }
 }

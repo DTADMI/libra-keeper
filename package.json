@@ -50,7 +50,8 @@
   "run-all-checks": "pnpm lint:ci && pnpm typecheck && pnpm test && pnpm check:supabase-security && pnpm build"
  },
  "dependencies": {
-  "@hookform/resolvers": "^5.2.2",
+  "@hookform/resolvers": "^5.4.0",
+  "@nebula-forge/voice-messaging": "workspace:*",
   "@prisma/adapter-pg": "^7.2.0",
   "@prisma/client": "^7.2.0",
   "@radix-ui/react-accordion": "^1.2.12",
@@ -96,7 +97,7 @@
   "react": "19.2.6",
   "react-day-picker": "9.13.0",
   "react-dom": "19.2.6",
-  "react-hook-form": "^7.69.0",
+  "react-hook-form": "^7.76.1",
   "resend": "^6.6.0",
   "sonner": "^2.0.7",
   "tailwind-merge": "^3.4.0",
@@ -113,7 +114,6 @@
   "@testing-library/react": "^16.3.1",
   "@testing-library/user-event": "^14.6.1",
   "@types/jest": "^30.0.0",
-  "@types/minimatch": "^6.0.0",
   "@types/node": "^22",
   "@types/pg": "^8.16.0",
   "@types/react": "^19",
