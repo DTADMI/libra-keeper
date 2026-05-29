@@ -12,6 +12,7 @@ interface SearchResult {
   author: string | null;
   coverImage: string | null;
   rank: number;
+  headline: string;
   _count: { likes: number; comments: number };
 }
 

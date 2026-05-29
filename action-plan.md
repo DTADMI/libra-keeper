@@ -182,6 +182,56 @@ Last updated: 2026-05-15
 
 ---
 
+---
+ 
+## 2026-05-28 Implementation Status
+
+### Architecture
+- i18n: `next-intl` pattern (different from cross-project Context pattern — migration recommended)
+- Default locale: effectively `en` (first in locales array, no explicit defaultLocale set)
+- Redis adapter: multi-tier (Upstash / ioredis / memory fallback) matching QH pattern
+- Rate limiting: sliding window via Redis ZSETs, predefined limits for auth/signup/API/admin
+- TanStack React Query: provider, devtools, query hooks for items/loans/messages/suggestions/activity
+- CSRF protection: double-submit cookie pattern
+- Supabase RLS: defense-in-depth layer with app-level authorization as primary guard
+- Prisma kept as primary data layer (matching SF pattern), RLS added via SQL migrations
+
+### Fixes Applied
+- RLS policies on all 11 tables with binary access model
+- `import "server-only"` guard on `lib/db.ts`
+- CSP headers in `next.config.ts`
+- `set_updated_at()` trigger function + `handle_new_user()` trigger for profiles sync
+- Supabase Auth migration from NextAuth completed
+
+### Features Implemented
+- Full CRUD for items, loans, messages, suggestions, activity feed
+- TanStack React Query migration (items, loans, messages, suggestions, activity, admin)
+- Feature flags system (SWR + Context, 12 flags, Redis+DB persistence)
+- Email reminders via Vercel cron (daily 9AM for due/overdue loans)
+- Vendor adapters (email via Resend, storage via Supabase)
+- Supabase Realtime subscriptions for activity feed + loan status
+- Full-text search with PostgreSQL tsvector (GIN index, weighted ranking)
+- ISBN / Google Books metadata lookup
+- Accessibility: ARIA labels, high contrast theme variant
+- Performance monitoring: Vercel Analytics + Speed Insights
+- Loading skeletons + error boundary components
+- Bilingual UI (120+ FR keys, Quebec French norms per action plan)
+
+### Tests Added
+- RLS policy smoke tests
+- Accessible component verification (ARIA, high contrast)
+
+### Flags Enabled/Changed
+- 12 feature flags defined in `lib/feature-flags.ts`
+- Percentage and user_list flag types added
+
+### i18n Issues (see `docs/technical/i18n-status.md`)
+- Default locale is effectively `en` — should be `fr` with explicit `defaultLocale`
+- Uses `next-intl` instead of cross-project Context pattern
+- Quebec French conventions partially adopted (good "connexion"/"courriel", some "email"/"password" in FR)
+
+---
+ 
 ## Technical Implementation Notes
 
 ### Redis Adapter Architecture

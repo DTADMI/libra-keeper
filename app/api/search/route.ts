@@ -19,9 +19,10 @@ async function _GET(req: Request) {
         id: string
         title: string
         type: string
-        author: string | null
+         author: string | null
         coverImage: string | null
         rank: number
+        headline: string
         likes_count: number
         comments_count: number
       }>
@@ -33,6 +34,7 @@ async function _GET(req: Request) {
         i."author",
         i."coverImage",
         ts_rank(i.search_vector, websearch_to_tsquery('english', $1))::float8 AS rank,
+        ts_headline('english', i.title, websearch_to_tsquery('english', $1), 'StartSel=<mark>, StopSel=</mark>, MaxWords=50, MinWords=10') AS headline,
         (SELECT COUNT(*) FROM "Like" l WHERE l."itemId" = i.id)::int AS likes_count,
         (SELECT COUNT(*) FROM "Comment" c WHERE c."itemId" = i.id)::int AS comments_count
       FROM "Item" i
@@ -49,6 +51,7 @@ async function _GET(req: Request) {
       author: r.author,
       coverImage: r.coverImage,
       rank: r.rank,
+      headline: r.headline,
       _count: {
         likes: r.likes_count,
         comments: r.comments_count,
