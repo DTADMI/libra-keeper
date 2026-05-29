@@ -206,7 +206,18 @@
     "duration": "Durée",
     "durationPlaceholder": "ex. 120 min",
     "identifier": "Identifiant",
-    "maker": "Fabricant"
+    "maker": "Fabricant",
+    "bulkImport": "Importation en lot",
+    "bulkImportTitle": "Importer des articles en lot",
+    "bulkImportDescription": "Téléversez un fichier CSV pour importer plusieurs articles à la fois",
+    "dragDrop": "Glissez-déposez un fichier CSV, ou cliquez pour parcourir",
+    "defaultType": "Type par défaut",
+    "preview": "Aperçu",
+    "rowsDetected": "{count} lignes détectées",
+    "csvNeedHeaders": "Le fichier CSV doit contenir une ligne d'en-tête",
+    "importLabel": "Importer",
+    "importing": "Importation en cours...",
+    "importSuccess": "{count} articles importés avec succès"
   },
   "Loans": {
     "title": "Mes emprunts",

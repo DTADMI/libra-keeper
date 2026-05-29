@@ -11,6 +11,8 @@ export function LoadingSkeleton({ className, ...props }: React.HTMLAttributes<HT
   );
 }
 
+export const Skeleton = LoadingSkeleton;
+
 export function PageLoadingSkeleton() {
   return (
     <div className="space-y-6 py-6">

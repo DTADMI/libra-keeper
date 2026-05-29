@@ -1,3 +1,3 @@
-export { VoiceRecorder } from "./VoiceRecorder";
+export type { RecorderState,VoicePlayerProps, VoiceRecorderProps } from "./types";
 export { VoicePlayer } from "./VoicePlayer";
-export type { VoiceRecorderProps, VoicePlayerProps, RecorderState } from "./types";
+export { VoiceRecorder } from "./VoiceRecorder";

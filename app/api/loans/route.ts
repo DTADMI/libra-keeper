@@ -47,7 +47,7 @@ async function _POST(req: Request) {
 
     for (const admin of admins) {
       if (admin.email) {
-        await sendLoanRequestEmail(admin.email, session.user.name || "A user", item.title);
+        await sendLoanRequestEmail(admin.email, "Admin", session.user.name || "A user", item.title);
       }
     }
 

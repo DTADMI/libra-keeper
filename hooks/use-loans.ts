@@ -18,11 +18,29 @@ interface Loan {
   user?: { id: string; name: string | null; image: string | null }
 }
 
+interface AdminLoan {
+  id: string
+  itemId: string
+  userId: string
+  status: string
+  createdAt: string
+  item: { title: string }
+  user: { name: string | null; email: string }
+}
+
 export function useMyLoans() {
   return useQuery({
     queryKey: ["loans"],
     queryFn: () => apiClient<Loan[]>("/api/loans"),
     staleTime: 30_000,
+  });
+}
+
+export function useAdminLoans() {
+  return useQuery({
+    queryKey: ["admin", "loans"],
+    queryFn: () => apiClient<AdminLoan[]>("/api/loans?admin=true&status=PENDING"),
+    staleTime: 15_000,
   });
 }
 
@@ -61,6 +79,7 @@ export function useUpdateLoan(loanId: string) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["loans"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "loans"] });
     },
   });
 }

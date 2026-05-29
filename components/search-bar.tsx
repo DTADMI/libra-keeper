@@ -3,12 +3,16 @@
 import { SearchIcon, X } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useEffect,useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useSearch } from "@/hooks/use-search";
 import { cn } from "@/lib/utils";
+
+function sanitizeHeadline(html: string): string {
+  return html.replace(/<(?! {4}[/]?b\b)[^>]*>/gi, "");
+}
 
 export function SearchBar() {
   const t = useTranslations("Search");
@@ -80,7 +84,7 @@ export function SearchBar() {
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-sm line-clamp-2">
                   {item.headline ? (
-                    <span dangerouslySetInnerHTML={{ __html: item.headline }} />
+                    <span dangerouslySetInnerHTML={{ __html: sanitizeHeadline(item.headline) }} />
                   ) : (
                     item.title
                   )}

@@ -6,16 +6,16 @@ import { prisma } from "@/lib/db";
 import { withProtection } from "@/lib/security/protection";
 const itemSchema = z.object({
   title: z.string().min(1),
-  description: z.string().optional().nullable(),
+  description: z.string().nullable().optional(),
   type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"]),
   status: z.enum(["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"]).optional(),
-  coverImage: z.string().url().optional().nullable(),
-  isbn: z.string().optional().nullable(),
-  author: z.string().optional().nullable(),
-  publisher: z.string().optional().nullable(),
-  publishedAt: z.string().datetime().optional().nullable(),
+  coverImage: z.string().url().nullable().optional(),
+  isbn: z.string().nullable().optional(),
+  author: z.string().nullable().optional(),
+  publisher: z.string().nullable().optional(),
+  publishedAt: z.string().datetime().nullable().optional(),
   tags: z.array(z.string()).optional(),
-  metadata: z.record(z.string(), z.any()).optional().nullable(),
+  metadata: z.record(z.string(), z.any()).nullable().optional(),
 });
 
 async function _GET(req: Request, { params }: { params: Promise<{ id: string }> }) {

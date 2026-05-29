@@ -1,6 +1,8 @@
 // lib/settings.ts — App settings with Redis caching
 // Feature flag logic consolidated into lib/feature-flags.ts (re-exported here for backward compat)
 
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { redis } from "@/lib/redis";
 

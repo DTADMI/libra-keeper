@@ -7,7 +7,7 @@ import { prisma } from "@/lib/db";
 import { withProtection } from "@/lib/security/protection";
 const profileSchema = z.object({
   name: z.string().min(1).optional(),
-  image: z.string().url().optional().nullable().or(z.literal("")),
+  image: z.string().url().nullable().optional().or(z.literal("")),
 });
 
 async function _GET() {

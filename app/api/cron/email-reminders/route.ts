@@ -6,6 +6,8 @@ import { NextResponse } from "next/server";
 
 import { emailClient } from "@/lib/adapters/email";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
+import { dueReminderTemplate, overdueReminderTemplate } from "@/lib/mail/templates";
 import { withProtection } from "@/lib/security/protection";
 
 async function _GET(req: Request) {
@@ -36,41 +38,46 @@ async function _GET(req: Request) {
       include: { item: true, user: true },
     });
 
-    const admin = await prisma.user.findFirst({
-      where: { role: "ADMIN" },
-      select: { email: true },
-    });
-
     const results: string[] = [];
 
     for (const loan of upcomingLoans) {
-      if (loan.user.email) {
+      if (loan.user.email && loan.user.name && loan.dueAt) {
+        const daysRemaining = Math.ceil(
+          (loan.dueAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        const { subject, html } = dueReminderTemplate({
+          userName: loan.user.name,
+          itemTitle: loan.item.title,
+          dueDate: loan.dueAt.toLocaleDateString("en-CA"),
+          daysRemaining,
+        });
         await emailClient.send({
           to: loan.user.email,
-          subject: `Reminder: "${loan.item.title}" is due tomorrow`,
-          text: `Your loan for "${loan.item.title}" is due on ${loan.dueAt?.toLocaleDateString()}. Please return it or request an extension.`,
+          subject,
+          html,
         });
         results.push(`Reminder sent to ${loan.user.email} for "${loan.item.title}"`);
       }
     }
 
     for (const loan of overdueLoans) {
-      if (loan.user.email) {
+      if (loan.user.email && loan.user.name && loan.dueAt) {
+        const daysOverdue = Math.ceil(
+          (now.getTime() - loan.dueAt.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        const { subject, html } = overdueReminderTemplate({
+          userName: loan.user.name,
+          itemTitle: loan.item.title,
+          dueDate: loan.dueAt.toLocaleDateString("en-CA"),
+          daysOverdue,
+        });
         await emailClient.send({
           to: loan.user.email,
-          subject: `Overdue: "${loan.item.title}"`,
-          text: `Your loan for "${loan.item.title}" is overdue since ${loan.dueAt?.toLocaleDateString()}. Please return it as soon as possible.`,
+          subject,
+          html,
         });
         results.push(`Overdue notice sent to ${loan.user.email} for "${loan.item.title}"`);
       }
-    }
-
-    if (results.length > 0 && admin?.email) {
-      await emailClient.send({
-        to: admin.email,
-        subject: `Daily loan reminder summary — ${results.length} notifications sent`,
-        text: results.join("\n"),
-      });
     }
 
     return NextResponse.json({
@@ -86,5 +93,3 @@ async function _GET(req: Request) {
 }
 
 export const GET = withProtection(_GET, { scope: "api", limit: 30, windowSeconds: 60 });
-
-import { logger } from "@/lib/logger";

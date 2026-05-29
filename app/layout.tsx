@@ -28,8 +28,8 @@ export const viewport = {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const headersList = await headers();
-  const acceptLanguage = headersList.get("accept-language") ?? "en";
-  const lang = acceptLanguage.startsWith("fr") ? "fr" : "en";
+  const acceptLanguage = headersList.get("accept-language") ?? "fr";
+  const lang = acceptLanguage.startsWith("en") ? "en" : "fr";
 
   return (
     <html lang={lang} suppressHydrationWarning>

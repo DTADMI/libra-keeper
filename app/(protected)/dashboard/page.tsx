@@ -1,16 +1,13 @@
 import Link from "next/link";
 
 import { ActivityFeed } from "@/components/activity/activity-feed";
-import { SearchBar } from "@/components/search-bar";
+import { DashboardToolbar } from "@/components/dashboard-toolbar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { TYPE_SUBTITLE } from "@/lib/labels";
 
 export default async function DashboardPage() {
-  const session = await getServerAuth();
 
   type ItemWithTags = {
     id: string
@@ -29,15 +26,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <SearchBar />
-        {session?.user && session.user.role === "ADMIN" && (
-          <Button asChild>
-            <Link href="/items/new">Add New Item</Link>
-          </Button>
-        )}
-      </div>
+      <DashboardToolbar />
 
       <div className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="lg:col-span-3">

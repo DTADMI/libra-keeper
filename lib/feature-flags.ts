@@ -6,6 +6,8 @@
 //   Server:  import { isFeatureEnabled } from "@/lib/feature-flags"
 //   Client:  import { useFeatureFlag } from "@/hooks/use-feature-flags"
 
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { redis } from "@/lib/redis";
 

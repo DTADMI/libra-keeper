@@ -1,7 +1,6 @@
 // eslint.config.mjs
 import js from "@eslint/js";
 import tseslint from "@typescript-eslint/eslint-plugin";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
 import react from "eslint-plugin-react";
 import hooks from "eslint-plugin-react-hooks";
@@ -82,8 +81,7 @@ export default [
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
-      tseslint,
+      "@typescript-eslint": tseslint,
       react,
       "react-hooks": hooks,
       "jsx-a11y": a11y,

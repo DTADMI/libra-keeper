@@ -8,19 +8,19 @@ import { logger } from "@/lib/logger";
 import { withProtection } from "@/lib/security/protection";
 const itemSchema = z.object({
   title: z.string().min(1),
-  description: z.string().optional().nullable(),
+  description: z.string().nullable().optional(),
   type: z.enum(["BOOK", "MUSIC", "MOVIE", "GAME", "TOY", "CLOTHES", "OTHER"]),
   status: z
     .enum(["AVAILABLE", "BORROWED", "RESERVED", "UNAVAILABLE", "GIVEN_AWAY", "LOST"])
     .optional(),
-  coverImage: z.string().url().optional().nullable().or(z.literal("")),
-  isbn: z.string().optional().nullable(),
-  author: z.string().optional().nullable(),
-  publisher: z.string().optional().nullable(),
-  publishedAt: z.string().datetime().optional().nullable(),
+  coverImage: z.string().url().nullable().optional().or(z.literal("")),
+  isbn: z.string().nullable().optional(),
+  author: z.string().nullable().optional(),
+  publisher: z.string().nullable().optional(),
+  publishedAt: z.string().datetime().nullable().optional(),
   tags: z.array(z.string()).optional(),
-  metadata: z.record(z.string(), z.any()).optional().nullable(),
-  collectionId: z.string().optional().nullable(),
+  metadata: z.record(z.string(), z.any()).nullable().optional(),
+  collectionId: z.string().nullable().optional(),
 });
 
 async function _POST(req: Request) {
@@ -65,8 +65,12 @@ async function _POST(req: Request) {
   }
 }
 
-async function _GET() {
+async function _GET(req: Request) {
   try {
+    const { searchParams } = new URL(req.url);
+    const take = Math.min(parseInt(searchParams.get("take") ?? "50", 10), 100);
+    const skip = Math.max(parseInt(searchParams.get("skip") ?? "0", 10), 0);
+
     const items = await prisma.item.findMany({
       include: {
         tags: true,
@@ -80,6 +84,8 @@ async function _GET() {
       orderBy: {
         createdAt: "desc",
       },
+      take,
+      skip,
     });
 
     return NextResponse.json(items);

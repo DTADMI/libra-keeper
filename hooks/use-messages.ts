@@ -18,6 +18,7 @@ interface Message {
   senderId: string
   createdAt: string
   sender: { name: string | null; image: string | null }
+  metadata?: { voiceUrl?: string; duration?: number }
 }
 
 export function useConversations() {

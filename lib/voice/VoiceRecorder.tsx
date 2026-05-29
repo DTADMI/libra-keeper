@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import type { RecorderState, VoiceRecorderProps } from "./types";
 
 function formatDuration(seconds: number): string {
@@ -63,10 +64,10 @@ export function VoiceRecorder({
   const drawWaveform = useCallback(() => {
     const canvas = canvasRef.current;
     const analyser = analyserRef.current;
-    if (!canvas || !analyser) return;
+    if (!canvas || !analyser) {return;}
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {return;}
 
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);

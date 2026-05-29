@@ -11,9 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useConversations, useMessages, useSendMessage } from "@/hooks/use-messages";
 import { useSession } from "@/hooks/use-session";
+import { createBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
-import { VoiceRecorder, VoicePlayer } from "@/lib/voice";
-import { createClient } from "@/lib/supabase/client";
+import { VoicePlayer,VoiceRecorder } from "@/lib/voice";
 
 export default function MessagesPage() {
   const t = useTranslations("Messages");
@@ -25,7 +25,7 @@ export default function MessagesPage() {
   const [newMessage, setNewMessage] = useState("");
   const [showVoiceRecorder, setShowVoiceRecorder] = useState(false);
   const sendMessage = useSendMessage(selectedUserId ?? "");
-  const supabase = createClient();
+  const supabase = createBrowserClient();
 
   const selectedConversation = conversations.find((c) => c.user.id === selectedUserId);
 
@@ -44,7 +44,7 @@ export default function MessagesPage() {
   const currentUserId = session?.user?.id;
 
   const handleVoiceComplete = async (blob: Blob, duration: number) => {
-    if (!selectedUserId || !currentUserId) return;
+    if (!selectedUserId || !currentUserId) {return;}
     const messageId = crypto.randomUUID();
     const filePath = `voice-messages/${currentUserId}/${messageId}.webm`;
     const { error: uploadError } = await supabase.storage
@@ -133,7 +133,7 @@ export default function MessagesPage() {
                   <p className="text-muted-foreground text-sm text-center">{t("loadingMessages")}</p>
                 )}
                 {messages.map((msg) => {
-                  const voiceUrl = (msg as any).metadata?.voiceUrl;
+                  const voiceUrl = msg.metadata?.voiceUrl;
                   if (voiceUrl) {
                     return (
                       <div

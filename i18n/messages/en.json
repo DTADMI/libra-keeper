@@ -206,7 +206,18 @@
     "duration": "Duration",
     "durationPlaceholder": "e.g. 120 min",
     "identifier": "Identifier",
-    "maker": "Maker"
+    "maker": "Maker",
+    "bulkImport": "Bulk Import",
+    "bulkImportTitle": "Bulk Import Items",
+    "bulkImportDescription": "Upload a CSV file to import multiple items at once",
+    "dragDrop": "Drag and drop a CSV file, or click to browse",
+    "defaultType": "Default Type",
+    "preview": "Preview",
+    "rowsDetected": "{count} rows detected",
+    "csvNeedHeaders": "CSV file must contain a header row",
+    "importLabel": "Import",
+    "importing": "Importing...",
+    "importSuccess": "Successfully imported {count} items"
   },
   "Loans": {
     "title": "My Loans",

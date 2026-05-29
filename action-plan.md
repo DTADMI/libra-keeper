@@ -222,7 +222,7 @@ Last updated: 2026-05-15
 - Accessible component verification (ARIA, high contrast)
 
 ### Flags Enabled/Changed
-- 12 feature flags defined in `lib/feature-flags.ts`
+- 13 feature flags defined in `lib/feature-flags.ts`
 - Percentage and user_list flag types added
 
 ### i18n Issues (see `docs/technical/i18n-status.md`)

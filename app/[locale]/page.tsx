@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+export const revalidate = 3600;
+
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   // Use getTranslations on the server
@@ -30,5 +32,5 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
 // Generate static params for all locales
 export async function generateStaticParams() {
-  return [{ locale: "en" }];
+  return [{ locale: "fr" }, { locale: "en" }];
 }

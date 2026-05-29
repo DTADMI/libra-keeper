@@ -3,17 +3,12 @@ import { redirect } from "next/navigation";
 
 import { locales } from "@/i18n";
 
-// This page will redirect to the default locale
-// The root path (/) will redirect to /fr or the default locale
+// Root path (/) redirects to default locale (/fr per cross-project rules).
+// force-dynamic is justified because this page performs a locale redirect
+// and must never be statically cached at build time.
 export default function RootPage() {
-  // This will only be hit if the middleware didn't redirect
-  // So we'll redirect to the default locale
   const defaultLocale = locales[0] || "fr";
   redirect(`/${defaultLocale}`);
-
-  // This won't be rendered, but it's here to make TypeScript happy
-  return null;
 }
 
-// This tells Next.js that this is a dynamic route
 export const dynamic = "force-dynamic";

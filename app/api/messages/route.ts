@@ -69,7 +69,7 @@ async function _GET(req: Request) {
       return NextResponse.json(messages);
     }
 
-    // Get list of conversations
+    // Get list of conversations (limited to most recent 50)
     const messages = await prisma.message.findMany({
       where: {
         OR: [{ senderId: session.user.id }, { receiverId: session.user.id }],
@@ -79,6 +79,7 @@ async function _GET(req: Request) {
         receiver: { select: { id: true, name: true, image: true } },
       },
       orderBy: { createdAt: "desc" },
+      take: 50,
     });
 
     // Group by other user and get latest message

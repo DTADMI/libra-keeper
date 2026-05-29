@@ -1,4 +1,4 @@
-// src/lib/logger.ts
+// lib/logger.ts
 
 type LogLevel = "info" | "warn" | "error" | "debug";
 

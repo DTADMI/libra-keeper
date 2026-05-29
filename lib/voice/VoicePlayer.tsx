@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+
 import type { VoicePlayerProps } from "./types";
 
 function formatDuration(seconds: number): string {
@@ -18,7 +19,7 @@ export function VoicePlayer({ url, compact = false, t, className = "" }: VoicePl
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio) {return;}
     if (playing) {
       audio.pause();
     } else {
@@ -46,7 +47,7 @@ export function VoicePlayer({ url, compact = false, t, className = "" }: VoicePl
 
   const handleSeek = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const audio = audioRef.current;
-    if (!audio || !totalDuration) return;
+    if (!audio || !totalDuration) {return;}
 
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -56,7 +57,7 @@ export function VoicePlayer({ url, compact = false, t, className = "" }: VoicePl
 
   useEffect(() => {
     const audio = audioRef.current;
-    if (!audio) return;
+    if (!audio) {return;}
 
     audio.addEventListener("timeupdate", handleTimeUpdate);
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);

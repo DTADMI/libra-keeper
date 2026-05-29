@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { withProtection } from "@/lib/security/protection";
 
 async function _GET() {
@@ -87,5 +88,3 @@ async function _GET() {
 }
 
 export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
-
-import { logger } from "@/lib/logger";

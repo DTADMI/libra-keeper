@@ -76,7 +76,7 @@ async function _PATCH(req: Request, { params }: { params: Promise<{ id: string }
     }
 
     if ((status === "APPROVED" || status === "REJECTED") && loan.user.email) {
-      await sendLoanStatusEmail(loan.user.email, loan.item.title, status);
+      await sendLoanStatusEmail(loan.user.email, loan.user.name ?? "User", loan.item.title, status);
     }
 
     if (isAdmin) {

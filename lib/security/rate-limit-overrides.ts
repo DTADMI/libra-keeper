@@ -1,6 +1,8 @@
 // lib/security/rate-limit-overrides.ts
 // Admin-managed per-scope rate limit overrides with Redis cache.
 
+import "server-only";
+
 import { prisma } from "@/lib/db";
 import { redis } from "@/lib/redis";
 
