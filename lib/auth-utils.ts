@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { cache } from "react";
 
 import { createServerClient } from "@/lib/supabase/server";
 
@@ -21,7 +22,7 @@ async function getProfileRole(supabase: SupabaseClient, userId: string): Promise
   return "USER";
 }
 
-export async function getServerAuth(): Promise<AuthSession> {
+export const getServerAuth = cache(async (): Promise<AuthSession> => {
   const supabase = await createServerClient();
   const { data } = await supabase.auth.getUser();
 
@@ -38,21 +39,21 @@ export async function getServerAuth(): Promise<AuthSession> {
       image: (data.user.user_metadata?.avatar_url as string) ?? null,
     },
   };
-}
+});
 
-export async function getCurrentUser() {
+export const getCurrentUser = cache(async () => {
   const session = await getServerAuth();
   return session.user;
-}
+});
 
-export async function requireAuth() {
+export const requireAuth = cache(async () => {
   const user = await getCurrentUser();
   if (!user) {throw new Error("Not authenticated");}
   return user;
-}
+});
 
-export async function requireAdmin() {
+export const requireAdmin = cache(async () => {
   const user = await requireAuth();
   if (user.role !== "ADMIN") {throw new Error("Not authorized");}
   return user;
-}
+});

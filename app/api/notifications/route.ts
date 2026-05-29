@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { withProtection } from "@/lib/security/protection";
 
 async function _GET() {
@@ -19,7 +20,7 @@ async function _GET() {
     return NextResponse.json(notifications);
   } catch (error) {
     logger.error("Notifications error:", error);
-    return NextResponse.json([], { status: 200 });
+    return NextResponse.json([], { status: 500 });
   }
 }
 
@@ -46,5 +47,3 @@ async function _POST(req: Request) {
 
 export const GET = withProtection(_GET, { scope: "api", limit: 100, windowSeconds: 60 });
 export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });
-
-import { logger } from "@/lib/logger";

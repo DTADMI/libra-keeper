@@ -232,14 +232,18 @@
       "REJECTED": "Refusé",
       "RETURNED": "Retourné",
       "OVERDUE": "En retard",
-      "LOST": "Perdu"
+      "LOST": "Perdu",
+      "DAMAGED": "Endommagé"
     },
     "approve": "Approuver",
     "reject": "Refuser",
-    "markReturned": "Marquer retourné",
+    "markReturned": "Marquer comme retourné",
     "approved": "Emprunt approuvé",
     "rejected": "Emprunt refusé",
-    "returned": "Article marqué comme retourné"
+    "returned": "Article marqué comme retourné",
+    "approvedAt": "Approuvé",
+    "enjoy": "Profitez de votre article!",
+    "loadingFailed": "Échec du chargement des emprunts."
   },
   "Messages": {
     "title": "Messages",

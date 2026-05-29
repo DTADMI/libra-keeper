@@ -3,6 +3,8 @@
 // Abstracts Supabase Storage (or alternative) behind a local interface.
 // Used for item cover images, user avatars, and exports.
 
+import "server-only";
+
 export interface StorageClient {
   upload(
     bucket: string,

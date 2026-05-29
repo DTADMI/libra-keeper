@@ -1,4 +1,21 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: librakeeper-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: libra_admin
+      POSTGRES_PASSWORD: libra_dev_password
+      POSTGRES_DB: librakeeper
+    volumes:
+      - librakeeper-pg-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U libra_admin -d librakeeper"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   redis:
     image: redis:7-alpine
     container_name: librakeeper-redis
@@ -14,4 +31,5 @@ services:
       retries: 5
 
 volumes:
+  librakeeper-pg-data:
   librakeeper-redis-data:

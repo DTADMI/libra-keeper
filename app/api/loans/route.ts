@@ -67,6 +67,10 @@ async function _GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
+    const { searchParams } = new URL(req.url);
+    const take = Math.min(parseInt(searchParams.get("take") ?? "50", 10), 100);
+    const skip = Math.max(parseInt(searchParams.get("skip") ?? "0", 10), 0);
+
     const loans = await prisma.loan.findMany({
       where: session.user.role === "ADMIN" ? {} : { userId: session.user.id },
       include: {
@@ -74,6 +78,8 @@ async function _GET(req: Request) {
         user: true,
       },
       orderBy: { createdAt: "desc" },
+      take,
+      skip,
     });
 
     return NextResponse.json(loans);

@@ -2,6 +2,7 @@
 
 import { formatDistanceToNow } from "date-fns";
 import { Bell } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect,useRef, useState } from "react";
 
@@ -10,6 +11,7 @@ import { useMarkAllRead,useMarkNotificationRead, useNotifications } from "@/hook
 
 export function NotificationBell() {
   const t = useTranslations("Notifications");
+  const router = useRouter();
   const { data: notifications = [] } = useNotifications();
   const markRead = useMarkNotificationRead();
   const markAllRead = useMarkAllRead();
@@ -64,7 +66,7 @@ export function NotificationBell() {
                 }`}
                 onClick={() => {
                   markRead.mutate(n.id);
-                  if (n.link) {window.location.href = n.link;}
+                  if (n.link) {router.push(n.link);}
                 }}
               >
                 <div className="flex items-start gap-2">

@@ -2,6 +2,7 @@
 
 import { createBrowserClient as createSupabaseBrowserClient } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { cache } from "react";
 
 import type { Database } from "@/types/database";
 
@@ -9,7 +10,7 @@ const globalForSupabase = globalThis as unknown as {
   supabase: SupabaseClient<Database> | undefined;
 };
 
-export function createBrowserClient() {
+export const createBrowserClient = cache(() => {
   if (globalForSupabase.supabase) {return globalForSupabase.supabase;}
 
   globalForSupabase.supabase = createSupabaseBrowserClient<Database>(
@@ -18,4 +19,4 @@ export function createBrowserClient() {
   );
 
   return globalForSupabase.supabase;
-}
+});

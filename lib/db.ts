@@ -6,21 +6,16 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Pool } from "pg";
 
 declare global {
-  // Allow global `prisma` to prevent multiple instances in development
   var prisma: PrismaClient | undefined;
 }
 
-const databaseUrl =
-  process.env.DATABASE_URL ??
-  "postgresql://postgres:postgres@127.0.0.1:5432/librakeeper?schema=public";
+const databaseUrl = process.env.DATABASE_URL;
 
-if (!process.env.DATABASE_URL) {
-  console.warn(
-    "[build] DATABASE_URL is not set. Using fallback URL for build-time module initialization.",
-  );
+if (!databaseUrl) {
+  console.warn("[build] DATABASE_URL is not set — Prisma will use fallback.");
 }
 
-const pool = new Pool({ connectionString: databaseUrl });
+const pool = new Pool({ connectionString: databaseUrl ?? "" });
 const adapter = new PrismaPg(pool);
 
 // Configure the Prisma client with appropriate logging

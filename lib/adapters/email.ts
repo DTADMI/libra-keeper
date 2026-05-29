@@ -3,6 +3,8 @@
 // Abstracts Resend behind a local interface for testability
 // and vendor independence.
 
+import "server-only";
+
 export interface EmailClient {
   send(params: SendEmailParams): Promise<EmailResult>;
 }

@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { logger } from "@/lib/logger";
 import { withProtection } from "@/lib/security/protection";
 
 const readSchema = z.object({
@@ -39,6 +40,3 @@ async function _POST(req: Request) {
 }
 
 export const POST = withProtection(_POST, { scope: "write", limit: 60, windowSeconds: 60 });
-
-
-import { logger } from "@/lib/logger";

@@ -51,29 +51,33 @@ async function _PATCH(req: Request, { params }: { params: Promise<{ id: string }
       if (returnNotes) {updateData.returnNotes = returnNotes;}
     }
 
-    const updatedLoan = await prisma.loan.update({
-      where: { id },
-      data: updateData as Parameters<typeof prisma.loan.update>[0]["data"],
-    });
-
-    if (status === "APPROVED") {
-      await prisma.item.update({ where: { id: loan.itemId }, data: { status: "BORROWED" } });
-    } else if (status === "RETURNED" || status === "LOST" || status === "DAMAGED") {
-      const newItemStatus = status === "DAMAGED" ? "UNAVAILABLE" : "AVAILABLE";
-      await prisma.item.update({ where: { id: loan.itemId }, data: { status: newItemStatus } });
-    }
-
-    if (returnCondition && isAdmin) {
-      await prisma.conditionHistory.create({
-        data: {
-          itemId: loan.itemId,
-          loanId: loan.id,
-          newCondition: returnCondition,
-          notes: returnNotes ?? null,
-          changedById: session.user.id,
-        },
+    const updatedLoan = await prisma.$transaction(async (tx) => {
+      const loan = await tx.loan.update({
+        where: { id },
+        data: updateData as Parameters<typeof prisma.loan.update>[0]["data"],
       });
-    }
+
+      if (status === "APPROVED") {
+        await tx.item.update({ where: { id: loan.itemId }, data: { status: "BORROWED" } });
+      } else if (status === "RETURNED" || status === "LOST" || status === "DAMAGED") {
+        const newItemStatus = status === "DAMAGED" ? "UNAVAILABLE" : "AVAILABLE";
+        await tx.item.update({ where: { id: loan.itemId }, data: { status: newItemStatus } });
+      }
+
+      if (returnCondition && isAdmin) {
+        await tx.conditionHistory.create({
+          data: {
+            itemId: loan.itemId,
+            loanId: loan.id,
+            newCondition: returnCondition,
+            notes: returnNotes ?? null,
+            changedById: session.user.id,
+          },
+        });
+      }
+
+      return loan;
+    });
 
     if ((status === "APPROVED" || status === "REJECTED") && loan.user.email) {
       await sendLoanStatusEmail(loan.user.email, loan.user.name ?? "User", loan.item.title, status);

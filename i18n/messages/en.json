@@ -232,14 +232,18 @@
       "REJECTED": "Rejected",
       "RETURNED": "Returned",
       "OVERDUE": "Overdue",
-      "LOST": "Lost"
+      "LOST": "Lost",
+      "DAMAGED": "Damaged"
     },
     "approve": "Approve",
     "reject": "Reject",
     "markReturned": "Mark Returned",
     "approved": "Loan approved",
     "rejected": "Loan rejected",
-    "returned": "Item marked as returned"
+    "returned": "Item marked as returned",
+    "approvedAt": "Approved",
+    "enjoy": "Enjoy your item!",
+    "loadingFailed": "Failed to load loans."
   },
   "Messages": {
     "title": "Messages",
