@@ -52,9 +52,7 @@
   "run-all-checks": "pnpm lint:ci && pnpm typecheck && pnpm test && pnpm check:supabase-security && pnpm build"
  },
  "dependencies": {
-  "@hookform/resolvers": "^5.4.0",
-  "@nebula-forge/voice-messaging": "workspace:*",
-  "@prisma/adapter-pg": "^7.2.0",
+  "@hookform/resolvers": "^5.4.0",  "@prisma/adapter-pg": "^7.2.0",
   "@prisma/client": "^7.2.0",
   "@radix-ui/react-accordion": "^1.2.12",
   "@radix-ui/react-alert-dialog": "^1.1.15",
