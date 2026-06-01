@@ -19,6 +19,13 @@ jest.mock("@/lib/redis", () => ({
   },
 }));
 
+jest.mock("@/lib/security/pg-rate-limit", () => ({
+  checkPgRateLimit: jest.fn().mockResolvedValue({ allowed: true, remaining: 9, resetAt: 0 }),
+}));
+
+// Default: PG path is used (redis_rate_limit=false)
+// Tests that need Redis can set process.env.REDIS_RATE_LIMIT=true
+
 import { checkRateLimit, RATE_LIMITS, withRateLimit } from "@/lib/security/rate-limit";
 
 describe("rate-limit", () => {
@@ -43,24 +50,13 @@ describe("rate-limit", () => {
         "127.0.0.1",
       );
       expect(result.allowed).toBe(true);
-      expect(result.remaining).toBe(4);
+      expect(result.remaining).toBe(9);
       expect(result.limit).toBe(10);
     });
 
     test("returns not allowed when at limit", async () => {
-      const { redis } = require("@/lib/redis");
-      redis.pipeline.mockReturnValue({
-        zremrangebyscore: jest.fn().mockReturnThis(),
-        zcard: jest.fn().mockReturnThis(),
-        zadd: jest.fn().mockReturnThis(),
-        expire: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue([
-          [null, 0],
-          [null, 10],
-          [null, 1],
-          [null, 1],
-        ]),
-      });
+      const { checkPgRateLimit } = require("@/lib/security/pg-rate-limit");
+      checkPgRateLimit.mockResolvedValue({ allowed: false, remaining: 0, retryAfter: 60, resetAt: 0 });
 
       const result = await checkRateLimit(
         { scope: "test", limit: 10, windowSeconds: 60 },
@@ -70,11 +66,9 @@ describe("rate-limit", () => {
       expect(result.retryAfter).toBe(60);
     });
 
-    test("fails open on Redis error", async () => {
-      const { redis } = require("@/lib/redis");
-      redis.pipeline.mockReturnValue({
-        exec: jest.fn().mockRejectedValue(new Error("Redis down")),
-      });
+    test("fails open when rate limiter is unavailable", async () => {
+      const { checkPgRateLimit } = require("@/lib/security/pg-rate-limit");
+      checkPgRateLimit.mockRejectedValue(new Error("PG down"));
 
       const result = await checkRateLimit(
         { scope: "test", limit: 10, windowSeconds: 60 },
@@ -96,19 +90,8 @@ describe("rate-limit", () => {
     });
 
     test("blocks request over limit", async () => {
-      const { redis } = require("@/lib/redis");
-      redis.pipeline.mockReturnValue({
-        zremrangebyscore: jest.fn().mockReturnThis(),
-        zcard: jest.fn().mockReturnThis(),
-        zadd: jest.fn().mockReturnThis(),
-        expire: jest.fn().mockReturnThis(),
-        exec: jest.fn().mockResolvedValue([
-          [null, 0],
-          [null, 100],
-          [null, 1],
-          [null, 1],
-        ]),
-      });
+      const { checkPgRateLimit } = require("@/lib/security/pg-rate-limit");
+      checkPgRateLimit.mockResolvedValue({ allowed: false, remaining: 0, retryAfter: 60, resetAt: 0 });
 
       const handler = jest.fn();
       const wrapped = withRateLimit({ scope: "test", limit: 100, windowSeconds: 60 })(handler);

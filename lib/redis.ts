@@ -534,15 +534,15 @@ function createRedisClient(): RedisClient {
 
 export const redis: RedisClient = createRedisClient();
 
-let _pgRateLimit: boolean | null = null;
-export async function shouldUsePgRateLimit(): Promise<boolean> {
-  if (_pgRateLimit !== null) return _pgRateLimit;
-  if (process.env.PG_RATE_LIMIT === "true") { _pgRateLimit = true; return true; }
+let _redisRateLimit: boolean | null = null;
+export async function shouldUseRedisRateLimit(): Promise<boolean> {
+  if (_redisRateLimit !== null) return _redisRateLimit;
+  if (process.env.REDIS_RATE_LIMIT === "true") { _redisRateLimit = true; return true; }
   try {
     const { createServerClient } = await import("@/lib/supabase/server");
     const supabase = await createServerClient();
-    const { data } = await (supabase as any).from("feature_flags").select("enabled").eq("name", "pg_rate_limit").maybeSingle();
-    _pgRateLimit = data?.enabled === true;
-  } catch { _pgRateLimit = false; }
-  return _pgRateLimit;
+    const { data } = await (supabase as any).from("feature_flags").select("enabled").eq("name", "redis_rate_limit").maybeSingle();
+    _redisRateLimit = data?.enabled === true;
+  } catch { _redisRateLimit = false; }
+  return _redisRateLimit;
 }

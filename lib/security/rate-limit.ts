@@ -1,12 +1,27 @@
-// lib/security/rate-limit.ts — Sliding window rate limiting via Redis ZSETs
+// lib/security/rate-limit.ts — Sliding window rate limiting
 //
-// Design: fails open — if Redis is unavailable, requests are allowed.
-// Algorithm: ZREMRANGEBYSCORE + ZCARD + ZADD + EXPIRE in atomic pipeline.
+// PG is the default via pg-rate-limit.ts.
+// Falls back to Redis (ioredis pipeline) when redis_rate_limit flag is enabled.
+// Design: fails open — if rate limiter is unavailable, requests are allowed.
 // Returns standard X-RateLimit-* and Retry-After headers.
 
 import { NextResponse } from "next/server";
 
 import { redis } from "@/lib/redis";
+import { checkPgRateLimit } from "@/lib/security/pg-rate-limit";
+
+let _redisRateLimit: boolean | null = null;
+async function shouldUseRedisRateLimit(): Promise<boolean> {
+  if (_redisRateLimit !== null) return _redisRateLimit;
+  if (process.env.REDIS_RATE_LIMIT === "true") { _redisRateLimit = true; return true; }
+  try {
+    const { createServerClient } = await import("@/lib/supabase/server");
+    const supabase = await createServerClient();
+    const { data } = await (supabase as any).from("feature_flags").select("enabled").eq("name", "redis_rate_limit").maybeSingle();
+    _redisRateLimit = data?.enabled === true;
+  } catch { _redisRateLimit = false; }
+  return _redisRateLimit;
+}
 
 export interface RateLimitConfig {
   scope: string;
@@ -64,6 +79,23 @@ async function slidingWindow(
   }
 }
 
+async function pgSlidingWindow(
+  config: RateLimitConfig,
+  identifier: string,
+): Promise<RateLimitResult> {
+  try {
+    const pgResult = await checkPgRateLimit(identifier, config.limit, config.windowSeconds, config.scope);
+    return {
+      allowed: pgResult.allowed,
+      remaining: pgResult.remaining,
+      limit: config.limit,
+      retryAfter: pgResult.allowed ? 0 : config.windowSeconds,
+    };
+  } catch {
+    return { allowed: true, remaining: config.limit, limit: config.limit, retryAfter: 0 };
+  }
+}
+
 function getClientIP(request: Request): string {
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {return forwarded.split(",")[0].trim();}
@@ -87,7 +119,14 @@ export function withRateLimit(
   return (handler: RouteHandler): RouteHandler => {
     return async (req: Request, ctx) => {
       const identifier = getIdentifier ? getIdentifier(req) : getClientIP(req);
-      const result = await slidingWindow(config, identifier);
+
+      // PG is the default
+      let result: RateLimitResult;
+      if (await shouldUseRedisRateLimit()) {
+        result = await slidingWindow(config, identifier);
+      } else {
+        result = await pgSlidingWindow(config, identifier);
+      }
 
       if (!result.allowed) {
         return new NextResponse("Too Many Requests", {
@@ -120,5 +159,9 @@ export async function checkRateLimit(
   config: RateLimitConfig,
   identifier: string,
 ): Promise<RateLimitResult> {
-  return slidingWindow(config, identifier);
+  // PG is the default
+  if (await shouldUseRedisRateLimit()) {
+    return slidingWindow(config, identifier);
+  }
+  return pgSlidingWindow(config, identifier);
 }
