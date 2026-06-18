@@ -88,6 +88,7 @@ export function withProtection(
           headers: {
             "X-RateLimit-Limit": String(result.limit),
             "X-RateLimit-Remaining": "0",
+            "X-RateLimit-Reset": String(Math.ceil(Date.now() / 1000) + result.retryAfter),
             "Retry-After": String(result.retryAfter),
           },
         });
@@ -96,6 +97,7 @@ export function withProtection(
       const response = await handler(req, ctx);
       response.headers.set("X-RateLimit-Limit", String(result.limit));
       response.headers.set("X-RateLimit-Remaining", String(result.remaining));
+      response.headers.set("X-RateLimit-Reset", String(Math.ceil(Date.now() / 1000) + rateLimit.windowSeconds));
       return response;
     }
 

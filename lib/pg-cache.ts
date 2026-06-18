@@ -20,7 +20,7 @@ async function shouldUseRedisCache(): Promise<boolean> {
 export async function pgGetCached<T>(key: string): Promise<T | null> {
   try {
     // L1: Redis (if enabled)
-    if (await shouldUseRedisCache() && redis) {
+    if (redis && await shouldUseRedisCache()) {
       const cached = await redis.get(`cache:${key}`);
       if (cached !== null) return JSON.parse(cached) as T;
     }
@@ -34,7 +34,7 @@ export async function pgGetCached<T>(key: string): Promise<T | null> {
     const result = data.value as T;
 
     // Warm L1
-    if (await shouldUseRedisCache() && redis) {
+    if (redis && await shouldUseRedisCache()) {
       redis.set(`cache:${key}`, JSON.stringify(result), { ex: 30 }).catch(() => {});
     }
 
@@ -50,7 +50,7 @@ export async function pgSetCached<T>(key: string, value: T, ttlSeconds = CACHE_D
       expires_at: new Date(Date.now() + ttlSeconds * 1000).toISOString(),
     }, { onConflict: "key" });
 
-    if (await shouldUseRedisCache() && redis) {
+    if (redis && await shouldUseRedisCache()) {
       redis.set(`cache:${key}`, JSON.stringify(value), { ex: Math.min(ttlSeconds, 60) }).catch(() => {});
     }
   } catch (err) { console.error("[pg-cache] set error:", err); }
@@ -61,7 +61,7 @@ export async function pgDeleteCached(key: string): Promise<void> {
     const supabase = await createServerClient();
     await (supabase as any).from("app_cache").delete().eq("key", key);
 
-    if (await shouldUseRedisCache() && redis) {
+    if (redis && await shouldUseRedisCache()) {
       redis.del(`cache:${key}`).catch(() => {});
     }
   } catch (err) { console.error("[pg-cache] delete error:", err); }

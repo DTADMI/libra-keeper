@@ -1,6 +1,7 @@
-// src/lib/db.ts
+// lib/db.ts — Prisma client with pg adapter (React.cache for multi-component dedup)
 import "server-only";
 
+import { cache } from "react";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Pool } from "pg";
@@ -18,7 +19,6 @@ if (!databaseUrl) {
 const pool = new Pool({ connectionString: databaseUrl ?? "" });
 const adapter = new PrismaPg(pool);
 
-// Configure the Prisma client with appropriate logging
 const prismaOptions = {
   log:
     process.env.NODE_ENV === "development"
@@ -27,9 +27,10 @@ const prismaOptions = {
   adapter,
 };
 
-export const prisma: PrismaClient = global.prisma || new PrismaClient(prismaOptions);
+const _getPrisma = () => global.prisma || new PrismaClient(prismaOptions);
 
-// In development, store the Prisma instance in the global object to prevent hot-reloading issues
+export const prisma: PrismaClient = cache(_getPrisma)();
+
 if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
 }

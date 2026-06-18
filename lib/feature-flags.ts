@@ -105,6 +105,18 @@ export const DEFAULT_FEATURE_FLAGS: FeatureFlag[] = [
     type: "boolean",
     enabled: false,
   },
+  {
+    name: "redis_rate_limit",
+    description: "Use Redis for rate limiting instead of PostgreSQL",
+    type: "boolean",
+    enabled: false,
+  },
+  {
+    name: "redis_cache",
+    description: "Use Redis as L1 cache tier (disables PG fallback for app_cache lookups)",
+    type: "boolean",
+    enabled: false,
+  },
 ];
 
 async function loadFlagsFromDB(): Promise<FeatureFlag[]> {

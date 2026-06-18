@@ -19,24 +19,6 @@ export async function getRateLimitOverrides(): Promise<Map<string, RateLimitOver
   const overrides = new Map<string, RateLimitOverride>();
 
   try {
-    // Try Redis cache first
-    const cachedKeys: string[] = [];
-    let cursor = 0;
-    // Scan for override keys (simplified — scanSetMembers equivalent)
-    const cacheKey = `${CACHE_PREFIX}keys`;
-    const keyCount = await redis.scard(cacheKey);
-
-    if (keyCount > 0) {
-      // Simplified: fetch each cached key
-      const scope = "auth"; // placeholder — full implementation would scan
-
-      // Fall through to DB to avoid complexity of Redis scanning here
-    }
-  } catch {
-    // Cache miss, continue to DB
-  }
-
-  try {
     // Read from AppSettings — overrides stored as JSON in settings
     const settings = await prisma.appSettings.findMany({
       where: {
