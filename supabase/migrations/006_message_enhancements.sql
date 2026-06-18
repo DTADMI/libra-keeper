@@ -1,4 +1,4 @@
--- 006_message_enhancements.sql
+﻿-- 006_message_enhancements.sql
 -- Adds message attachments and read receipt support.
 
 ALTER TABLE public.messages ADD COLUMN IF NOT EXISTS attachments JSONB DEFAULT '[]'::jsonb;
@@ -15,11 +15,14 @@ CREATE TABLE IF NOT EXISTS public.friendships (
 
 ALTER TABLE public.friendships ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view their friendships" ON public.friendships;
 CREATE POLICY "Users can view their friendships" ON public.friendships
   FOR SELECT USING (auth.uid() = requester_id OR auth.uid() = addressee_id);
 
+DROP POLICY IF EXISTS "Users can create friend requests" ON public.friendships;
 CREATE POLICY "Users can create friend requests" ON public.friendships
   FOR INSERT WITH CHECK (auth.uid() = requester_id);
 
+DROP POLICY IF EXISTS "Users can update own friendships" ON public.friendships;
 CREATE POLICY "Users can update own friendships" ON public.friendships
   FOR UPDATE USING (auth.uid() = addressee_id AND status = 'PENDING');

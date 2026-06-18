@@ -1,4 +1,4 @@
--- 005_return_flow_and_media.sql
+﻿-- 005_return_flow_and_media.sql
 -- Adds return condition tracking, item images, condition history, and notifications.
 
 -- Update Loan: add return condition fields
@@ -24,9 +24,11 @@ CREATE TABLE IF NOT EXISTS public.condition_history (
 
 ALTER TABLE public.condition_history ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view condition history" ON public.condition_history;
 CREATE POLICY "Anyone can view condition history" ON public.condition_history
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Admins can insert condition history" ON public.condition_history;
 CREATE POLICY "Admins can insert condition history" ON public.condition_history
   FOR INSERT WITH CHECK (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
@@ -45,9 +47,11 @@ CREATE TABLE IF NOT EXISTS public.item_images (
 
 ALTER TABLE public.item_images ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view item images" ON public.item_images;
 CREATE POLICY "Anyone can view item images" ON public.item_images
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Admins can manage item images" ON public.item_images;
 CREATE POLICY "Admins can manage item images" ON public.item_images
   FOR ALL USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
@@ -69,12 +73,15 @@ CREATE TABLE IF NOT EXISTS public.notifications (
 
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own notifications" ON public.notifications;
 CREATE POLICY "Users can view own notifications" ON public.notifications
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can update own notifications" ON public.notifications;
 CREATE POLICY "Users can update own notifications" ON public.notifications
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "System can insert notifications" ON public.notifications;
 CREATE POLICY "System can insert notifications" ON public.notifications
   FOR INSERT WITH CHECK (true);
 

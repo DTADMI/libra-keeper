@@ -1,4 +1,4 @@
--- 002_create_app_tables.sql
+﻿-- 002_create_app_tables.sql
 -- All application tables with RLS policies.
 -- Binary access model: USER (own data), ADMIN (all data).
 
@@ -24,11 +24,12 @@ CREATE TABLE IF NOT EXISTS public.items (
 
 ALTER TABLE public.items ENABLE ROW LEVEL SECURITY;
 
--- Everyone (authenticated) can read items in the shared collection
+DROP POLICY IF EXISTS "Anyone can view items" ON public.items;
 CREATE POLICY "Anyone can view items" ON public.items
   FOR SELECT USING (true);
 
 -- Only admins can insert items
+DROP POLICY IF EXISTS "Admins can insert items" ON public.items;
 CREATE POLICY "Admins can insert items" ON public.items
   FOR INSERT WITH CHECK (
     EXISTS (
@@ -37,6 +38,7 @@ CREATE POLICY "Admins can insert items" ON public.items
   );
 
 -- Only admins can update items
+DROP POLICY IF EXISTS "Admins can update items" ON public.items;
 CREATE POLICY "Admins can update items" ON public.items
   FOR UPDATE USING (
     EXISTS (
@@ -45,6 +47,7 @@ CREATE POLICY "Admins can update items" ON public.items
   );
 
 -- Only admins can delete items
+DROP POLICY IF EXISTS "Admins can delete items" ON public.items;
 CREATE POLICY "Admins can delete items" ON public.items
   FOR DELETE USING (
     EXISTS (
@@ -71,7 +74,9 @@ CREATE TABLE IF NOT EXISTS public.tags (
 
 ALTER TABLE public.tags ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view tags" ON public.tags;
 CREATE POLICY "Anyone can view tags" ON public.tags FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Admins can manage tags" ON public.tags;
 CREATE POLICY "Admins can manage tags" ON public.tags FOR ALL USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
 );
@@ -87,7 +92,9 @@ CREATE TABLE IF NOT EXISTS public.item_tags (
 
 ALTER TABLE public.item_tags ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view item_tags" ON public.item_tags;
 CREATE POLICY "Anyone can view item_tags" ON public.item_tags FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Admins can manage item_tags" ON public.item_tags;
 CREATE POLICY "Admins can manage item_tags" ON public.item_tags FOR ALL USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
 );
@@ -105,7 +112,9 @@ CREATE TABLE IF NOT EXISTS public.collections (
 
 ALTER TABLE public.collections ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view collections" ON public.collections;
 CREATE POLICY "Anyone can view collections" ON public.collections FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Admins can manage collections" ON public.collections;
 CREATE POLICY "Admins can manage collections" ON public.collections FOR ALL USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
 );
@@ -134,26 +143,31 @@ CREATE TABLE IF NOT EXISTS public.loans (
 ALTER TABLE public.loans ENABLE ROW LEVEL SECURITY;
 
 -- Users can see their own loans
+DROP POLICY IF EXISTS "Users can view own loans" ON public.loans;
 CREATE POLICY "Users can view own loans" ON public.loans
   FOR SELECT USING (auth.uid() = user_id);
 
 -- Admins can see all loans
+DROP POLICY IF EXISTS "Admins can view all loans" ON public.loans;
 CREATE POLICY "Admins can view all loans" ON public.loans
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
   );
 
 -- Users can create loans (borrow requests)
+DROP POLICY IF EXISTS "Users can create loans" ON public.loans;
 CREATE POLICY "Users can create loans" ON public.loans
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Admins can update loans (approve, reject, mark returned)
+DROP POLICY IF EXISTS "Admins can update loans" ON public.loans;
 CREATE POLICY "Admins can update loans" ON public.loans
   FOR UPDATE USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
   );
 
 -- Users can update their own loans (e.g. mark returned)
+DROP POLICY IF EXISTS "Users can update own loans" ON public.loans;
 CREATE POLICY "Users can update own loans" ON public.loans
   FOR UPDATE USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id AND status IN ('PENDING', 'RETURNED'));
@@ -182,20 +196,25 @@ CREATE TABLE IF NOT EXISTS public.comments (
 ALTER TABLE public.comments ENABLE ROW LEVEL SECURITY;
 
 -- Anyone can view comments
+DROP POLICY IF EXISTS "Anyone can view comments" ON public.comments;
 CREATE POLICY "Anyone can view comments" ON public.comments FOR SELECT USING (true);
 
 -- Authenticated users can create comments
+DROP POLICY IF EXISTS "Users can create comments" ON public.comments;
 CREATE POLICY "Users can create comments" ON public.comments
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Users can update/delete their own comments
+DROP POLICY IF EXISTS "Users can update own comments" ON public.comments;
 CREATE POLICY "Users can update own comments" ON public.comments
   FOR UPDATE USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can delete own comments" ON public.comments;
 CREATE POLICY "Users can delete own comments" ON public.comments
   FOR DELETE USING (auth.uid() = user_id);
 
 -- Admins can delete any comment
+DROP POLICY IF EXISTS "Admins can delete any comment" ON public.comments;
 CREATE POLICY "Admins can delete any comment" ON public.comments
   FOR DELETE USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
@@ -221,9 +240,12 @@ CREATE TABLE IF NOT EXISTS public.likes (
 
 ALTER TABLE public.likes ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view likes" ON public.likes;
 CREATE POLICY "Anyone can view likes" ON public.likes FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Users can like items" ON public.likes;
 CREATE POLICY "Users can like items" ON public.likes
   FOR INSERT WITH CHECK (auth.uid() = user_id);
+DROP POLICY IF EXISTS "Users can unlike items" ON public.likes;
 CREATE POLICY "Users can unlike items" ON public.likes
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -244,10 +266,12 @@ CREATE TABLE IF NOT EXISTS public.messages (
 ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
 -- Users can see messages they sent or received
+DROP POLICY IF EXISTS "Users can view own messages" ON public.messages;
 CREATE POLICY "Users can view own messages" ON public.messages
   FOR SELECT USING (auth.uid() = sender_id OR auth.uid() = receiver_id);
 
 -- Users can send messages
+DROP POLICY IF EXISTS "Users can send messages" ON public.messages;
 CREATE POLICY "Users can send messages" ON public.messages
   FOR INSERT WITH CHECK (auth.uid() = sender_id);
 
@@ -274,17 +298,21 @@ CREATE TABLE IF NOT EXISTS public.item_requests (
 
 ALTER TABLE public.item_requests ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own requests" ON public.item_requests;
 CREATE POLICY "Users can view own requests" ON public.item_requests
   FOR SELECT USING (auth.uid() = requested_by_id);
 
+DROP POLICY IF EXISTS "Admins can view all requests" ON public.item_requests;
 CREATE POLICY "Admins can view all requests" ON public.item_requests
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
   );
 
+DROP POLICY IF EXISTS "Users can create requests" ON public.item_requests;
 CREATE POLICY "Users can create requests" ON public.item_requests
   FOR INSERT WITH CHECK (auth.uid() = requested_by_id);
 
+DROP POLICY IF EXISTS "Admins can update requests" ON public.item_requests;
 CREATE POLICY "Admins can update requests" ON public.item_requests
   FOR UPDATE USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
@@ -309,17 +337,21 @@ CREATE TABLE IF NOT EXISTS public.waitlist_entries (
 
 ALTER TABLE public.waitlist_entries ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Users can view own waitlist" ON public.waitlist_entries;
 CREATE POLICY "Users can view own waitlist" ON public.waitlist_entries
   FOR SELECT USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Admins can view all waitlist" ON public.waitlist_entries;
 CREATE POLICY "Admins can view all waitlist" ON public.waitlist_entries
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
   );
 
+DROP POLICY IF EXISTS "Users can join waitlist" ON public.waitlist_entries;
 CREATE POLICY "Users can join waitlist" ON public.waitlist_entries
   FOR INSERT WITH CHECK (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Users can leave waitlist" ON public.waitlist_entries;
 CREATE POLICY "Users can leave waitlist" ON public.waitlist_entries
   FOR DELETE USING (auth.uid() = user_id);
 
@@ -337,7 +369,9 @@ CREATE TABLE IF NOT EXISTS public.feature_flags (
 
 ALTER TABLE public.feature_flags ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Anyone can view feature flags" ON public.feature_flags;
 CREATE POLICY "Anyone can view feature flags" ON public.feature_flags FOR SELECT USING (true);
+DROP POLICY IF EXISTS "Admins can manage feature flags" ON public.feature_flags;
 CREATE POLICY "Admins can manage feature flags" ON public.feature_flags FOR ALL USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
 );
@@ -357,10 +391,12 @@ CREATE TABLE IF NOT EXISTS public.app_settings (
 
 ALTER TABLE public.app_settings ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Admins can manage settings" ON public.app_settings;
 CREATE POLICY "Admins can manage settings" ON public.app_settings FOR ALL USING (
   EXISTS (SELECT 1 FROM public.profiles WHERE id = auth.uid() AND role = 'ADMIN')
 );
 
+DROP POLICY IF EXISTS "Anyone can read settings" ON public.app_settings;
 CREATE POLICY "Anyone can read settings" ON public.app_settings FOR SELECT USING (true);
 
 DROP TRIGGER IF EXISTS set_updated_at_app_settings ON public.app_settings;
