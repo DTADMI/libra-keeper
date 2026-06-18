@@ -8,6 +8,58 @@ Last updated: 2026-05-15
 ## Recent Updates
 
 - **[NEW]** 2026-05-15 — Architecture assessment completed. Identified 10 gaps vs quest-hunt-web reference. Phases 1-4 drafted.
+- **[NEW]** 2026-06-18 — Comprehensive gap audit + remediation. 25 gaps identified, critical SQL migration issues resolved, RLS hardened, app-level fixes applied.
+
+---
+
+## 2026-06-18 Remediation Summary
+
+### Critical Fixes Applied
+| # | Issue | Fix | Migration |
+|---|-------|-----|-----------|
+| 1 | Missing `check_rate_limit` PG function | Created `public.check_rate_limit()` with `rate_limits` table | `008_cache_and_security_fixes.sql` |
+| 2 | Missing `app_cache` table | Created `public.app_cache` (key/value/expires_at) | `008_cache_and_security_fixes.sql` |
+| 3 | No rollout/rollback migration files | Created `scripts/008_*.rollout.sql` / `scripts/008_*.rollback.sql` | |
+| 4 | 44 `CREATE POLICY` without `DROP POLICY IF EXISTS` | Added `DROP POLICY IF EXISTS` before every `CREATE POLICY` in 002, 005, 006 | |
+| 5 | No explicit `GRANT` for Data API | `check_rate_limit` function: REVOKE + GRANT pattern applied | `008_cache_and_security_fixes.sql` |
+| 6 | `items` table RLS allows unauthenticated read | Changed to `auth.role() = 'authenticated'` | `008_cache_and_security_fixes.sql` |
+| 7 | `app_settings` public read RLS | Restricted to `auth.role() = 'authenticated'` | `008_cache_and_security_fixes.sql` |
+| 8 | `notifications` open insert RLS | Restricted to `auth.role() = 'authenticated'` | `008_cache_and_security_fixes.sql` |
+| 12 | FTS hardcoded to English only | Updated to French `to_tsvector('french', ...)` with simple for ISBN | `008_cache_and_security_fixes.sql` |
+
+### Application Fixes Applied
+| # | Issue | Fix |
+|---|-------|-----|
+| 14 | No `React.cache()` on Prisma client | Added `cache()` wrapper in `lib/db.ts` |
+| 16 | Two competing rate-limit implementations | Consolidated — both use same sliding window algorithm; protection.ts delegates to Redis slab (PG supported via rate-limit.ts) |
+| 17 | Missing X-RateLimit-Reset in protection.ts | Added header for both 429 and success responses |
+| 20 | Dead Redis scan code in rate-limit-overrides | Removed dead code, simplified to DB-only + per-key Redis cache |
+| 21 | Deprecated X-XSS-Protection header | Removed from `next.config.ts` |
+| 22 | CSP allows `unsafe-eval` | Removed from CSP script-src |
+| 24 | `redis_rate_limit`/`redis_cache` flags unseeded | Added to `DEFAULT_FEATURE_FLAGS` |
+| 25 | Minor null guard inconsistency in pg-cache | Standardized `redis && await shouldUseRedisCache()` order |
+| 10 | Missing Codex hook scripts | Created `scripts/codex/session-start-hook.mjs` and `scripts/codex/stop-review-hook.mjs` stubs |
+
+### Documentation Fixes
+| # | Issue | Fix |
+|---|-------|-----|
+| 11 | Architecture doc uses wrong `src/` paths | Updated Section 6 File Map to reflect actual project layout |
+| 13 | Key count mismatch (362 vs 394) | Updated `docs/technical/i18n-status.md` to 394 keys |
+| 15 | Doc says SWR, code uses TanStack Query | Fixed SWR references in architecture-security.md |
+| 26 | Feature flag doc wrong file path | Fixed `components/use-feature-flags.tsx` → `hooks/use-feature-flags.tsx` |
+
+### Deferred / Future
+| # | Issue | Rationale |
+|---|-------|-----------|
+| 9 | No Sentry configuration | Requires account provisioning; BACKLOG item in Phase 3 |
+| 18 | Limited `generateStaticParams` usage | Medium effort, defer to Phase 4 polish |
+| 19 | `next-pwa` v5 with Next.js 16 | Evaluate `@serwist/next` migration when PWA becomes active |
+| 23 | Action plan undercounts gaps | This update addresses it |
+| 28 | `setup_app_user.sql` at repo root | Legacy file, pending migration to `supabase/migrations/` |
+| 29 | Cron routes use GET | Vercel Cron supports both GET and POST; acceptable for now |
+| 30 | No CSP violation reporting endpoint | Low priority, add when CSP enforcement tightens |
+| 31 | `staleTimes.static: 300` vs `revalidate: 3600` | Minor discrepancy, default revalidate overrides staleTime for static pages |
+| 32 | `outputFileTracingRoot` may not be needed | Default in recent Next.js, harmless to keep |
 
 ---
 

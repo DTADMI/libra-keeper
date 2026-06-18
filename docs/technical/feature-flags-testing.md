@@ -6,7 +6,7 @@ LibraKeeper feature flag system. Last updated: 2026-05-29.
 
 - **Definition**: `lib/feature-flags.ts` (13 flags, Redis + DB persistence)
 - **Server consumption**: `import { isFeatureEnabled } from "@/lib/feature-flags"`
-- **Client consumption**: `useFeatureFlag(id)` hook via `components/use-feature-flags.tsx`
+- **Client consumption**: `useFeatureFlag(id)` hook via `hooks/use-feature-flags.tsx`
 - **Admin UI**: `app/(protected)/admin/settings/feature-flag-manager.tsx`
 - **API**: `app/api/feature-flags/route.ts` (GET) and `app/api/admin/flags/route.ts` (GET/POST)
 

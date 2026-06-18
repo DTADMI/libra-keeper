@@ -134,7 +134,7 @@ See `docs/platform-architecture-comparison.md` for the full analysis of Supabase
 | **Email**         | Resend               | Vendor adapter in `lib/adapters/email.ts`                              |
 | **Storage**       | Supabase Storage     | Vendor adapter in `lib/adapters/storage.ts` (public + private buckets) |
 | **State**         | TanStack React Query | `staleTime: 30s`, `gcTime: 5min`, `refetchOnWindowFocus: false`        |
-| **Feature flags** | Redis + DB           | Public API at `/api/feature-flags`. SWR hooks for client consumption.  |
+| **Feature flags** | Redis + DB           | Public API at `/api/feature-flags`. `useFeatureFlag(id)` hook for client.  |
 
 ---
 
@@ -165,17 +165,22 @@ libra-keeper/
 │   ├── platform-architecture-comparison.md ← Supabase vs Convex vs SpacetimeDB vs Neo4j
 │   ├── architecture-security.md            ← This file
 │   └── supabase-postgres-migration-plan.md ← DB hosting migration plan
-├── src/
-│   ├── lib/
-│   │   ├── db.ts                           ← Prisma client with pg adapter (import "server-only")
-│   │   ├── auth-utils.ts                   ← getServerAuth(), requireAuth(), requireAdmin()
-│   │   ├── redis.ts                        ← 3-tier Redis adapter
-│   │   ├── supabase/                       ← Client factories (browser, server, middleware, admin)
-│   │   ├── security/                       ← rate-limit.ts, csrf.ts, rate-limit-overrides.ts
-│   │   └── adapters/                       ← email.ts, storage.ts
-│   └── hooks/
-│       ├── use-auth.ts                     ← Production-hardened auth hook
-│       ├── use-session.ts                  ← NextAuth-compatible shim
-│       └── use-feature-flags.tsx           ← SWR-based feature flag hooks
-└── next.config.ts                          ← CSP headers + PWA + standalone output
+├── lib/
+│   ├── db.ts                           ← Prisma client with pg adapter (import "server-only")
+│   ├── auth-utils.ts                   ← getServerAuth(), requireAuth(), requireAdmin()
+│   ├── redis.ts                        ← 3-tier Redis adapter
+│   ├── feature-flags.ts                ← Default flags + flag evaluation (server-side)
+│   ├── pg-cache.ts                     ← PG-based L2 cache tier
+│   ├── supabase/                       ← Client factories (browser, server, middleware, admin)
+│   ├── security/                       ← rate-limit.ts, csrf.ts, rate-limit-overrides.ts, protection.ts
+│   └── adapters/                       ← email.ts, storage.ts
+├── hooks/
+│   ├── use-auth.ts                     ← Production-hardened auth hook
+│   ├── use-session.ts                  ← Supabase Auth session hook
+│   ├── use-feature-flags.tsx           ← TanStack React Query-based feature flag hooks
+│   └── use-realtime.ts                 ← Supabase Realtime subscriptions
+├── i18n/
+│   ├── messages/                       ← en.json, fr.json (next-intl pattern)
+│   └── next-intl.config.ts             ← Locale configuration
+└── next.config.ts                      ← CSP headers + PPA + standalone output
 ```
