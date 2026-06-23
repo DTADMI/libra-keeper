@@ -535,13 +535,26 @@ function createRedisClient(): RedisClient {
 export const redis: RedisClient = createRedisClient();
 
 let _redisRateLimit: boolean | null = null;
+type SupabaseFeatureFlagQuery = {
+  select: (columns: string) => SupabaseFeatureFlagQuery;
+  eq: (column: string, value: unknown) => SupabaseFeatureFlagQuery;
+  maybeSingle: () => Promise<{ data: { enabled: boolean } | null; error?: unknown }>;
+};
+type SupabaseFeatureFlagClient = {
+  from: (table: "feature_flags") => SupabaseFeatureFlagQuery;
+};
+
+function featureFlagClient(client: unknown): SupabaseFeatureFlagClient {
+  return client as SupabaseFeatureFlagClient;
+}
+
 export async function shouldUseRedisRateLimit(): Promise<boolean> {
-  if (_redisRateLimit !== null) return _redisRateLimit;
+  if (_redisRateLimit !== null) {return _redisRateLimit;}
   if (process.env.REDIS_RATE_LIMIT === "true") { _redisRateLimit = true; return true; }
   try {
     const { createServerClient } = await import("@/lib/supabase/server");
     const supabase = await createServerClient();
-    const { data } = await (supabase as any).from("feature_flags").select("enabled").eq("name", "redis_rate_limit").maybeSingle();
+    const { data } = await featureFlagClient(supabase).from("feature_flags").select("enabled").eq("name", "redis_rate_limit").maybeSingle();
     _redisRateLimit = data?.enabled === true;
   } catch { _redisRateLimit = false; }
   return _redisRateLimit;

@@ -1,10 +1,10 @@
 // lib/db.ts — Prisma client with pg adapter (React.cache for multi-component dedup)
 import "server-only";
 
-import { cache } from "react";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Pool } from "pg";
+import { cache } from "react";
 
 declare global {
   var prisma: PrismaClient | undefined;
