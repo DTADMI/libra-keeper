@@ -1,6 +1,6 @@
 # Action Plan — Libra Keeper
 
-**Last Updated**: 2026-06-13
+**Last Updated**: 2026-08-20
 
 ## Legend
 
@@ -44,15 +44,24 @@
 | 10 | Full-text search (PostgreSQL tsvector) | ✅ Done |
 | 11 | Admin dashboard with feature flag toggles | ✅ Done |
 
-## Phase 3: Remaining Gaps
+## Phase 3: Remaining Gaps (3 items — minor)
 
 | # | Gap | Priority | Status |
 |---|-----|----------|--------|
-| 1 | Default locale: Change to `fr` — already correct in config but doc needs update | Low | ✅ Done |
-| 2 | Quebec French: Audit remaining "email"→"courriel" and "password"→"mot de passe" in FR translations | Low | ✅ Done |
-| 3 | Cross-project i18n Context pattern migration (currently using next-intl) | Low | 🟡 Planned |
-| 4 | Testing coverage expansion | Medium | 🟡 Planned |
-| 5 | Performance optimization doc audit | Low | 🟡 Planned |
+| 1 | Cross-project i18n Context pattern migration (currently using next-intl) | Low | 🟡 Planned |
+| 2 | Testing coverage expansion (current: 18 feature flags, basic unit coverage) | Medium | 🟡 Planned |
+| 3 | Performance optimization doc audit | Low | 🟡 Planned |
+
+## Standard Docs Status
+
+| Document | Status |
+|---|---|
+| `docs/README.md` | ✅ |
+| `docs/technical/performance-optimization.md` | ✅ |
+| `docs/technical/encoding-reference.md` | ✅ |
+| `docs/technical/feature-flags-testing.md` | ✅ |
+| `docs/action-plan.md` | ✅ (this document) |
+| `docs/technical/gaps-roadmap.md` | ❌ (covered by action-plan.md) |
 
 ## Version Compliance
 
