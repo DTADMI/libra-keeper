@@ -7,6 +7,8 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
 
+import I18nServerProvider from "@/lib/i18n/server-provider";
+
 import { AppProviders } from "@/components/providers/app-providers";
 import { PWAInstallPrompt } from "@/components/pwa/install-prompt";
 import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-registration";
@@ -36,9 +38,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
       <body className={inter.className}>
         <ServiceWorkerRegistration />
         <PWAInstallPrompt />
-        <AppProviders>
-          {children}
-        </AppProviders>
+        <I18nServerProvider>
+          <AppProviders>
+            {children}
+          </AppProviders>
+        </I18nServerProvider>
         <Analytics />
         <SpeedInsights />
       </body>
