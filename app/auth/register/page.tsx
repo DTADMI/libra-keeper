@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuth();
-  const t = useTranslations("Auth");
+  const { t } = useI18n();
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
@@ -46,11 +46,11 @@ export default function RegisterPage() {
     setIsLoading(true);
     try {
       await signUp(values.email, values.password, values.name);
-      toast.success(t("accountCreated"));
+      toast.success(t("Auth.accountCreated"));
       router.push("/auth/signin");
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : t("failedRegister");
+        error instanceof Error ? error.message : t("Auth.failedRegister");
       toast.error(message);
     } finally {
       setIsLoading(false);
@@ -61,9 +61,9 @@ export default function RegisterPage() {
     <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-8 rounded-lg border p-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">{t("registerTitle")}</h1>
+          <h1 className="text-2xl font-bold">{t("Auth.registerTitle")}</h1>
           <p className="text-muted-foreground mt-2">
-            {t("registerSubtitle")}
+            {t("Auth.registerSubtitle")}
           </p>
         </div>
         <Form {...form}>
@@ -73,7 +73,7 @@ export default function RegisterPage() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("name")}</FormLabel>
+                  <FormLabel>{t("Auth.name")}</FormLabel>
                   <FormControl>
                     <Input placeholder="John Doe" {...field} />
                   </FormControl>
@@ -86,7 +86,7 @@ export default function RegisterPage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("email")}</FormLabel>
+                  <FormLabel>{t("Auth.email")}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -104,7 +104,7 @@ export default function RegisterPage() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("password")}</FormLabel>
+                  <FormLabel>{t("Auth.password")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -117,14 +117,14 @@ export default function RegisterPage() {
               )}
             />
             <Button type="submit" className="w-full" disabled={isLoading} aria-busy={isLoading}>
-              {isLoading ? t("creatingAccount") : t("registerButton")}
+              {isLoading ? t("Auth.creatingAccount") : t("Auth.registerButton")}
             </Button>
           </form>
         </Form>
         <p className="text-center text-sm text-muted-foreground">
-          {t("haveAccount")}{" "}
+          {t("Auth.haveAccount")}{" "}
           <Link href="/auth/signin" className="text-primary hover:underline">
-            {t("signInLink")}
+            {t("Auth.signInLink")}
           </Link>
         </p>
       </div>

@@ -1,43 +1,32 @@
 // src/app/[locale]/layout.tsx
 import { notFound } from "next/navigation";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
 import { ReactNode } from "react";
 
-import { locales } from "@/i18n";
+import I18nServerProvider from "@/lib/i18n/server-provider";
+import { SUPPORTED_LOCALES, defaultLocale } from "@/lib/i18n/config";
 
 export function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
+  return SUPPORTED_LOCALES.map((l) => ({ locale: l.code }));
 }
 
 export default async function LocaleLayout({
-                                             children,
-                                             params,
-                                           }: {
+  children,
+  params,
+}: {
   children: ReactNode;
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
 
-  // Validate that the incoming `locale` parameter is valid
-  if (!locales.some((supportedLocale) => supportedLocale === locale)) {
-    notFound();
-  }
-
-  let messages;
-  try {
-    messages = await getMessages();
-  } catch (error) {
+  // Validate that the incoming locale is supported
+  if (!SUPPORTED_LOCALES.some((l) => l.code === locale)) {
     notFound();
   }
 
   return (
-    <NextIntlClientProvider
-      locale={locale}
-      messages={messages}
-    >
+    <I18nServerProvider>
       {children}
-    </NextIntlClientProvider>
+    </I18nServerProvider>
   );
 }
 

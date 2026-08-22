@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -41,8 +41,8 @@ async function fetchChannelConfig(): Promise<NotificationChannelConfig> {
 }
 
 export function NotificationChannelManager() {
-  const t = useTranslations("Admin");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const [config, setConfig] = useState<NotificationChannelConfig>({
     pushEnabled: false,
     emailEnabled: true,
@@ -69,12 +69,12 @@ export function NotificationChannelManager() {
       });
 
       if (res.ok) {
-        toast.success(t("settingUpdated"));
+        toast.success(t("Admin.settingUpdated"));
       } else {
-        toast.error(tc("error"));
+        toast.error(t("Common.error"));
       }
     } catch {
-      toast.error(tc("error"));
+      toast.error(t("Common.error"));
     }
     setLoading(false);
   };
@@ -82,17 +82,17 @@ export function NotificationChannelManager() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("notificationChannels") || "Notification Channels"}</CardTitle>
+        <CardTitle>{t("Admin.notificationChannels") || "Notification Channels"}</CardTitle>
         <CardDescription>
-          {t("notificationChannelsDescription") || "Configure how notifications are delivered to users"}
+          {t("Admin.notificationChannelsDescription") || "Configure how notifications are delivered to users"}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>{t("emailNotifications") || "Email Notifications"}</Label>
+            <Label>{t("Admin.emailNotifications") || "Email Notifications"}</Label>
             <p className="text-sm text-muted-foreground">
-              {t("emailNotificationsDesc") || "Send transactional emails via Resend"}
+              {t("Admin.emailNotificationsDesc") || "Send transactional emails via Resend"}
             </p>
           </div>
           <Switch
@@ -103,9 +103,9 @@ export function NotificationChannelManager() {
 
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <Label>{t("pushNotifications") || "Push Notifications"}</Label>
+            <Label>{t("Admin.pushNotifications") || "Push Notifications"}</Label>
             <p className="text-sm text-muted-foreground">
-              {t("pushNotificationsDesc") || "Forward notifications to a webhook endpoint for push delivery"}
+              {t("Admin.pushNotificationsDesc") || "Forward notifications to a webhook endpoint for push delivery"}
             </p>
           </div>
           <Switch
@@ -117,7 +117,7 @@ export function NotificationChannelManager() {
         {config.pushEnabled && (
           <div className="space-y-4 pl-4 border-l-2 border-muted">
             <div className="space-y-2">
-              <Label htmlFor="push-webhook-url">{t("pushWebhookUrl") || "Webhook URL"}</Label>
+              <Label htmlFor="push-webhook-url">{t("Admin.pushWebhookUrl") || "Webhook URL"}</Label>
               <Input
                 id="push-webhook-url"
                 value={config.pushWebhookUrl}
@@ -127,7 +127,7 @@ export function NotificationChannelManager() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="push-webhook-secret">
-                {t("pushWebhookSecret") || "Webhook Secret"}
+                {t("Admin.pushWebhookSecret") || "Webhook Secret"}
               </Label>
               <Input
                 id="push-webhook-secret"
@@ -141,7 +141,7 @@ export function NotificationChannelManager() {
         )}
 
         <Button onClick={handleSave} disabled={loading}>
-          {loading ? tc("saving") || "Saving..." : tc("save") || "Save"}
+          {loading ? t("Common.saving") || "Saving..." : t("Common.save") || "Save"}
         </Button>
       </CardContent>
     </Card>

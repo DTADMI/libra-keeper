@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -20,8 +20,8 @@ interface Setting {
 }
 
 export function SettingsManager() {
-  const t = useTranslations("Admin");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const { data: settings = [], isLoading } = useAdminSettings();
   const updateSetting = useUpdateSetting();
 
@@ -30,33 +30,33 @@ export function SettingsManager() {
 
   const handleSave = (setting: { key: string; value: string; type: string }) => {
     updateSetting.mutate(setting, {
-      onSuccess: () => toast.success(t("settingUpdated")),
-      onError: () => toast.error(tc("error")),
+      onSuccess: () => toast.success(t("Admin.settingUpdated")),
+      onError: () => toast.error(t("Common.error")),
     });
   };
 
   const handleAdd = () => {
     if (!newSetting.key) {
-      return toast.error(t("keyRequired"));
+      return toast.error(t("Admin.keyRequired"));
     }
     handleSave(newSetting);
     setNewSetting({ key: "", value: "", type: "STRING" });
   };
 
   if (isLoading) {
-    return <div>{t("loading")}</div>;
+    return <div>{t("Admin.loading")}</div>;
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("appSettings")}</CardTitle>
-        <CardDescription>{t("settingsDescription")}</CardDescription>
+        <CardTitle>{t("Admin.appSettings")}</CardTitle>
+        <CardDescription>{t("Admin.settingsDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-4 gap-4 items-end border-b pb-4">
           <div className="space-y-2">
-            <Label htmlFor="new-key">{t("key")}</Label>
+            <Label htmlFor="new-key">{t("Admin.key")}</Label>
             <Input
               id="new-key"
               value={newSetting.key}
@@ -65,7 +65,7 @@ export function SettingsManager() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="new-value">{t("value")}</Label>
+            <Label htmlFor="new-value">{t("Admin.value")}</Label>
             <Input
               id="new-value"
               value={newSetting.value}
@@ -74,7 +74,7 @@ export function SettingsManager() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="new-type">{t("type")}</Label>
+            <Label htmlFor="new-type">{t("Admin.type")}</Label>
             <Select
               value={newSetting.type}
               onValueChange={(v: SettingType) => setNewSetting({ ...newSetting, type: v })}
@@ -90,7 +90,7 @@ export function SettingsManager() {
               </SelectContent>
             </Select>
           </div>
-          <Button onClick={handleAdd}>{t("addSetting")}</Button>
+          <Button onClick={handleAdd}>{t("Admin.addSetting")}</Button>
         </div>
 
         <div className="space-y-4">
@@ -114,7 +114,7 @@ export function SettingsManager() {
                   })
                 }
               >
-                {t("update")}
+                {t("Admin.update")}
               </Button>
             </div>
           ))}

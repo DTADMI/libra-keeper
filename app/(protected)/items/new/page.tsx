@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -65,8 +65,8 @@ const USES_ISBN_LOOKUP: ItemType[] = ["BOOK"];
 
 export default function NewItemPage() {
   const router = useRouter();
-  const t = useTranslations("Items");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
 
   const { data: collections = [] } = useQuery({
     queryKey: ["collections"],
@@ -95,11 +95,11 @@ export default function NewItemPage() {
   function onSubmit(values: z.infer<typeof itemSchema>) {
     createItem.mutate(values, {
       onSuccess: () => {
-        toast.success(t("itemCreated"));
+        toast.success(t("Items.itemCreated"));
         router.push("/dashboard");
       },
       onError: () => {
-        toast.error(tc("error"));
+        toast.error(t("Common.error"));
       },
     });
   }
@@ -117,7 +117,7 @@ export default function NewItemPage() {
   return (
     <div className="container mx-auto max-w-2xl py-10">
       <div className="mb-8 flex items-center justify-between">
-        <h1 className="text-3xl font-bold">{t("addNew")}</h1>
+        <h1 className="text-3xl font-bold">{t("Items.addNew")}</h1>
         {USES_ISBN_LOOKUP.includes(watchedType) && <ISBNLookup onFill={handleISBNFill} />}
       </div>
       <Form {...form}>
@@ -127,9 +127,9 @@ export default function NewItemPage() {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("titleLabel")}</FormLabel>
+                <FormLabel>{t("Items.titleLabel")}</FormLabel>
                 <FormControl>
-                  <Input placeholder={t("titlePlaceholder")} {...field} />
+                  <Input placeholder={t("Items.titlePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -141,11 +141,11 @@ export default function NewItemPage() {
               name="type"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("type")}</FormLabel>
+                  <FormLabel>{t("Items.type")}</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder={t("selectType")} />
+                        <SelectValue placeholder={t("Items.selectType")} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -179,10 +179,10 @@ export default function NewItemPage() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("description")}</FormLabel>
+                <FormLabel>{t("Items.description")}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={t("descriptionPlaceholder")}
+                    placeholder={t("Items.descriptionPlaceholder")}
                     className="resize-none"
                     {...field}
                   />
@@ -196,11 +196,11 @@ export default function NewItemPage() {
             name="coverImage"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("coverImage")}</FormLabel>
+                <FormLabel>{t("Items.coverImage")}</FormLabel>
                 <FormControl>
-                  <Input placeholder={t("coverImagePlaceholder")} {...field} />
+                  <Input placeholder={t("Items.coverImagePlaceholder")} {...field} />
                 </FormControl>
-                <FormDescription>{t("coverImageDescription")}</FormDescription>
+                <FormDescription>{t("Items.coverImageDescription")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -239,7 +239,7 @@ export default function NewItemPage() {
           {showMetadataFields && (
             <div className="rounded-md border p-4 space-y-4">
               <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                {t(`types.${watchedType}`)} {t("details")}
+                {t(`types.${watchedType}`)} {t("Items.details")}
               </h2>
               <div className="grid grid-cols-2 gap-4">
                 {["TOY", "CLOTHES"].includes(watchedType) && (
@@ -249,9 +249,9 @@ export default function NewItemPage() {
                       name="metadata.brand"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("brand")}</FormLabel>
+                          <FormLabel>{t("Items.brand")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("brandPlaceholder")} {...field} />
+                            <Input placeholder={t("Items.brandPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -262,9 +262,9 @@ export default function NewItemPage() {
                       name="metadata.material"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("material")}</FormLabel>
+                          <FormLabel>{t("Items.material")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("materialPlaceholder")} {...field} />
+                            <Input placeholder={t("Items.materialPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -275,11 +275,11 @@ export default function NewItemPage() {
                       name="metadata.condition"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("condition")}</FormLabel>
+                          <FormLabel>{t("Items.condition")}</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder={t("selectCondition")} />
+                                <SelectValue placeholder={t("Items.selectCondition")} />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -302,9 +302,9 @@ export default function NewItemPage() {
                     name="metadata.ageRange"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("ageRange")}</FormLabel>
+                        <FormLabel>{t("Items.ageRange")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("ageRangePlaceholder")} {...field} />
+                          <Input placeholder={t("Items.ageRangePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -317,9 +317,9 @@ export default function NewItemPage() {
                     name="metadata.size"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("size")}</FormLabel>
+                        <FormLabel>{t("Items.size")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("sizePlaceholder")} {...field} />
+                          <Input placeholder={t("Items.sizePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -333,9 +333,9 @@ export default function NewItemPage() {
                       name="metadata.genre"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("genre")}</FormLabel>
+                          <FormLabel>{t("Items.genre")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("genrePlaceholder")} {...field} />
+                            <Input placeholder={t("Items.genrePlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -346,9 +346,9 @@ export default function NewItemPage() {
                       name="metadata.duration"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>{t("duration")}</FormLabel>
+                          <FormLabel>{t("Items.duration")}</FormLabel>
                           <FormControl>
-                            <Input placeholder={t("durationPlaceholder")} {...field} />
+                            <Input placeholder={t("Items.durationPlaceholder")} {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -362,9 +362,9 @@ export default function NewItemPage() {
                     name="metadata.artist"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("artist")}</FormLabel>
+                        <FormLabel>{t("Items.artist")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("artistPlaceholder")} {...field} />
+                          <Input placeholder={t("Items.artistPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -377,9 +377,9 @@ export default function NewItemPage() {
                     name="metadata.director"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("director")}</FormLabel>
+                        <FormLabel>{t("Items.director")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("directorPlaceholder")} {...field} />
+                          <Input placeholder={t("Items.directorPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -392,9 +392,9 @@ export default function NewItemPage() {
                     name="metadata.platform"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>{t("platform")}</FormLabel>
+                        <FormLabel>{t("Items.platform")}</FormLabel>
                         <FormControl>
-                          <Input placeholder={t("platformPlaceholder")} {...field} />
+                          <Input placeholder={t("Items.platformPlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -410,15 +410,15 @@ export default function NewItemPage() {
             name="collectionId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>{t("collection")}</FormLabel>
+                <FormLabel>{t("Items.collection")}</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder={t("selectCollection")} />
+                      <SelectValue placeholder={t("Items.selectCollection")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="">{t("noCollection")}</SelectItem>
+                    <SelectItem value="">{t("Items.noCollection")}</SelectItem>
                     {collections.map((c) => (
                       <SelectItem key={c.id} value={c.id}>
                         {c.name}
@@ -432,10 +432,10 @@ export default function NewItemPage() {
           />
           <div className="flex justify-end gap-4">
             <Button type="button" variant="outline" onClick={() => router.back()}>
-              {tc("cancel")}
+              {t("Common.cancel")}
             </Button>
             <Button type="submit" disabled={createItem.isPending}>
-              {createItem.isPending ? t("saving") : t("saveItem")}
+              {createItem.isPending ? t("Items.saving") : t("Items.saveItem")}
             </Button>
           </div>
         </form>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,8 +18,8 @@ interface FeatureFlag {
 }
 
 export function FeatureFlagManager() {
-  const t = useTranslations("Admin");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const { data: flags = [], isLoading } = useAdminFlags();
   const updateFlag = useUpdateFlag();
 
@@ -31,34 +31,34 @@ export function FeatureFlagManager() {
 
   const handleSave = (flag: { name: string; isEnabled: boolean; description?: string }) => {
     updateFlag.mutate(flag, {
-      onSuccess: () => toast.success(t("flagUpdated")),
-      onError: () => toast.error(tc("error")),
+      onSuccess: () => toast.success(t("Admin.flagUpdated")),
+      onError: () => toast.error(t("Common.error")),
     });
   };
 
   const handleAdd = () => {
     if (!newFlag.name) {
-      return toast.error(t("nameRequired"));
+      return toast.error(t("Admin.nameRequired"));
     }
     handleSave(newFlag);
     setNewFlag({ name: "", description: "", isEnabled: false });
   };
 
   if (isLoading) {
-    return <div>{t("loading")}</div>;
+    return <div>{t("Admin.loading")}</div>;
   }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t("featureFlags")}</CardTitle>
-        <CardDescription>{t("flagsDescription")}</CardDescription>
+        <CardTitle>{t("Admin.featureFlags")}</CardTitle>
+        <CardDescription>{t("Admin.flagsDescription")}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 gap-4 items-end border-b pb-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="flag-name">{t("flagName")}</Label>
+              <Label htmlFor="flag-name">{t("Admin.flagName")}</Label>
               <Input
                 id="flag-name"
                 value={newFlag.name}
@@ -67,7 +67,7 @@ export function FeatureFlagManager() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="flag-desc">{t("description")}</Label>
+              <Label htmlFor="flag-desc">{t("Admin.description")}</Label>
               <Input
                 id="flag-desc"
                 value={newFlag.description}
@@ -83,9 +83,9 @@ export function FeatureFlagManager() {
                 checked={newFlag.isEnabled}
                 onCheckedChange={(checked) => setNewFlag({ ...newFlag, isEnabled: checked })}
               />
-              <Label htmlFor="flag-enabled">{t("enabledByDefault")}</Label>
+              <Label htmlFor="flag-enabled">{t("Admin.enabledByDefault")}</Label>
             </div>
-            <Button onClick={handleAdd}>{t("addFlag")}</Button>
+            <Button onClick={handleAdd}>{t("Admin.addFlag")}</Button>
           </div>
         </div>
 

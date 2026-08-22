@@ -1,16 +1,16 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { Suspense, useEffect, useState } from "react";
 
 import { createBrowserClient } from "@/lib/supabase/client";
 
 function CallbackHandler() {
-  const t = useTranslations("Auth");
+  const { t } = useI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/dashboard";
+  const redirect = searchParams.get("Auth.redirect") ?? "/dashboard";
   const [error, setError] = useState<string | null>(null);
   const supabase = createBrowserClient();
 
@@ -30,7 +30,7 @@ function CallbackHandler() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center space-y-4">
           <h1 className="text-xl font-bold text-destructive">
-            {t("authError")}
+            {t("Auth.authError")}
           </h1>
           <p className="text-muted-foreground">{error}</p>
         </div>
@@ -42,7 +42,7 @@ function CallbackHandler() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center space-y-4">
         <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto" />
-        <p className="text-muted-foreground">{t("completingSignIn")}</p>
+        <p className="text-muted-foreground">{t("Auth.completingSignIn")}</p>
       </div>
     </div>
   );

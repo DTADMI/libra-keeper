@@ -2,7 +2,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -41,8 +41,8 @@ const statusColors: Record<string, string> = {
 };
 
 export default function SuggestionsPage() {
-  const t = useTranslations("Suggestions");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const { data: session } = useSession();
   const { data: requests = [], isLoading: listLoading, error: listError } = useSuggestions();
   const createSuggestion = useCreateSuggestion();
@@ -69,12 +69,12 @@ export default function SuggestionsPage() {
       },
       {
         onSuccess: () => {
-          toast.success(t("submitted"));
+          toast.success(t("Suggestions.submitted"));
           form.reset();
         },
         onError: (error) => {
           toast.error(
-            error instanceof Error ? error.message : t("submitFailed")
+            error instanceof Error ? error.message : t("Suggestions.submitFailed")
           );
         },
       },
@@ -85,11 +85,11 @@ export default function SuggestionsPage() {
 
   return (
     <div className="container mx-auto p-4 max-w-3xl">
-      <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Suggestions.title")}</h1>
 
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>{isAdmin ? t("manageTitle") : t("submitTitle")}</CardTitle>
+          <CardTitle>{isAdmin ? t("Suggestions.manageTitle") : t("Suggestions.submitTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           {!isAdmin && (
@@ -100,7 +100,7 @@ export default function SuggestionsPage() {
                   name="type"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("type")}</FormLabel>
+                      <FormLabel>{t("Suggestions.type")}</FormLabel>
                       <Select
                         value={field.value}
                         onValueChange={(v) => field.onChange(v as SuggestionFormData["type"])}
@@ -125,7 +125,7 @@ export default function SuggestionsPage() {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("titleField")}</FormLabel>
+                      <FormLabel>{t("Suggestions.titleField")}</FormLabel>
                       <FormControl>
                         <Input {...field} required />
                       </FormControl>
@@ -139,7 +139,7 @@ export default function SuggestionsPage() {
                   name="author"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("authorField")}</FormLabel>
+                      <FormLabel>{t("Suggestions.authorField")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -153,7 +153,7 @@ export default function SuggestionsPage() {
                   name="isbn"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("isbnField")}</FormLabel>
+                      <FormLabel>{t("Suggestions.isbnField")}</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -167,7 +167,7 @@ export default function SuggestionsPage() {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{t("descriptionField")}</FormLabel>
+                      <FormLabel>{t("Suggestions.descriptionField")}</FormLabel>
                       <FormControl>
                         <Textarea {...field} rows={3} />
                       </FormControl>
@@ -177,7 +177,7 @@ export default function SuggestionsPage() {
                 />
 
                 <Button type="submit" disabled={createSuggestion.isPending}>
-                  {createSuggestion.isPending ? t("submitting") : t("submitButton")}
+                  {createSuggestion.isPending ? t("Suggestions.submitting") : t("Suggestions.submitButton")}
                 </Button>
               </form>
             </Form>
@@ -185,8 +185,8 @@ export default function SuggestionsPage() {
         </CardContent>
       </Card>
 
-      {listLoading && <p className="text-muted-foreground">{tc("loading")}</p>}
-      {listError && <p className="text-destructive">{t("loadingFailed")}</p>}
+      {listLoading && <p className="text-muted-foreground">{t("Common.loading")}</p>}
+      {listError && <p className="text-destructive">{t("Suggestions.loadingFailed")}</p>}
 
       <div className="space-y-4">
         {requests.map((req) => (
@@ -206,7 +206,7 @@ export default function SuggestionsPage() {
           </Card>
         ))}
         {!listLoading && requests.length === 0 && (
-          <p className="text-muted-foreground text-center py-8">{t("noSuggestions")}</p>
+          <p className="text-muted-foreground text-center py-8">{t("Suggestions.noSuggestions")}</p>
         )}
       </div>
     </div>

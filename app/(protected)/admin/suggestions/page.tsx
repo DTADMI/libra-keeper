@@ -1,7 +1,7 @@
 // src/app/(protected)/admin/suggestions/page.tsx
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,7 @@ import { useSuggestions } from "@/hooks/use-suggestions";
 type ItemRequestStatus = "PENDING" | "PROCESSING" | "COMPLETED" | "REJECTED";
 
 export default function AdminSuggestionsPage() {
-  const t = useTranslations("Admin");
+  const { t } = useI18n();
   const { data: requests = [], isLoading } = useSuggestions();
 
   async function updateStatus(requestId: string, newStatus: string) {
@@ -24,35 +24,35 @@ export default function AdminSuggestionsPage() {
         body: JSON.stringify({ status: newStatus }),
       });
       if (res.ok) {
-        toast.success(t("statusUpdated"));
+        toast.success(t("Admin.statusUpdated"));
       } else {
-        toast.error(t("statusFailed"));
+        toast.error(t("Admin.statusFailed"));
       }
     } catch {
-      toast.error(t("statusFailed"));
+      toast.error(t("Admin.statusFailed"));
     }
   }
 
   if (isLoading) {
-    return <div className="p-8 text-center">{t("loading")}</div>;
+    return <div className="p-8 text-center">{t("Admin.loading")}</div>;
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("suggestions")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Admin.suggestions")}</h1>
       <Card>
         <CardHeader>
-          <CardTitle>{t("suggestions")}</CardTitle>
+          <CardTitle>{t("Admin.suggestions")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("title")}</TableHead>
-                <TableHead>{t("user")}</TableHead>
-                <TableHead>{t("type")}</TableHead>
-                <TableHead>{t("status")}</TableHead>
-                <TableHead>{t("submitted")}</TableHead>
+                <TableHead>{t("Admin.title")}</TableHead>
+                <TableHead>{t("Admin.user")}</TableHead>
+                <TableHead>{t("Admin.type")}</TableHead>
+                <TableHead>{t("Admin.status")}</TableHead>
+                <TableHead>{t("Admin.submitted")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -67,11 +67,11 @@ export default function AdminSuggestionsPage() {
                   <TableCell>
                     {(req as { requestedBy?: { name?: string | null; email?: string } }).requestedBy?.name ||
                      (req as { requestedBy?: { name?: string | null; email?: string } }).requestedBy?.email ||
-                     t("nA")}
+                     t("Admin.nA")}
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline">
-                      {req.type === "SUGGESTION" ? t("suggestion") : t("borrowed")}
+                      {req.type === "SUGGESTION" ? t("Admin.suggestion") : t("Admin.borrowed")}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -83,10 +83,10 @@ export default function AdminSuggestionsPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="PENDING">{t("pending")}</SelectItem>
-                        <SelectItem value="PROCESSING">{t("processing")}</SelectItem>
-                        <SelectItem value="COMPLETED">{t("completed")}</SelectItem>
-                        <SelectItem value="REJECTED">{t("rejected")}</SelectItem>
+                        <SelectItem value="PENDING">{t("Admin.pending")}</SelectItem>
+                        <SelectItem value="PROCESSING">{t("Admin.processing")}</SelectItem>
+                        <SelectItem value="COMPLETED">{t("Admin.completed")}</SelectItem>
+                        <SelectItem value="REJECTED">{t("Admin.rejected")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>
@@ -96,7 +96,7 @@ export default function AdminSuggestionsPage() {
               {requests.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
-                    {t("noRequests")}
+                    {t("Admin.noRequests")}
                   </TableCell>
                 </TableRow>
               )}

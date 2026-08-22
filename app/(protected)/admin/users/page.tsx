@@ -1,7 +1,7 @@
 // src/app/(protected)/admin/users/page.tsx
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import { useAdminUsers, useChangeUserRole } from "@/hooks/use-admin";
 type UserRole = "ADMIN" | "USER";
 
 export default function UsersPage() {
-  const t = useTranslations("Admin");
+  const { t } = useI18n();
   const { data: users = [], isLoading } = useAdminUsers();
   const changeRole = useChangeUserRole();
 
@@ -20,37 +20,37 @@ export default function UsersPage() {
     changeRole.mutate(
       { userId, role: newRole },
       {
-        onSuccess: () => toast.success(t("roleChanged")),
-        onError: () => toast.error(t("roleFailed")),
+        onSuccess: () => toast.success(t("Admin.roleChanged")),
+        onError: () => toast.error(t("Admin.roleFailed")),
       },
     );
   }
 
   if (isLoading) {
-    return <div className="p-8 text-center">{t("loading")}</div>;
+    return <div className="p-8 text-center">{t("Admin.loading")}</div>;
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("users")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Admin.users")}</h1>
       <Card>
         <CardHeader>
-          <CardTitle>{t("allUsers")}</CardTitle>
+          <CardTitle>{t("Admin.allUsers")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>{t("name")}</TableHead>
-                <TableHead>{t("email")}</TableHead>
-                <TableHead>{t("role")}</TableHead>
-                <TableHead>{t("joined")}</TableHead>
+                <TableHead>{t("Admin.name")}</TableHead>
+                <TableHead>{t("Admin.email")}</TableHead>
+                <TableHead>{t("Admin.role")}</TableHead>
+                <TableHead>{t("Admin.joined")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell>{user.name || t("nA")}</TableCell>
+                  <TableCell>{user.name || t("Admin.nA")}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     <Select
@@ -61,8 +61,8 @@ export default function UsersPage() {
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="USER">{t("userRole")}</SelectItem>
-                        <SelectItem value="ADMIN">{t("adminRole")}</SelectItem>
+                        <SelectItem value="USER">{t("Admin.userRole")}</SelectItem>
+                        <SelectItem value="ADMIN">{t("Admin.adminRole")}</SelectItem>
                       </SelectContent>
                     </Select>
                   </TableCell>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,21 +11,21 @@ import { useSession } from "@/hooks/use-session";
 import { RequestActionButtons } from "./request-action-buttons";
 
 export default function AdminRequestsPage() {
-  const t = useTranslations("Admin");
+  const { t } = useI18n();
   const { data: session } = useSession();
   const { data: loans = [], isLoading, error } = useAdminLoans();
 
   if (session?.user?.role !== "ADMIN") {
     return (
       <div className="container mx-auto p-4">
-        <p className="text-muted-foreground">{t("unauthorized")}</p>
+        <p className="text-muted-foreground">{t("Admin.unauthorized")}</p>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("requests")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Admin.requests")}</h1>
 
       {isLoading && (
         <div className="space-y-4">
@@ -45,7 +45,7 @@ export default function AdminRequestsPage() {
       )}
 
       {error && (
-        <p className="text-destructive text-center py-8">{t("loadingFailed")}</p>
+        <p className="text-destructive text-center py-8">{t("Admin.loadingFailed")}</p>
       )}
 
       {!isLoading && !error && (
@@ -57,7 +57,7 @@ export default function AdminRequestsPage() {
                   <div>
                     <CardTitle className="text-lg">{loan.item.title}</CardTitle>
                     <p className="text-sm text-muted-foreground">
-                      {t("requestedBy")} {loan.user.name} ({loan.user.email})
+                      {t("Admin.requestedBy")} {loan.user.name} ({loan.user.email})
                     </p>
                   </div>
                   <Badge>{loan.status}</Badge>
@@ -66,7 +66,7 @@ export default function AdminRequestsPage() {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <p className="text-xs text-muted-foreground">
-                    {t("requestedOn")} {new Date(loan.createdAt).toLocaleDateString()}
+                    {t("Admin.requestedOn")} {new Date(loan.createdAt).toLocaleDateString()}
                   </p>
                   <RequestActionButtons loanId={loan.id} />
                 </div>
@@ -75,7 +75,7 @@ export default function AdminRequestsPage() {
           ))}
 
           {loans.length === 0 && (
-            <p className="text-center py-10 text-muted-foreground">{t("noPendingRequests")}</p>
+            <p className="text-center py-10 text-muted-foreground">{t("Admin.noPendingRequests")}</p>
           )}
         </div>
       )}

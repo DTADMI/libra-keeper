@@ -1,7 +1,7 @@
 // src/app/(protected)/messages/page.tsx
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -16,8 +16,8 @@ import { cn } from "@/lib/utils";
 import { VoicePlayer,VoiceRecorder } from "@/lib/voice";
 
 export default function MessagesPage() {
-  const t = useTranslations("Messages");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const { data: session } = useSession();
   const { data: conversations = [], isLoading: conversationsLoading, error: conversationsError } = useConversations();
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -35,7 +35,7 @@ export default function MessagesPage() {
       onSuccess: () => setNewMessage(""),
       onError: (error) => {
         toast.error(
-          error instanceof Error ? error.message : t("sendFailed")
+          error instanceof Error ? error.message : t("Messages.sendFailed")
         );
       },
     });
@@ -68,22 +68,22 @@ export default function MessagesPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Messages.title")}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-1">
           <CardHeader>
-            <CardTitle>{t("conversations")}</CardTitle>
+            <CardTitle>{t("Messages.conversations")}</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
             {conversationsLoading && (
-              <p className="text-muted-foreground text-sm p-4">{t("loadingConversations")}</p>
+              <p className="text-muted-foreground text-sm p-4">{t("Messages.loadingConversations")}</p>
             )}
             {conversationsError && (
-              <p className="text-destructive text-sm p-4">{t("failedConversations")}</p>
+              <p className="text-destructive text-sm p-4">{t("Messages.failedConversations")}</p>
             )}
             {!conversationsLoading && conversations.length === 0 && (
-              <p className="text-muted-foreground text-sm p-4">{t("noConversations")}</p>
+              <p className="text-muted-foreground text-sm p-4">{t("Messages.noConversations")}</p>
             )}
             <div className="divide-y">
               {conversations.map((conv) => (
@@ -130,7 +130,7 @@ export default function MessagesPage() {
               </CardHeader>
               <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messagesLoading && (
-                  <p className="text-muted-foreground text-sm text-center">{t("loadingMessages")}</p>
+                  <p className="text-muted-foreground text-sm text-center">{t("Messages.loadingMessages")}</p>
                 )}
                 {messages.map((msg) => {
                   const voiceUrl = msg.metadata?.voiceUrl;
@@ -177,7 +177,7 @@ export default function MessagesPage() {
                 ) : (
                   <>
                     <Input
-                      placeholder={t("typeMessage")}
+                      placeholder={t("Messages.typeMessage")}
                       value={newMessage}
                       onChange={(e) => setNewMessage(e.target.value)}
                       onKeyDown={(e) => {
@@ -193,7 +193,7 @@ export default function MessagesPage() {
                       size="icon"
                       onClick={() => setShowVoiceRecorder(true)}
                       disabled={sendMessage.isPending}
-                      title={t("recordVoiceMessage")}
+                      title={t("Messages.recordVoiceMessage")}
                     >
                       <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
@@ -203,7 +203,7 @@ export default function MessagesPage() {
                       </svg>
                     </Button>
                     <Button onClick={handleSend} disabled={sendMessage.isPending || !newMessage.trim()}>
-                      {t("send")}
+                      {t("Messages.send")}
                     </Button>
                   </>
                 )}
@@ -211,7 +211,7 @@ export default function MessagesPage() {
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center text-muted-foreground">
-              {t("selectConversation")}
+              {t("Messages.selectConversation")}
             </div>
           )}
         </Card>

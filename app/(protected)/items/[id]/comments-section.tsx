@@ -2,7 +2,7 @@
 "use client";
 
 import { formatDistanceToNow } from "date-fns";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ interface CommentsSectionProps {
 }
 
 export function CommentsSection({ itemId }: CommentsSectionProps) {
-  const t = useTranslations("Items");
+  const { t } = useI18n();
   const { data: comments = [], isLoading } = useComments(itemId);
   const addComment = useAddComment(itemId);
   const [newComment, setNewComment] = useState("");
@@ -27,33 +27,33 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
     addComment.mutate(newComment, {
       onSuccess: () => {
         setNewComment("");
-        toast.success(t("commentPosted"));
+        toast.success(t("Items.commentPosted"));
       },
       onError: (error) => {
         toast.error(
-          error instanceof Error ? error.message : t("commentFailed")
+          error instanceof Error ? error.message : t("Items.commentFailed")
         );
       },
     });
   }
 
   if (isLoading) {
-    return <p className="text-muted-foreground text-center py-10">{t("loadingComments")}</p>;
+    return <p className="text-muted-foreground text-center py-10">{t("Items.loadingComments")}</p>;
   }
 
   return (
     <div className="space-y-8">
-      <h3 className="text-2xl font-bold">{t("comments")}</h3>
+      <h3 className="text-2xl font-bold">{t("Items.comments")}</h3>
 
       <div className="space-y-4">
         <Textarea
-          placeholder={t("leaveComment")}
+          placeholder={t("Items.leaveComment")}
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           disabled={addComment.isPending}
         />
         <Button onClick={onSubmit} disabled={addComment.isPending || !newComment.trim()}>
-          {t("postComment")}
+          {t("Items.postComment")}
         </Button>
       </div>
 
@@ -76,7 +76,7 @@ export function CommentsSection({ itemId }: CommentsSectionProps) {
           </div>
         ))}
         {comments.length === 0 && (
-          <p className="text-muted-foreground text-center py-10">{t("noComments")}</p>
+          <p className="text-muted-foreground text-center py-10">{t("Items.noComments")}</p>
         )}
       </div>
     </div>

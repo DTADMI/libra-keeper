@@ -1,7 +1,7 @@
 // src/app/(protected)/items/[id]/report-button.tsx
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -26,8 +26,8 @@ interface ReportButtonProps {
 }
 
 export function ReportButton({ itemId }: ReportButtonProps) {
-  const t = useTranslations("Items");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const reportItem = useReportItem(itemId);
   const [reason, setReason] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -39,13 +39,13 @@ export function ReportButton({ itemId }: ReportButtonProps) {
 
     reportItem.mutate(reason.trim(), {
       onSuccess: () => {
-        toast.success(t("reportSubmitted"));
+        toast.success(t("Items.reportSubmitted"));
         setIsOpen(false);
         setReason("");
       },
       onError: (error) => {
         toast.error(
-          error instanceof Error ? error.message : t("reportFailed")
+          error instanceof Error ? error.message : t("Items.reportFailed")
         );
       },
     });
@@ -56,19 +56,19 @@ export function ReportButton({ itemId }: ReportButtonProps) {
       <AlertDialogTrigger asChild>
         <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-destructive">
           <Icons.alertCircle className="h-4 w-4 mr-2" />
-          {t("reportMissing")}
+          {t("Items.reportMissing")}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("reportMissing")}</AlertDialogTitle>
+          <AlertDialogTitle>{t("Items.reportMissing")}</AlertDialogTitle>
           <AlertDialogDescription>
-            {t("description")}
+            {t("Items.description")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="py-4">
           <Textarea
-            placeholder={t("reportReason")}
+            placeholder={t("Items.reportReason")}
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             disabled={reportItem.isPending}
@@ -76,7 +76,7 @@ export function ReportButton({ itemId }: ReportButtonProps) {
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={reportItem.isPending}>
-            {tc("cancel")}
+            {t("Common.cancel")}
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={(e) => {
@@ -85,7 +85,7 @@ export function ReportButton({ itemId }: ReportButtonProps) {
             }}
             disabled={reportItem.isPending || !reason.trim()}
           >
-            {reportItem.isPending ? tc("loading") : tc("submit")}
+            {reportItem.isPending ? t("Common.loading") : t("Common.submit")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

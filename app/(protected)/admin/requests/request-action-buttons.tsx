@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -12,19 +12,19 @@ interface RequestActionButtonsProps {
 }
 
 export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
-  const t = useTranslations("Loans");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  // tc (Common) merged — use t("Common.key")
   const router = useRouter();
   const updateLoan = useUpdateLoan(loanId);
 
   function handleAction(status: "APPROVED" | "REJECTED") {
     updateLoan.mutate(status, {
       onSuccess: () => {
-        toast.success(status === "APPROVED" ? t("approved") : t("rejected"));
+        toast.success(status === "APPROVED" ? t("Loans.approved") : t("Loans.rejected"));
         router.refresh();
       },
       onError: () => {
-        toast.error(tc("error"));
+        toast.error(t("Common.error"));
       },
     });
   }
@@ -38,10 +38,10 @@ export function RequestActionButtons({ loanId }: RequestActionButtonsProps) {
         onClick={() => handleAction("REJECTED")}
         disabled={updateLoan.isPending}
       >
-        {t("reject")}
+        {t("Loans.reject")}
       </Button>
       <Button size="sm" onClick={() => handleAction("APPROVED")} disabled={updateLoan.isPending}>
-        {t("approve")}
+        {t("Loans.approve")}
       </Button>
     </div>
   );

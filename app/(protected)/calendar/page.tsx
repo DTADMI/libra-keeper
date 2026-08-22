@@ -2,7 +2,7 @@
 
 import { format, isSameDay } from "date-fns";
 import { Loader2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMyLoans } from "@/hooks/use-loans";
 
 export default function CalendarPage() {
-  const t = useTranslations("Calendar");
+  const { t } = useI18n();
   const { data: loans = [], isLoading } = useMyLoans();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
@@ -31,11 +31,11 @@ export default function CalendarPage() {
 
   return (
     <div className="container mx-auto py-10">
-      <h1 className="mb-8 text-3xl font-bold">{t("title")}</h1>
+      <h1 className="mb-8 text-3xl font-bold">{t("Calendar.title")}</h1>
       <div className="grid gap-8 md:grid-cols-[1fr_300px]">
         <Card>
           <CardHeader>
-            <CardTitle>{t("calendar")}</CardTitle>
+            <CardTitle>{t("Calendar.calendar")}</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center">
             <Calendar
@@ -56,7 +56,7 @@ export default function CalendarPage() {
         <div className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>{selectedDate ? format(selectedDate, "PPP") : t("selectDate")}</CardTitle>
+              <CardTitle>{selectedDate ? format(selectedDate, "PPP") : t("Calendar.selectDate")}</CardTitle>
             </CardHeader>
             <CardContent>
               {loansOnSelectedDate.length > 0 ? (
@@ -65,16 +65,16 @@ export default function CalendarPage() {
                     <li key={loan.id} className="border-b pb-2 last:border-0">
                       <p className="font-semibold">{loan.item?.title}</p>
                       <p className="text-sm text-muted-foreground">
-                        {t("borrowedBy")} {loan.user?.name || t("unknownUser")}
+                        {t("Calendar.borrowedBy")} {loan.user?.name || t("Calendar.unknownUser")}
                       </p>
                       <Badge variant="destructive" className="mt-1">
-                        {t("due")}
+                        {t("Calendar.due")}
                       </Badge>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-muted-foreground">{t("noLoansDue")}</p>
+                <p className="text-muted-foreground">{t("Calendar.noLoansDue")}</p>
               )}
             </CardContent>
           </Card>

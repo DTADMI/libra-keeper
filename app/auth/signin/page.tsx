@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { Suspense, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -34,7 +34,7 @@ function SignInForm() {
   const redirect = searchParams.get("redirect") ?? "/dashboard";
   const [isLoading, setIsLoading] = useState(false);
   const { signIn } = useAuth();
-  const t = useTranslations("Auth");
+  const { t } = useI18n();
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -52,7 +52,7 @@ function SignInForm() {
       router.refresh();
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : t("failedSignIn");
+        error instanceof Error ? error.message : t("Auth.failedSignIn");
       toast.error(message);
     } finally {
       setIsLoading(false);
@@ -72,7 +72,7 @@ function SignInForm() {
       if (error) {throw error;}
     } catch (error: unknown) {
       const message =
-        error instanceof Error ? error.message : t("failedGoogleSignIn");
+        error instanceof Error ? error.message : t("Auth.failedGoogleSignIn");
       toast.error(message);
       setIsLoading(false);
     }
@@ -82,9 +82,9 @@ function SignInForm() {
     <div className="flex min-h-screen flex-col items-center justify-center">
       <div className="w-full max-w-md space-y-8 rounded-lg border p-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">{t("signInTitle")}</h1>
+          <h1 className="text-2xl font-bold">{t("Auth.signInTitle")}</h1>
           <p className="text-muted-foreground mt-2">
-            {t("signInSubtitle")}
+            {t("Auth.signInSubtitle")}
           </p>
         </div>
         <Form {...form}>
@@ -94,7 +94,7 @@ function SignInForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("email")}</FormLabel>
+                  <FormLabel>{t("Auth.email")}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -113,7 +113,7 @@ function SignInForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("password")}</FormLabel>
+                  <FormLabel>{t("Auth.password")}</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -127,7 +127,7 @@ function SignInForm() {
               )}
             />
             <Button type="submit" className="w-full" disabled={isLoading} aria-busy={isLoading}>
-              {isLoading ? t("signingIn") : t("signInButton")}
+              {isLoading ? t("Auth.signingIn") : t("Auth.signInButton")}
             </Button>
           </form>
         </Form>
@@ -137,7 +137,7 @@ function SignInForm() {
           </div>
           <div className="relative flex justify-center text-xs uppercase">
             <span className="bg-background text-muted-foreground px-2">
-              {t("orContinueWith")}
+              {t("Auth.orContinueWith")}
             </span>
           </div>
         </div>
@@ -149,12 +149,12 @@ function SignInForm() {
           disabled={isLoading}
         >
           <Icons.google className="mr-2 h-4 w-4" />
-          {t("google")}
+          {t("Auth.google")}
         </Button>
         <p className="text-center text-sm text-muted-foreground">
-          {t("noAccount")}{" "}
+          {t("Auth.noAccount")}{" "}
           <Link href="/auth/register" className="text-primary hover:underline">
-            {t("registerLink")}
+            {t("Auth.registerLink")}
           </Link>
         </p>
       </div>

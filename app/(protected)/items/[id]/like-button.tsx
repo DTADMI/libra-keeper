@@ -1,7 +1,7 @@
 // src/app/(protected)/items/[id]/like-button.tsx
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { toast } from "sonner";
 
 import { Icons } from "@/components/icons";
@@ -14,14 +14,14 @@ interface LikeButtonProps {
 }
 
 export function LikeButton({ itemId }: LikeButtonProps) {
-  const t = useTranslations("Items");
+  const { t } = useI18n();
   const { data, isLoading: isQueryLoading } = useLikes(itemId);
   const toggleLike = useToggleLike(itemId);
 
   function onLike() {
     toggleLike.mutate(undefined, {
       onError: (error) => {
-        toast.error(error instanceof Error ? error.message : t("reportFailed"));
+        toast.error(error instanceof Error ? error.message : t("Items.reportFailed"));
       },
     });
   }

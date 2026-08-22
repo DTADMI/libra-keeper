@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,7 +18,7 @@ const statusBadgeVariant: Record<string, "default" | "secondary" | "outline" | "
 };
 
 export default function MyLoansPage() {
-  const t = useTranslations("Loans");
+  const { t } = useI18n();
   const { data: loans = [], isLoading, error } = useMyLoans();
 
   if (isLoading) {
@@ -41,14 +41,14 @@ export default function MyLoansPage() {
   if (error) {
     return (
       <div className="container mx-auto p-4">
-        <p className="text-destructive text-center py-8">{t("loadingFailed") || "Failed to load loans."}</p>
+        <p className="text-destructive text-center py-8">{t("Loans.loadingFailed") || "Failed to load loans."}</p>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Loans.title")}</h1>
 
       <div className="grid gap-4">
         {loans.map((loan) => (
@@ -67,18 +67,18 @@ export default function MyLoansPage() {
             <CardContent>
               <div className="flex justify-between items-end">
                 <div className="text-xs text-muted-foreground space-y-1">
-                  <p>{t("requestedAt")}: {new Date(loan.requestedAt).toLocaleDateString()}</p>
+                  <p>{t("Loans.requestedAt")}: {new Date(loan.requestedAt).toLocaleDateString()}</p>
                   {loan.approvedAt && (
-                    <p>{t("approvedAt") || "Approved"}: {new Date(loan.approvedAt).toLocaleDateString()}</p>
+                    <p>{t("Loans.approvedAt") || "Approved"}: {new Date(loan.approvedAt).toLocaleDateString()}</p>
                   )}
                   {loan.dueAt && (
                     <p className="font-medium text-primary">
-                      {t("dueDate")}: {new Date(loan.dueAt).toLocaleDateString()}
+                      {t("Loans.dueDate")}: {new Date(loan.dueAt).toLocaleDateString()}
                     </p>
                   )}
                 </div>
                 {loan.status === "APPROVED" && (
-                  <p className="text-sm font-medium">{t("enjoy") || "Enjoy your item!"}</p>
+                  <p className="text-sm font-medium">{t("Loans.enjoy") || "Enjoy your item!"}</p>
                 )}
               </div>
             </CardContent>
@@ -86,7 +86,7 @@ export default function MyLoansPage() {
         ))}
 
         {loans.length === 0 && (
-          <p className="text-center py-10 text-muted-foreground">{t("noLoans")}</p>
+          <p className="text-center py-10 text-muted-foreground">{t("Loans.noLoans")}</p>
         )}
       </div>
     </div>

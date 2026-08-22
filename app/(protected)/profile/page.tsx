@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -23,7 +23,7 @@ const profileSchema = z.object({
 type ProfileFormData = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
-  const t = useTranslations("Profile");
+  const { t } = useI18n();
   const { data: session, update } = useSession();
 
   const form = useForm<ProfileFormData>({
@@ -49,10 +49,10 @@ export default function ProfilePage() {
       }),
     onSuccess: async (_, variables) => {
       await update({ name: variables.name, image: variables.image });
-      toast.success(t("updated"));
+      toast.success(t("Profile.updated"));
     },
     onError: () => {
-      toast.error(t("updateFailed"));
+      toast.error(t("Profile.updateFailed"));
     },
   });
 
@@ -62,20 +62,20 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto p-4 max-w-2xl">
-      <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
+      <h1 className="text-2xl font-bold mb-6">{t("Profile.title")}</h1>
       <Card>
         <CardHeader>
-          <CardTitle>{t("yourInformation")}</CardTitle>
+          <CardTitle>{t("Profile.yourInformation")}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">{t("email")}</Label>
+              <Label htmlFor="email">{t("Profile.email")}</Label>
               <Input id="email" value={session?.user?.email || ""} disabled />
-              <p className="text-xs text-muted-foreground">{t("emailDisabled")}</p>
+              <p className="text-xs text-muted-foreground">{t("Profile.emailDisabled")}</p>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="name">{t("name")}</Label>
+              <Label htmlFor="name">{t("Profile.name")}</Label>
               <Input
                 id="name"
                 {...form.register("name")}
@@ -86,7 +86,7 @@ export default function ProfilePage() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="image">{t("profileImage")}</Label>
+              <Label htmlFor="image">{t("Profile.profileImage")}</Label>
               <Input
                 id="image"
                 {...form.register("image")}
@@ -94,7 +94,7 @@ export default function ProfilePage() {
               />
             </div>
             <Button type="submit" disabled={updateProfile.isPending}>
-              {updateProfile.isPending ? t("updating") : t("updateButton")}
+              {updateProfile.isPending ? t("Profile.updating") : t("Profile.updateButton")}
             </Button>
           </form>
         </CardContent>
