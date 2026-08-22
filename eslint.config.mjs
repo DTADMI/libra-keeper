@@ -113,6 +113,8 @@ export default [
         },
       ]*/,
       "@typescript-eslint/no-explicit-any": "warn",
+      // NF-TYPE-001: exported functions must have explicit return types
+      "@typescript-eslint/explicit-module-boundary-types": "warn",
       "@typescript-eslint/ban-ts-comment": "warn",
       "@typescript-eslint/no-var-requires": "error",
 
@@ -168,7 +170,9 @@ export default [
   {
     files: ["**/__tests__/**/*", "**/*.test.{js,jsx,ts,tsx}"],
     rules: {
-      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-explicit-any": "warn",
+      // NF-TYPE-001: exported functions must have explicit return types
+      "@typescript-eslint/explicit-module-boundary-types": "warn",
       "@typescript-eslint/no-non-null-assertion": "off",
     },
   },
