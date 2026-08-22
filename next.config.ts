@@ -16,6 +16,9 @@ const nextConfig: NextConfig = withNextIntl(
   withPWA({
     output: "standalone",
     outputFileTracingRoot: __dirname,
+    poweredByHeader: false,
+    compress: true,
+    productionBrowserSourceMaps: false,
     experimental: {
       staleTimes: {
         dynamic: 30,

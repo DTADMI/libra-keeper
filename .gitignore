@@ -252,4 +252,5 @@ playwright-report/
 /public/workbox-*.js
 /public/worker-*.js
 /public/sw.js.map
-/public/workbox-*.js.map
+/public/workbox-*.js.mapi18n-audit-report.json
+dead-code-report.json
