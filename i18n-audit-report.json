@@ -1,0 +1,3508 @@
+{
+  "project": "B:\\git\\nebula-forge\\libra-keeper",
+  "timestamp": "2026-08-21T14:34:32.518Z",
+  "totalFiles": 175,
+  "totalViolations": 636,
+  "violations": [
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 20,
+      "text": "container mx-auto p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 21,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 27,
+      "text": "container mx-auto p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 28,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 31,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 34,
+      "text": "p-6 space-y-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 37,
+      "text": "flex gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 48,
+      "text": "text-destructive text-center py-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 52,
+      "text": "grid gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 56,
+      "text": "flex justify-between items-start",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 59,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 67,
+      "text": "flex justify-between items-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 68,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\page.tsx",
+      "line": 78,
+      "text": "text-center py-10 text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\requests\\request-action-buttons.tsx",
+      "line": 33,
+      "text": "flex gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 57,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 58,
+      "text": "grid grid-cols-1 gap-4 items-end border-b pb-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 59,
+      "text": "grid grid-cols-2 gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 60,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 61,
+      "text": "flag-name",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 63,
+      "text": "flag-name",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 66,
+      "text": "e.g. maintenance_mode",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 69,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 70,
+      "text": "flag-desc",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 72,
+      "text": "flag-desc",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 75,
+      "text": "Description",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 79,
+      "text": "flex items-center gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 80,
+      "text": "flex items-center space-x-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 82,
+      "text": "flag-enabled",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 86,
+      "text": "flag-enabled",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 92,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 94,
+      "text": "flex items-center justify-between p-2 border rounded-md",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 95,
+      "text": "space-y-0.5",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 96,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 97,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 99,
+      "text": "flex items-center gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\feature-flag-manager.tsx",
+      "line": 75,
+      "text": "Description",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 67,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 90,
+      "text": "space-y-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 91,
+      "text": "flex items-center justify-between",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 92,
+      "text": "space-y-0.5",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 94,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 104,
+      "text": "flex items-center justify-between",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 105,
+      "text": "space-y-0.5",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 107,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 118,
+      "text": "space-y-4 pl-4 border-l-2 border-muted",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 119,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 120,
+      "text": "push-webhook-url",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 122,
+      "text": "push-webhook-url",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 128,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 129,
+      "text": "push-webhook-secret",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 133,
+      "text": "push-webhook-secret",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 137,
+      "text": "Bearer token or shared secret",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 144,
+      "text": "Saving...",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\notification-channel-manager.tsx",
+      "line": 137,
+      "text": "Bearer token or shared secret",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\page.tsx",
+      "line": 22,
+      "text": "container mx-auto p-4 space-y-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\page.tsx",
+      "line": 23,
+      "text": "text-2xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\page.tsx",
+      "line": 36,
+      "text": "flex gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\page.tsx",
+      "line": 38,
+      "text": "mr-2 h-4 w-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\page.tsx",
+      "line": 42,
+      "text": "mr-2 h-4 w-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 86,
+      "text": "String",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 87,
+      "text": "Boolean",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 88,
+      "text": "Number",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 56,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 57,
+      "text": "grid grid-cols-4 gap-4 items-end border-b pb-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 58,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 64,
+      "text": "e.g. library_name",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 67,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 68,
+      "text": "new-value",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 76,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 96,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 98,
+      "text": "grid grid-cols-4 gap-4 items-end",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 99,
+      "text": "font-mono text-sm",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 106,
+      "text": "text-xs uppercase text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 108,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\settings\\settings-manager.tsx",
+      "line": 73,
+      "text": "Value",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 13,
+      "text": "PROCESSING",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 13,
+      "text": "COMPLETED",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 23,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 37,
+      "text": "p-8 text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 42,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 63,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 64,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 74,
+      "text": "SUGGESTION",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 87,
+      "text": "PROCESSING",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 88,
+      "text": "COMPLETED",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\suggestions\\page.tsx",
+      "line": 98,
+      "text": "text-center py-10 text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\users\\page.tsx",
+      "line": 30,
+      "text": "p-8 text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\admin\\users\\page.tsx",
+      "line": 35,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 27,
+      "text": "h-8 w-8 animate-spin",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 33,
+      "text": "container mx-auto py-10",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 34,
+      "text": "mb-8 text-3xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 40,
+      "text": "flex justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 45,
+      "text": "rounded-md border shadow",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 50,
+      "text": "underline",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 56,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 63,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 66,
+      "text": "font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 67,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 70,
+      "text": "destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\calendar\\page.tsx",
+      "line": 77,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 33,
+      "text": "Your Library",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 28,
+      "text": "container mx-auto p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 33,
+      "text": "text-xl font-semibold mb-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 43,
+      "text": "object-cover w-full h-full",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 48,
+      "text": "flex justify-between items-start gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 49,
+      "text": "text-lg line-clamp-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 50,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 54,
+      "text": "text-sm text-muted-foreground line-clamp-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 59,
+      "text": "flex flex-wrap gap-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\dashboard\\page.tsx",
+      "line": 71,
+      "text": "text-muted-foreground col-span-full text-center py-10",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 118,
+      "text": "container mx-auto max-w-2xl py-10",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 119,
+      "text": "mb-8 flex items-center justify-between",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 120,
+      "text": "text-3xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 124,
+      "text": "space-y-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 138,
+      "text": "grid grid-cols-2 gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 179,
+      "text": "description",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 196,
+      "text": "coverImage",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 209,
+      "text": "grid grid-cols-2 gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 225,
+      "text": "publisher",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 240,
+      "text": "rounded-md border p-4 space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 244,
+      "text": "grid grid-cols-2 gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 249,
+      "text": "metadata.brand",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 262,
+      "text": "metadata.material",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 275,
+      "text": "metadata.condition",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 302,
+      "text": "metadata.ageRange",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 317,
+      "text": "metadata.size",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 333,
+      "text": "metadata.genre",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 346,
+      "text": "metadata.duration",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 362,
+      "text": "metadata.artist",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 377,
+      "text": "metadata.director",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 392,
+      "text": "metadata.platform",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 410,
+      "text": "collectionId",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\new\\page.tsx",
+      "line": 433,
+      "text": "flex justify-end gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 41,
+      "text": "text-muted-foreground text-center py-10",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 45,
+      "text": "space-y-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 46,
+      "text": "text-2xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 60,
+      "text": "space-y-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 62,
+      "text": "flex gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 67,
+      "text": "flex-1 space-y-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 68,
+      "text": "flex items-center justify-between",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 69,
+      "text": "font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 70,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 74,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\comments-section.tsx",
+      "line": 79,
+      "text": "text-muted-foreground text-center py-10",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 110,
+      "text": "space-y-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 176,
+      "text": "description",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 203,
+      "text": "coverImage",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 232,
+      "text": "publisher",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 247,
+      "text": "rounded-md border p-4 space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 254,
+      "text": "metadata.brand",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 257,
+      "text": "metadata.material",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 260,
+      "text": "metadata.condition",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 277,
+      "text": "metadata.ageRange",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 282,
+      "text": "metadata.size",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 288,
+      "text": "metadata.genre",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 291,
+      "text": "metadata.duration",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 297,
+      "text": "metadata.platform",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\edit-item-form.tsx",
+      "line": 305,
+      "text": "flex gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\page.tsx",
+      "line": 27,
+      "text": "Edit Item",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\page.tsx",
+      "line": 26,
+      "text": "container mx-auto max-w-2xl py-10",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\edit\\page.tsx",
+      "line": 27,
+      "text": "mb-8 text-3xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 64,
+      "text": "No Cover Image\n            ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 101,
+      "text": "Description",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 139,
+      "text": "Material",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 145,
+      "text": "Condition",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 151,
+      "text": "Age Range",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 163,
+      "text": "Platform",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 169,
+      "text": "Duration",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 193,
+      "text": "Edit Item",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 227,
+      "text": "Loan History",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 54,
+      "text": "container mx-auto py-10 px-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 70,
+      "text": "flex-1 space-y-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 72,
+      "text": "flex items-center gap-4 mb-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 73,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 74,
+      "text": "AVAILABLE",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 74,
+      "text": "destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 78,
+      "text": "text-4xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 80,
+      "text": "text-xl text-muted-foreground mt-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 84,
+      "text": "mt-2 flex items-center gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 90,
+      "text": "flex flex-wrap gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 100,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 101,
+      "text": "text-2xl font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 102,
+      "text": "text-muted-foreground whitespace-pre-wrap",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 103,
+      "text": "No description provided.",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 109,
+      "text": "grid grid-cols-2 gap-4 text-sm",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 112,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 113,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 118,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 119,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 127,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 128,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 133,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 134,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 139,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 140,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 145,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 146,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 151,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 152,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 157,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 158,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 163,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 164,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 169,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 170,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 177,
+      "text": "pt-6 flex flex-wrap gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 178,
+      "text": "AVAILABLE",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 187,
+      "text": "text-sm text-muted-foreground italic",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 200,
+      "text": "text-sm font-medium mb-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 201,
+      "text": "flex -space-x-2 overflow-hidden",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 212,
+      "text": "h-full w-full rounded-full",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 226,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 227,
+      "text": "text-xl font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 228,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 230,
+      "text": "flex items-center justify-between text-sm border-b pb-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 232,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 233,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 234,
+      "text": "Requested ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 235,
+      "text": "Borrowed ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 236,
+      "text": "Returned ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 237,
+      "text": "Rejected ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 238,
+      "text": "Overdue since ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 240,
+      "text": "Returned damaged ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\page.tsx",
+      "line": 245,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\report-button.tsx",
+      "line": 58,
+      "text": "h-4 w-4 mr-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\waitlist-button.tsx",
+      "line": 34,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\waitlist-button.tsx",
+      "line": 36,
+      "text": "flex items-center gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\items\\[id]\\waitlist-button.tsx",
+      "line": 39,
+      "text": "h-4 w-4 animate-spin",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 10,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 10,
+      "text": "destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 26,
+      "text": "container mx-auto p-4 space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 30,
+      "text": "p-6 space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 43,
+      "text": "container mx-auto p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 44,
+      "text": "text-destructive text-center py-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 50,
+      "text": "container mx-auto p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 51,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 57,
+      "text": "flex justify-between items-start",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 60,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 62,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 68,
+      "text": "flex justify-between items-end",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 69,
+      "text": "text-xs text-muted-foreground space-y-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 75,
+      "text": "font-medium text-primary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 81,
+      "text": "text-sm font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\loans\\page.tsx",
+      "line": 89,
+      "text": "text-center py-10 text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 70,
+      "text": "container mx-auto p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 71,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 80,
+      "text": "text-muted-foreground text-sm p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 83,
+      "text": "text-destructive text-sm p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 86,
+      "text": "text-muted-foreground text-sm p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 98,
+      "text": "flex items-center gap-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 103,
+      "text": "min-w-0 flex-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 104,
+      "text": "flex items-center justify-between",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 105,
+      "text": "font-medium text-sm truncate",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 107,
+      "text": "h-2 w-2 rounded-full bg-primary flex-shrink-0",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 110,
+      "text": "text-xs text-muted-foreground truncate",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 123,
+      "text": "flex items-center gap-3 text-lg",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 131,
+      "text": "flex-1 overflow-y-auto p-4 space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 133,
+      "text": "text-muted-foreground text-sm text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 144,
+      "text": "ml-auto bg-primary text-primary-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 158,
+      "text": "ml-auto bg-primary text-primary-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 168,
+      "text": "border-t p-4 flex gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 198,
+      "text": "currentColor",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 199,
+      "text": "M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 200,
+      "text": "M19 10v2a7 7 0 0 1-14 0v-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\messages\\page.tsx",
+      "line": 213,
+      "text": "flex-1 flex items-center justify-center text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 47,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 64,
+      "text": "container mx-auto p-4 max-w-2xl",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 65,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 71,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 72,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 75,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 77,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 82,
+      "text": "Your name",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 85,
+      "text": "text-xs text-destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 88,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\profile\\page.tsx",
+      "line": 82,
+      "text": "Your name",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 87,
+      "text": "container mx-auto p-4 max-w-3xl",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 88,
+      "text": "text-2xl font-bold mb-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 97,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 114,
+      "text": "SUGGESTION",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 115,
+      "text": "BORROWED_ITEM",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 167,
+      "text": "description",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 188,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 189,
+      "text": "text-destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 195,
+      "text": "flex items-start justify-between gap-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 197,
+      "text": "font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 198,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 199,
+      "text": "text-sm mt-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\(protected)\\suggestions\\page.tsx",
+      "line": 209,
+      "text": "text-muted-foreground text-center py-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\activity\\route.ts",
+      "line": 52,
+      "text": "Loan request for ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\activity\\route.ts",
+      "line": 74,
+      "text": "s suggestion ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\admin\\export\\route.ts",
+      "line": 39,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\admin\\export\\route.ts",
+      "line": 40,
+      "text": "Content-Disposition",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\admin\\export\\route.ts",
+      "line": 47,
+      "text": "Content-Disposition",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\cron\\cleanup-tokens\\route.ts",
+      "line": 35,
+      "text": "Internal error",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\cron\\email-reminders\\route.ts",
+      "line": 91,
+      "text": "Internal error",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\health\\route.ts",
+      "line": 26,
+      "text": "configured",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\health\\route.ts",
+      "line": 29,
+      "text": "configured",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\items\\[id]\\comments\\route.ts",
+      "line": 41,
+      "text": "You commented on ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\items\\[id]\\images\\route.ts",
+      "line": 37,
+      "text": "URL required",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\loans\\[id]\\route.ts",
+      "line": 63,
+      "text": "UNAVAILABLE",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\loans\\[id]\\route.ts",
+      "line": 94,
+      "text": "Your request to borrow ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\loans\\[id]\\route.ts",
+      "line": 96,
+      "text": "Your request to borrow ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\loans\\[id]\\route.ts",
+      "line": 99,
+      "text": "Your loan for ",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\search\\route.ts",
+      "line": 31,
+      "text": "SELECT\r\n        i.id,\r\n        i.title,\r\n        i.",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\upload\\route.ts",
+      "line": 13,
+      "text": "A file is required",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\upload\\route.ts",
+      "line": 18,
+      "text": "File size must be less than 5MB",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\upload\\route.ts",
+      "line": 39,
+      "text": "Upload failed",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\upload\\route.ts",
+      "line": 46,
+      "text": "Invalid request",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\api\\upload\\route.ts",
+      "line": 49,
+      "text": "Internal error",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 30,
+      "text": "flex min-h-screen items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 31,
+      "text": "text-center space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 32,
+      "text": "text-xl font-bold text-destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 42,
+      "text": "flex min-h-screen items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 43,
+      "text": "text-center space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 45,
+      "text": "text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\callback\\page.tsx",
+      "line": 55,
+      "text": "flex min-h-screen items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 61,
+      "text": "flex min-h-screen flex-col items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 62,
+      "text": "w-full max-w-md space-y-8 rounded-lg border p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 63,
+      "text": "text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 64,
+      "text": "text-2xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 70,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 111,
+      "text": "new-password",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 124,
+      "text": "text-center text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\register\\page.tsx",
+      "line": 78,
+      "text": "John Doe",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 82,
+      "text": "flex min-h-screen flex-col items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 83,
+      "text": "w-full max-w-md space-y-8 rounded-lg border p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 84,
+      "text": "text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 85,
+      "text": "text-2xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 91,
+      "text": "space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 91,
+      "text": "Sign in form",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 120,
+      "text": "current-password",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 135,
+      "text": "absolute inset-0 flex items-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 136,
+      "text": "w-full border-t",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 138,
+      "text": "relative flex justify-center text-xs uppercase",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 139,
+      "text": "bg-background text-muted-foreground px-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 151,
+      "text": "mr-2 h-4 w-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 169,
+      "text": "flex min-h-screen items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\auth\\signin\\page.tsx",
+      "line": 91,
+      "text": "Sign in form",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 10,
+      "text": "mx-auto w-full max-w-3xl space-y-6 px-4 py-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 11,
+      "text": "rounded-xl border border-border bg-card p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 12,
+      "text": "text-2xl font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 18,
+      "text": "rounded-xl border border-border bg-card p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 19,
+      "text": "text-lg font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 28,
+      "text": "rounded-xl border border-border bg-card p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 29,
+      "text": "text-lg font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 37,
+      "text": "rounded-xl border border-border bg-card p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 38,
+      "text": "text-lg font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\download\\page.tsx",
+      "line": 42,
+      "text": "mt-4 flex gap-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\offline\\page.tsx",
+      "line": 9,
+      "text": "mx-auto w-full max-w-2xl px-4 py-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\offline\\page.tsx",
+      "line": 10,
+      "text": "rounded-xl border border-border bg-card p-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\offline\\page.tsx",
+      "line": 11,
+      "text": "text-2xl font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\[locale]\\not-found.tsx",
+      "line": 10,
+      "text": "max-w-md w-full space-y-8 p-8 text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\[locale]\\not-found.tsx",
+      "line": 11,
+      "text": "text-6xl font-bold text-gray-900",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\[locale]\\not-found.tsx",
+      "line": 12,
+      "text": "text-3xl font-bold text-gray-900",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\[locale]\\page.tsx",
+      "line": 12,
+      "text": "flex min-h-screen flex-col items-center justify-between p-24",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "app\\[locale]\\page.tsx",
+      "line": 14,
+      "text": "text-4xl font-bold mb-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 24,
+      "text": "space-y-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 26,
+      "text": "flex gap-3 animate-pulse",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 27,
+      "text": "h-8 w-8 rounded-full bg-muted",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 28,
+      "text": "flex-1 space-y-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 39,
+      "text": "text-sm text-destructive",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 43,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 52,
+      "text": "flex gap-3 text-sm",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 54,
+      "text": "h-4 w-4 text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 56,
+      "text": "min-w-0 flex-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 57,
+      "text": "text-sm leading-snug",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\activity\\activity-feed.tsx",
+      "line": 69,
+      "text": "text-xs text-muted-foreground mt-0.5",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 165,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 194,
+      "text": "mr-2 h-4 w-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 206,
+      "text": "space-y-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 208,
+      "text": "border-2 border-dashed rounded-lg p-12 text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 209,
+      "text": "mx-auto h-8 w-8 text-muted-foreground mb-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 210,
+      "text": "text-sm text-muted-foreground mb-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 216,
+      "text": "absolute inset-0 w-full h-full opacity-0 cursor-pointer",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 228,
+      "text": "flex items-center justify-between",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 230,
+      "text": "font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 231,
+      "text": "text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 246,
+      "text": "mr-1 h-4 w-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 252,
+      "text": "mb-1 block",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 270,
+      "text": "overflow-x-auto max-h-64",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 275,
+      "text": "text-xs whitespace-nowrap",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 305,
+      "text": "flex justify-end gap-3 pt-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\bulk-import.tsx",
+      "line": 154,
+      "text": "Untitled",
+      "type": "Attribute",
+      "severity": "high"
+    },
+    {
+      "file": "components\\dashboard-toolbar.tsx",
+      "line": 15,
+      "text": "Dashboard",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "components\\dashboard-toolbar.tsx",
+      "line": 20,
+      "text": "Add New Item",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "components\\dashboard-toolbar.tsx",
+      "line": 14,
+      "text": "flex items-center justify-between mb-6 flex-wrap gap-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\dashboard-toolbar.tsx",
+      "line": 15,
+      "text": "text-2xl font-bold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\dashboard-toolbar.tsx",
+      "line": 18,
+      "text": "flex items-center gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\error-boundary.tsx",
+      "line": 46,
+      "text": "flex flex-col items-center justify-center py-12 space-y-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\error-boundary.tsx",
+      "line": 47,
+      "text": "text-center space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\error-boundary.tsx",
+      "line": 48,
+      "text": "text-lg font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 37,
+      "text": "h-48 bg-muted rounded-lg animate-pulse",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 44,
+      "text": "space-y-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 46,
+      "text": "relative rounded-lg overflow-hidden bg-black",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 50,
+      "text": "w-full max-h-96 object-contain mx-auto",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 83,
+      "text": "flex gap-2 overflow-x-auto pb-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 89,
+      "text": "border-primary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 92,
+      "text": "w-full h-full object-cover",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\gallery.tsx",
+      "line": 100,
+      "text": "h-5 w-5 text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\isbn-lookup.tsx",
+      "line": 69,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\isbn-lookup.tsx",
+      "line": 70,
+      "text": "isbn-lookup",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\isbn-lookup.tsx",
+      "line": 73,
+      "text": "isbn-lookup",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\isbn-lookup.tsx",
+      "line": 89,
+      "text": "h-4 w-4 animate-spin",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 57,
+      "text": "Scan Barcode\n        ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 63,
+      "text": "Scan ISBN Barcode",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 66,
+      "text": "Position the barcode within the frame to scan\n        ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 56,
+      "text": "flex items-center gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 65,
+      "text": "barcode-reader",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 65,
+      "text": "overflow-hidden rounded-md border",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\items\\barcode-scanner.tsx",
+      "line": 66,
+      "text": "mt-4 text-center text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 50,
+      "text": "flex items-center justify-between p-3 border-b",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 51,
+      "text": "font-semibold text-sm",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 59,
+      "text": "p-4 text-sm text-muted-foreground text-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 72,
+      "text": "flex items-start gap-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 73,
+      "text": "mt-1.5 h-2 w-2 rounded-full bg-primary shrink-0",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 75,
+      "text": "text-sm font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\notification-bell.tsx",
+      "line": 76,
+      "text": "text-xs text-muted-foreground line-clamp-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\providers\\app-providers.tsx",
+      "line": 24,
+      "text": "top-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\providers\\query-provider.tsx",
+      "line": 30,
+      "text": "development",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\pwa\\install-prompt.tsx",
+      "line": 7,
+      "text": "Promise",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "components\\pwa\\install-prompt.tsx",
+      "line": 8,
+      "text": "dismissed",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\pwa\\install-prompt.tsx",
+      "line": 65,
+      "text": "text-sm font-semibold",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\pwa\\install-prompt.tsx",
+      "line": 75,
+      "text": "rounded-md border border-border px-3 py-2 text-xs font-medium",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\pwa\\service-worker-registration.tsx",
+      "line": 8,
+      "text": "serviceWorker",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 40,
+      "text": "relative w-full max-w-md",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 50,
+      "text": "pl-9 pr-8",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 72,
+      "text": "p-4 text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 75,
+      "text": "p-4 text-sm text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 84,
+      "text": "min-w-0 flex-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 85,
+      "text": "font-medium text-sm line-clamp-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 92,
+      "text": "flex items-center gap-2 mt-1",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 93,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 95,
+      "text": "text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 99,
+      "text": "flex items-center gap-2 text-xs text-muted-foreground",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\search-bar.tsx",
+      "line": 101,
+      "text": "secondary",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\select.tsx",
+      "line": 30,
+      "text": "h-4 w-4 opacity-50",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\select.tsx",
+      "line": 120,
+      "text": "absolute right-2 flex h-3.5 w-3.5 items-center justify-center",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\separator.tsx",
+      "line": 19,
+      "text": "horizontal",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 18,
+      "text": "space-y-6 py-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 19,
+      "text": "space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 25,
+      "text": "space-y-3 rounded-lg border p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 26,
+      "text": "h-32 w-full",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 38,
+      "text": "space-y-6 py-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 41,
+      "text": "h-64 w-full rounded-lg",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 42,
+      "text": "space-y-3",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 44,
+      "text": "h-4 w-full",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 45,
+      "text": "h-4 w-full",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 47,
+      "text": "h-10 w-32",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 56,
+      "text": "space-y-4 py-6",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 59,
+      "text": "flex items-center gap-4 rounded-lg border p-4",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 60,
+      "text": "h-10 w-10 rounded-full",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\skeleton.tsx",
+      "line": 61,
+      "text": "flex-1 space-y-2",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\sonner.tsx",
+      "line": 15,
+      "text": "toaster group",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\switch.tsx",
+      "line": 22,
+      "text": "switch-thumb",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "components\\ui\\table.tsx",
+      "line": 8,
+      "text": "relative w-full overflow-auto",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "coverage\\lcov-report\\prettify.js",
+      "line": 2,
+      "text": "default-markup",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "coverage\\lcov-report\\prettify.js",
+      "line": 2,
+      "text": "default-code",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "coverage\\lcov-report\\prettify.js",
+      "line": 2,
+      "text": "null,true,false",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "e2e\\basic.spec.ts",
+      "line": 6,
+      "text": "to contain",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-admin.ts",
+      "line": 51,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-admin.ts",
+      "line": 78,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-admin.ts",
+      "line": 106,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-auth.ts",
+      "line": 10,
+      "text": "authenticated",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-auth.ts",
+      "line": 10,
+      "text": "unauthenticated",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-auth.ts",
+      "line": 45,
+      "text": "unauthenticated",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-auth.ts",
+      "line": 83,
+      "text": "SIGNED_IN",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-auth.ts",
+      "line": 105,
+      "text": "unauthenticated",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-item-images.ts",
+      "line": 40,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-items.ts",
+      "line": 106,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-items.ts",
+      "line": 143,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-items.ts",
+      "line": 162,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-items.ts",
+      "line": 180,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-loans.ts",
+      "line": 54,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-loans.ts",
+      "line": 74,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-messages.ts",
+      "line": 49,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-notifications.ts",
+      "line": 49,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-session.ts",
+      "line": 24,
+      "text": "authenticated",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "hooks\\use-suggestions.ts",
+      "line": 40,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\adapters\\email.ts",
+      "line": 39,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\adapters\\storage.ts",
+      "line": 44,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\adapters\\storage.ts",
+      "line": 70,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\auth\\account-lockout-pg.ts",
+      "line": 8,
+      "text": "Promise",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\auth\\account-lockout.ts",
+      "line": 27,
+      "text": "Promise",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\db.ts",
+      "line": 24,
+      "text": "development",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\feature-flags-pg.ts",
+      "line": 11,
+      "text": "Promise",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\feature-flags-pg.ts",
+      "line": 12,
+      "text": "PromiseLike",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\feature-flags.ts",
+      "line": 14,
+      "text": "percentage",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\feature-flags.ts",
+      "line": 167,
+      "text": "percentage",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\feature-flags.ts",
+      "line": 169,
+      "text": "user_list",
+      "type": "Bare string",
+      "severity": "high"
+    },
+    {
+      "file": "lib\\mail\\templates.ts",
+      "line": 28,
+      "text": "LibraKeeper",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\mail\\templates.ts",
+      "line": 70,
+      "text": "Your request to borrow ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\mail\\templates.ts",
+      "line": 87,
+      "text": "This is a friendly reminder that ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\mail\\templates.ts",
+      "line": 118,
+      "text": "Welcome to ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\mail\\templates.ts",
+      "line": 118,
+      "text": "LibraKeeper",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\mail\\templates.ts",
+      "line": 132,
+      "text": "The return of ",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\notifications\\dispatch.ts",
+      "line": 131,
+      "text": "Promise",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\notifications\\dispatch.ts",
+      "line": 200,
+      "text": "Sent by LibraKeeper",
+      "type": "JSX text",
+      "severity": "medium"
+    },
+    {
+      "file": "lib\\notifications\\dispatch.ts",
+      "line": 230,
+      "text": "Content-Type",
+      "type": "Bare string",
+      "severity": "high"
+    }
+  ]
+}
