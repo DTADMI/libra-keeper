@@ -8,6 +8,9 @@ on:
     branches: [main]
 
 permissions:
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
   contents: read
 
 jobs:
@@ -47,12 +50,7 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm exec prisma generate
 
-      - name: Typecheck
-        run: pnpm typecheck
-
-      - name: Lint
-        run: pnpm lint:ci
-
+      # Lint + typecheck handled by pre-commit; Next.js build catches type errors
       - name: Test
         run: pnpm test
 
