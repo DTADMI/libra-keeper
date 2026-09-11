@@ -1,7 +1,7 @@
 "use client";
 
 import { Upload, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 
@@ -88,8 +88,8 @@ function detectHeaders(headers: string[]): Partial<Record<string, number>> {
 }
 
 export function BulkImport() {
-  const t = useTranslations("Items");
-  const tc = useTranslations("Common");
+  const { t } = useI18n();
+  const { t: tc } = useI18n();
   const { enabled } = useFeatureFlag("bulk_import");
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -107,7 +107,7 @@ export function BulkImport() {
       const text = e.target?.result as string;
       const parsed = parseCSV(text);
       if (parsed.length < 2) {
-        toast.error(t("csvNeedHeaders"));
+        toast.error(t("Items.csvNeedHeaders"));
         setFile(null);
         return;
       }
@@ -168,7 +168,7 @@ export function BulkImport() {
         imported += res.count;
       }
 
-      toast.success(t("importSuccess", { count: imported }));
+      toast.success(t("Items.importSuccess", { count: imported }));
       setOpen(false);
       setFile(null);
       setHeaders([]);
@@ -176,7 +176,7 @@ export function BulkImport() {
       setMapping({});
       setPreview([]);
     } catch {
-      toast.error(tc("error"));
+      toast.error(tc("Common.error"));
     } finally {
       setImporting(false);
     }
@@ -192,14 +192,14 @@ export function BulkImport() {
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Upload className="mr-2 h-4 w-4" />
-          {t("bulkImport") || "Bulk Import"}
+          {t("Items.bulkImport") || "Bulk Import"}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{t("bulkImportTitle") || "Bulk Import Items"}</DialogTitle>
+          <DialogTitle>{t("Items.bulkImportTitle") || "Bulk Import Items"}</DialogTitle>
           <DialogDescription>
-            {t("bulkImportDescription") || "Upload a CSV file to import multiple items at once"}
+            {t("Items.bulkImportDescription") || "Upload a CSV file to import multiple items at once"}
           </DialogDescription>
         </DialogHeader>
 
@@ -208,7 +208,7 @@ export function BulkImport() {
             <div className="border-2 border-dashed rounded-lg p-12 text-center">
               <Upload className="mx-auto h-8 w-8 text-muted-foreground mb-3" />
               <p className="text-sm text-muted-foreground mb-2">
-                {t("dragDrop") || "Drag and drop a CSV file, or click to browse"}
+                {t("Items.dragDrop") || "Drag and drop a CSV file, or click to browse"}
               </p>
               <input
                 type="file"
@@ -229,7 +229,7 @@ export function BulkImport() {
                 <div>
                   <p className="font-medium">{file.name}</p>
                   <p className="text-sm text-muted-foreground">
-                    {t("rowsDetected", { count: rows.length }) || `${rows.length} rows detected`}
+                    {t("Items.rowsDetected", { count: rows.length }) || `${rows.length} rows detected`}
                   </p>
                 </div>
                 <Button
@@ -244,19 +244,19 @@ export function BulkImport() {
                   }}
                 >
                   <X className="mr-1 h-4 w-4" />
-                  {tc("cancel")}
+                  {tc("Common.cancel")}
                 </Button>
               </div>
 
               <div>
-                <Label className="mb-1 block">{t("defaultType") || "Default Type"}</Label>
+                <Label className="mb-1 block">{t("Items.defaultType") || "Default Type"}</Label>
                 <Select value={defaultType} onValueChange={setDefaultType}>
                   <SelectTrigger className="w-[200px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
                     {ITEM_TYPES.map((v) => (
-                      <SelectItem key={v} value={v}>{t(`types.${v}`) || v}</SelectItem>
+                      <SelectItem key={v} value={v}>{t(`Items.types.${v}`) || v}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -264,7 +264,7 @@ export function BulkImport() {
 
               <Card>
                 <CardHeader className="py-3">
-                  <CardTitle className="text-sm">{t("preview") || "Preview"}</CardTitle>
+                  <CardTitle className="text-sm">{t("Items.preview") || "Preview"}</CardTitle>
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="overflow-x-auto max-h-64">
@@ -304,12 +304,12 @@ export function BulkImport() {
 
         <div className="flex justify-end gap-3 pt-4">
           <Button variant="outline" onClick={() => setOpen(false)}>
-            {tc("cancel")}
+            {tc("Common.cancel")}
           </Button>
           <Button onClick={handleImport} disabled={importing || rows.length === 0}>
             {importing
-              ? (t("importing") || "Importing...")
-              : `${t("importLabel") || "Import"} ${rows.length} ${t("items") || "items"}`}
+              ? (t("Items.importing") || "Importing...")
+              : `${t("Items.importLabel") || "Import"} ${rows.length} ${t("Items.items") || "items"}`}
           </Button>
         </div>
       </DialogContent>

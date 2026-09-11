@@ -3,7 +3,7 @@
 import { formatDistanceToNow } from "date-fns";
 import { BookOpen, MessageCircle, Send } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 
 import { useActivity } from "@/hooks/use-activity";
 import { useRealtimeActivity } from "@/hooks/use-realtime";
@@ -15,7 +15,7 @@ const ICONS = {
 } as const;
 
 export function ActivityFeed() {
-  const t = useTranslations("Dashboard");
+  const { t } = useI18n();
   const { data: activities = [], isLoading, error } = useActivity();
   useRealtimeActivity();
 
@@ -36,11 +36,11 @@ export function ActivityFeed() {
   }
 
   if (error) {
-    return <p className="text-sm text-destructive">{t("failedActivity")}</p>;
+    return <p className="text-sm text-destructive">{t("Dashboard.failedActivity")}</p>;
   }
 
   if (activities.length === 0) {
-    return <p className="text-sm text-muted-foreground">{t("noActivity")}</p>;
+    return <p className="text-sm text-muted-foreground">{t("Dashboard.noActivity")}</p>;
   }
 
   return (

@@ -43,6 +43,19 @@ const fr: Translations = {
       "generic": "Une erreur s'est produite. Veuillez reessayer.",
       "notFound": "Introuvable",
       "unauthorized": "Vous devez etre connecte pour acceder a cette page."
+    },
+    "time": {
+      "now": "A l'instant",
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "tomorrow": "Demain",
+      "minutes": "minutes",
+      "hours": "heures",
+      "days": "jours",
+      "weeks": "semaines",
+      "months": "mois",
+      "years": "annees",
+      "ago": "il y a"
     }
   },
   "Index": {
@@ -259,11 +272,11 @@ const fr: Translations = {
     "dragDrop": "Glissez-déposez un fichier CSV, ou cliquez pour parcourir",
     "defaultType": "Type par défaut",
     "preview": "Aperçu",
-    "rowsDetected": "{count} lignes détectées",
+    "rowsDetected": "{{count}} lignes détectées",
     "csvNeedHeaders": "Le fichier CSV doit contenir une ligne d'en-tête",
     "importLabel": "Importer",
     "importing": "Importation en cours...",
-    "importSuccess": "{count} articles importés avec succès"
+    "importSuccess": "{{count}} articles importés avec succès"
   },
   "Loans": {
     "title": "Mes emprunts",
@@ -438,7 +451,7 @@ const fr: Translations = {
     "searching": "Recherche en cours...",
     "noResults": "Aucun article trouvé.",
     "by": "par",
-    "likes": "{count, plural, =1 {1 mention j'aime} other {# mentions j'aime}}"
+    "likes": "{{count}} likes"
   },
   "Notifications": {
     "title": "Notifications",
@@ -452,7 +465,7 @@ const fr: Translations = {
     "searchLabel": "Rechercher un livre par ISBN",
     "searchButton": "Rechercher l'ISBN",
     "notFound": "Aucun livre trouvé pour cet ISBN",
-    "found": "Trouvé : {title}",
+    "found": "Trouvé : {{title}}",
     "lookupFailed": "Échec de la recherche ISBN. Essayez d'entrer les détails manuellement."
   },
   "Common": {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, Search } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -24,7 +24,7 @@ interface ISBNLookupProps {
 }
 
 export function ISBNLookup({ onFill }: ISBNLookupProps) {
-  const t = useTranslations("ISBN");
+  const { t } = useI18n();
   const [isbn, setIsbn] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
 
       const data = await res.json();
       if (!data.items?.length) {
-        toast.error(t("notFound"));
+        toast.error(t("ISBN.notFound"));
         return;
       }
 
@@ -57,9 +57,9 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
       };
 
       onFill(metadata);
-      toast.success(t("found", { title: metadata.title ?? "" }));
+      toast.success(t("ISBN.found", { title: metadata.title ?? "" }));
     } catch (error) {
-      toast.error(t("lookupFailed"));
+      toast.error(t("ISBN.lookupFailed"));
     } finally {
       setIsLoading(false);
     }
@@ -67,24 +67,24 @@ export function ISBNLookup({ onFill }: ISBNLookupProps) {
 
   return (
     <div className="space-y-2">
-      <Label htmlFor="isbn-lookup">{t("lookupLabel")}</Label>
+      <Label htmlFor="isbn-lookup">{t("ISBN.lookupLabel")}</Label>
       <div className="flex gap-2">
         <Input
           id="isbn-lookup"
-          placeholder={t("lookupPlaceholder")}
+          placeholder={t("ISBN.lookupPlaceholder")}
           value={isbn}
           onChange={(e) => setIsbn(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {handleLookup();}
           }}
-          aria-label={t("searchLabel")}
+          aria-label={t("ISBN.searchLabel")}
         />
         <Button
           type="button"
           variant="outline"
           onClick={handleLookup}
           disabled={isLoading || !isbn.trim()}
-          aria-label={t("searchButton")}
+          aria-label={t("ISBN.searchButton")}
         >
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
         </Button>

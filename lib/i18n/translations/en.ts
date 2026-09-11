@@ -43,6 +43,19 @@ const en: Translations = {
       "generic": "Something went wrong. Please try again.",
       "notFound": "Not found",
       "unauthorized": "You must be signed in to access this page."
+    },
+    "time": {
+      "now": "Just now",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "tomorrow": "Tomorrow",
+      "minutes": "minutes",
+      "hours": "hours",
+      "days": "days",
+      "weeks": "weeks",
+      "months": "months",
+      "years": "years",
+      "ago": "ago"
     }
   },
   "Index": {
@@ -259,11 +272,11 @@ const en: Translations = {
     "dragDrop": "Drag and drop a CSV file, or click to browse",
     "defaultType": "Default Type",
     "preview": "Preview",
-    "rowsDetected": "{count} rows detected",
+    "rowsDetected": "{{count}} rows detected",
     "csvNeedHeaders": "CSV file must contain a header row",
     "importLabel": "Import",
     "importing": "Importing...",
-    "importSuccess": "Successfully imported {count} items"
+    "importSuccess": "Successfully imported {{count}} items"
   },
   "Loans": {
     "title": "My Loans",
@@ -438,7 +451,7 @@ const en: Translations = {
     "searching": "Searching...",
     "noResults": "No items found.",
     "by": "by",
-    "likes": "{count, plural, =1 {1 like} other {# likes}}"
+    "likes": "{{count}} likes"
   },
   "Notifications": {
     "title": "Notifications",
@@ -452,7 +465,7 @@ const en: Translations = {
     "searchLabel": "Look up book by ISBN",
     "searchButton": "Search ISBN",
     "notFound": "No book found for this ISBN",
-    "found": "Found: {title}",
+    "found": "Found: {{title}}",
     "lookupFailed": "Failed to look up ISBN. Try entering details manually."
   },
   "Common": {

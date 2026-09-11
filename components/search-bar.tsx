@@ -2,7 +2,7 @@
 
 import { SearchIcon, X } from "lucide-react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { useEffect, useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
@@ -15,7 +15,7 @@ function sanitizeHeadline(html: string): string {
 }
 
 export function SearchBar() {
-  const t = useTranslations("Search");
+  const { t } = useI18n();
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const { data: results = [], isLoading } = useSearch(query);
@@ -41,14 +41,14 @@ export function SearchBar() {
       <div className="relative">
         <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder={t("placeholder")}
+          placeholder={t("Search.placeholder")}
           value={query}
           onChange={(e) => handleChange(e.target.value)}
           onFocus={() => {
             if (query.length >= 2) {setOpen(true);}
           }}
           className="pl-9 pr-8"
-          aria-label={t("searchLabel")}
+          aria-label={t("Search.searchLabel")}
           role="searchbox"
           aria-expanded={open}
         />
@@ -59,7 +59,7 @@ export function SearchBar() {
               setOpen(false);
             }}
             className="absolute right-3 top-1/2 -translate-y-1/2"
-            aria-label={t("clearSearch")}
+            aria-label={t("Search.clearSearch")}
           >
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
@@ -69,10 +69,10 @@ export function SearchBar() {
       {open && (
         <div className="absolute z-50 mt-2 w-full rounded-md border bg-background shadow-lg">
           {isLoading && (
-            <p className="p-4 text-sm text-muted-foreground">{t("searching")}</p>
+            <p className="p-4 text-sm text-muted-foreground">{t("Search.searching")}</p>
           )}
           {!isLoading && results.length === 0 && query.length >= 2 && (
-            <p className="p-4 text-sm text-muted-foreground">{t("noResults")}</p>
+            <p className="p-4 text-sm text-muted-foreground">{t("Search.noResults")}</p>
           )}
           {results.map((item) => (
             <Link
@@ -92,14 +92,14 @@ export function SearchBar() {
                 <div className="flex items-center gap-2 mt-1">
                   <span className="text-xs text-muted-foreground">{item.type}</span>
                   {item.author && (
-                    <span className="text-xs text-muted-foreground">{t("by", { author: item.author })}</span>
+                    <span className="text-xs text-muted-foreground">{t("Search.by", { author: item.author })}</span>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 {item._count.likes > 0 && (
                   <Badge variant="secondary" className="text-xs">
-                    {t("likes", { count: item._count.likes })}
+                    {t("Search.likes", { count: item._count.likes })}
                   </Badge>
                 )}
               </div>

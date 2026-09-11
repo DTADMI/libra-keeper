@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useI18n } from "@/lib/i18n";
 import { Component, ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -41,17 +41,17 @@ class ErrorBoundaryInner extends Component<ErrorBoundaryProps, ErrorBoundaryStat
 }
 
 function ErrorFallback({ error, onRetry }: { error: Error | null; onRetry: () => void }) {
-  const t = useTranslations("Common");
+  const { t } = useI18n();
   return (
     <div className="flex flex-col items-center justify-center py-12 space-y-4">
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold">{t("error")}</h3>
+        <h3 className="text-lg font-semibold">{t("Common.error")}</h3>
         <p className="text-sm text-muted-foreground">
-          {error?.message ?? t("unexpectedError")}
+          {error?.message ?? t("Common.unexpectedError")}
         </p>
       </div>
       <Button variant="outline" onClick={onRetry}>
-        {t("tryAgain")}
+        {t("Common.tryAgain")}
       </Button>
     </div>
   );
