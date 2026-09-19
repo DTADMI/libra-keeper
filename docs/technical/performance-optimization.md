@@ -8,7 +8,7 @@ LibraKeeper performance strategy. Last updated: 2026-05-29.
 
 | Route | Strategy | revalidate | Notes |
 |-------|----------|------------|-------|
-| `/` (root) | `force-dynamic` | N/A | Locale redirect — must never cache |
+| `/` (root) | `force-dynamic` | N/A | Locale redirect - must never cache |
 | `/[locale]` (landing) | ISR | 3600s | Static public page, revalidated hourly |
 | `/[locale]/layout` | Static | `dynamicParams: false` | Only pre-generated FR/EN locales |
 | `/(protected)/*` | Dynamic | N/A | Auth-gated, no caching |

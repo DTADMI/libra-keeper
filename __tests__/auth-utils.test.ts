@@ -1,4 +1,4 @@
-// Auth utility tests — unit tests for requireAuth/requireAdmin wrappers
+// Auth utility tests - unit tests for requireAuth/requireAdmin wrappers
 
 jest.mock("@/lib/supabase/server", () => ({
   createServerClient: jest.fn(),

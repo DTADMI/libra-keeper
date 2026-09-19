@@ -1,4 +1,4 @@
-// lib/feature-flags.ts — Enhanced feature flag system
+// lib/feature-flags.ts - Enhanced feature flag system
 // Types: boolean, percentage, user_list
 // Storage: Redis (primary) → DB (fallback) → defaults
 //

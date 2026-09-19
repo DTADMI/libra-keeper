@@ -10,7 +10,7 @@ import { fileURLToPath } from "url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
 
-console.log("Libra Keeper — Installing Git hooks...");
+console.log("Libra Keeper - Installing Git hooks...");
 
 // Set git config to use our hooks directory
 execSync("git config core.hooksPath .githooks", {
@@ -24,7 +24,7 @@ if (existsSync(preCommitHook)) {
   try {
     chmodSync(preCommitHook, 0o755);
   } catch {
-    // chmod may not be available on Windows — git handles it
+    // chmod may not be available on Windows - git handles it
   }
 }
 

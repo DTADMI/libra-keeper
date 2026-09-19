@@ -1,4 +1,4 @@
-// lib/adapters/storage.ts — Vendor-isolated storage adapter
+// lib/adapters/storage.ts - Vendor-isolated storage adapter
 //
 // Abstracts Supabase Storage (or alternative) behind a local interface.
 // Used for item cover images, user avatars, and exports.

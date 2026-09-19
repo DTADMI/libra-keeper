@@ -1,4 +1,4 @@
-// lib/redis.ts — Multi-tier Redis adapter with memory fallback
+// lib/redis.ts - Multi-tier Redis adapter with memory fallback
 //
 // Architecture:
 //   Production/Preview (VERCEL_ENV) → @upstash/redis via KV_REST_API_URL + KV_REST_API_TOKEN
@@ -35,7 +35,7 @@ export interface Pipeline {
 }
 
 // ---------------------------------------------------------------------------
-// MemoryRedis — In-memory Map fallback (build phase, safety net)
+// MemoryRedis - In-memory Map fallback (build phase, safety net)
 // ---------------------------------------------------------------------------
 
 class MemoryPipeline implements Pipeline {
@@ -190,7 +190,7 @@ class MemoryRedis implements RedisClient {
 }
 
 // ---------------------------------------------------------------------------
-// IoredisAdapter — Wraps ioredis for local development
+// IoredisAdapter - Wraps ioredis for local development
 // ---------------------------------------------------------------------------
 
 class IoredisPipeline implements Pipeline {
@@ -359,7 +359,7 @@ class IoredisAdapter implements RedisClient {
 }
 
 // ---------------------------------------------------------------------------
-// UpstashRedisAdapter — Wraps @upstash/redis for production
+// UpstashRedisAdapter - Wraps @upstash/redis for production
 // ---------------------------------------------------------------------------
 
 class UpstashPipeline implements Pipeline {

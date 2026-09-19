@@ -19,7 +19,7 @@ interface FeatureFlag {
 
 export function FeatureFlagManager() {
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
   const { data: flags = [], isLoading } = useAdminFlags();
   const updateFlag = useUpdateFlag();
 

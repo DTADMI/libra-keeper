@@ -1,4 +1,4 @@
-// lib/db.ts — Prisma client with pg adapter (React.cache for multi-component dedup)
+// lib/db.ts - Prisma client with pg adapter (React.cache for multi-component dedup)
 import "server-only";
 
 import { PrismaPg } from "@prisma/adapter-pg";
@@ -13,7 +13,7 @@ declare global {
 const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
-  console.warn("[build] DATABASE_URL is not set — Prisma will use fallback.");
+  console.warn("[build] DATABASE_URL is not set - Prisma will use fallback.");
 }
 
 const pool = new Pool({ connectionString: databaseUrl ?? "" });

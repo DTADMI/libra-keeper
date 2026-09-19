@@ -1,4 +1,4 @@
-// lib/security/protection.ts — Unified rate limiting + CSRF wrapper
+// lib/security/protection.ts - Unified rate limiting + CSRF wrapper
 // Combines withRateLimit + withCsrf into a single HOF for route handlers.
 
 import { NextResponse } from "next/server";

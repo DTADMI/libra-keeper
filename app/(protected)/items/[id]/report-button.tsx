@@ -27,7 +27,7 @@ interface ReportButtonProps {
 
 export function ReportButton({ itemId }: ReportButtonProps) {
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
   const reportItem = useReportItem(itemId);
   const [reason, setReason] = useState("");
   const [isOpen, setIsOpen] = useState(false);

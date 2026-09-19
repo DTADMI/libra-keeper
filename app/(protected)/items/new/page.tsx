@@ -66,7 +66,7 @@ const USES_ISBN_LOOKUP: ItemType[] = ["BOOK"];
 export default function NewItemPage() {
   const router = useRouter();
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
 
   const { data: collections = [] } = useQuery({
     queryKey: ["collections"],

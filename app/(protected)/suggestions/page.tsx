@@ -42,7 +42,7 @@ const statusColors: Record<string, string> = {
 
 export default function SuggestionsPage() {
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
   const { data: session } = useSession();
   const { data: requests = [], isLoading: listLoading, error: listError } = useSuggestions();
   const createSuggestion = useCreateSuggestion();

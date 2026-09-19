@@ -1,4 +1,4 @@
-# Libra Keeper — Documentation
+# Libra Keeper - Documentation
 
 ## Overview
 
@@ -6,20 +6,20 @@ Libra Keeper is a personal library management app for tracking books, music, mov
 
 ## Quick Links
 
-- **Action Plan** — `action-plan.md` (project root)
-- **User Guide** — `user-guide.md`
-- **Admin Guide** — `admin-guide.md`
-- **API Reference** — `api-reference.md`
+- **Action Plan** - `action-plan.md` (project root)
+- **User Guide** - `user-guide.md`
+- **Admin Guide** - `admin-guide.md`
+- **API Reference** - `api-reference.md`
 
 ## Architecture & Technical
 
-- **Architecture & Security** — `technical/architecture-security.md`
-- **Encoding Reference** — `technical/encoding-reference.md`
+- **Architecture & Security** - `technical/architecture-security.md`
+- **Encoding Reference** - `technical/encoding-reference.md`
 
 ## Planning & Analysis
 
-- **Platform Comparison** — `platform-architecture-comparison.md` (Supabase vs Convex vs SpacetimeDB vs Neo4j)
-- **Migration Plan** — `supabase-postgres-migration-plan.md` (Docker PostgreSQL → Supabase)
+- **Platform Comparison** - `platform-architecture-comparison.md` (Supabase vs Convex vs SpacetimeDB vs Neo4j)
+- **Migration Plan** - `supabase-postgres-migration-plan.md` (Docker PostgreSQL → Supabase)
 
 ## Tech Stack
 

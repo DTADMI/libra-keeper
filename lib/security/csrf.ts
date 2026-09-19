@@ -1,4 +1,4 @@
-// lib/security/csrf.ts — CSRF token generation and validation
+// lib/security/csrf.ts - CSRF token generation and validation
 // Double-submit cookie pattern for API mutation endpoints.
 
 import { randomBytes, timingSafeEqual } from "crypto";

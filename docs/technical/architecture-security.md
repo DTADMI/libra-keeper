@@ -1,6 +1,6 @@
 # LibraKeeper Architecture & Security
 
-> **See also (root canonical strategy)**: `../../../docs/technical/vercel-supabase-security-cost-ops-2026-05-27.md` — the cross-project Vercel/Supabase security & cost-ops strategy. This doc keeps Libra Keeper-specific architecture and threat-model detail only.
+> **See also (root canonical strategy)**: `../../../docs/technical/vercel-supabase-security-cost-ops-2026-05-27.md` - the cross-project Vercel/Supabase security & cost-ops strategy. This doc keeps Libra Keeper-specific architecture and threat-model detail only.
 
 > Last updated: 2026-05-15
 
@@ -17,7 +17,7 @@ LibraKeeper uses a **dual-layer authorization** model following the StoryForge p
 
 ### Why dual-layer?
 
-**Prisma connects to Postgres via `@prisma/adapter-pg` using the database user, not `auth.uid()`.** This means Prisma queries bypass RLS entirely. The primary authorization must therefore be in application code — every route handler checks the user's identity and role, and every query explicitly filters by `userId`.
+**Prisma connects to Postgres via `@prisma/adapter-pg` using the database user, not `auth.uid()`.** This means Prisma queries bypass RLS entirely. The primary authorization must therefore be in application code - every route handler checks the user's identity and role, and every query explicitly filters by `userId`.
 
 **RLS serves as defense-in-depth.** If application code has a bug (missing `userId` filter) or if someone accesses the database directly (e.g., via the Supabase dashboard), RLS policies still block unauthorized access. The policies are not the primary guard, but they are the safety net.
 
@@ -104,10 +104,10 @@ See `docs/platform-architecture-comparison.md` for the full analysis of Supabase
 
 | Before (NextAuth)                      | After (Supabase Auth)                                          |
 | -------------------------------------- | -------------------------------------------------------------- |
-| `lib/auth.ts` — NextAuthOptions config | `lib/supabase/server.ts` — server client factory               |
-| `getServerSession(authOptions)`        | `getServerAuth()` — returns same shape                         |
-| `useSession()` from `next-auth/react`  | `useSession()` from `@/hooks/use-session` — compatibility shim |
-| User/Account/Session tables in Prisma  | `auth.users` + `public.profiles` — managed by Supabase         |
+| `lib/auth.ts` - NextAuthOptions config | `lib/supabase/server.ts` - server client factory               |
+| `getServerSession(authOptions)`        | `getServerAuth()` - returns same shape                         |
+| `useSession()` from `next-auth/react`  | `useSession()` from `@/hooks/use-session` - compatibility shim |
+| User/Account/Session tables in Prisma  | `auth.users` + `public.profiles` - managed by Supabase         |
 | `api/auth/[...nextauth]` route         | `@supabase/ssr` middleware + cookie handling                   |
 | Password hashing via `bcryptjs`        | Handled by Supabase Auth (Argon2)                              |
 | No email verification                  | Built-in via Supabase Auth                                     |
@@ -146,7 +146,7 @@ See `docs/platform-architecture-comparison.md` for the full analysis of Supabase
 | ----------------------- | ------ | ------------------------------------------------------------------------------------------------------------------ |
 | **Rate limiting**       | ✅     | Sliding window via Redis. Auth: 10/60s, Signup: 5/300s, API: 100/60s, Admin: 200/60s. `lib/security/rate-limit.ts` |
 | **CSRF protection**     | ✅     | Double-submit cookie pattern. `lib/security/csrf.ts`                                                               |
-| **CSP headers**         | ✅     | `next.config.ts` — script-src, connect-src, frame-src, worker-src                                                  |
+| **CSP headers**         | ✅     | `next.config.ts` - script-src, connect-src, frame-src, worker-src                                                  |
 | **RLS policies**        | ✅     | All tables. `supabase/migrations/001_*` and `002_*`                                                                |
 | **server-only imports** | ✅     | `lib/db.ts`, `lib/supabase/server.ts`, `lib/supabase/admin.ts`                                                     |
 | **Admin separation**    | ✅     | `requireAdmin()` in route handlers. Service role key never exposed to client.                                      |

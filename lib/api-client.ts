@@ -1,4 +1,4 @@
-// lib/api-client.ts — Shared TanStack Query fetch wrapper
+// lib/api-client.ts - Shared TanStack Query fetch wrapper
 // Eliminates 8x duplicated fetchJSON across hook files.
 
 export async function apiClient<T>(url: string, init?: RequestInit): Promise<T> {

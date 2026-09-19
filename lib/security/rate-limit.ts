@@ -1,8 +1,8 @@
-// lib/security/rate-limit.ts — Sliding window rate limiting
+// lib/security/rate-limit.ts - Sliding window rate limiting
 //
 // PG is the default via pg-rate-limit.ts.
 // Falls back to Redis (ioredis pipeline) when redis_rate_limit flag is enabled.
-// Design: fails open — if rate limiter is unavailable, requests are allowed.
+// Design: fails open - if rate limiter is unavailable, requests are allowed.
 // Returns standard X-RateLimit-* and Retry-After headers.
 
 import { NextResponse } from "next/server";
@@ -87,7 +87,7 @@ async function slidingWindow(
 
     return { allowed, remaining, limit: config.limit, retryAfter };
   } catch {
-    // Fail open — rate limit check skipped if Redis is unavailable
+    // Fail open - rate limit check skipped if Redis is unavailable
     return { allowed: true, remaining: config.limit, limit: config.limit, retryAfter: 0 };
   }
 }

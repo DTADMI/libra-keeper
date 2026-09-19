@@ -57,7 +57,7 @@ interface EditItemFormProps {
 export function EditItemForm({ item }: EditItemFormProps) {
   const router = useRouter();
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
 
   const updateItem = useUpdateItem(item.id);
 

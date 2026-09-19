@@ -10,7 +10,7 @@ function cloneTranslations(): TranslationsBase {
  * Never throws on missing namespaces: it creates empty objects as needed and
  * skips null/undefined/array values. This replaces the previous QuestHunt-
  * specific per-field mapping (which referenced namespaces that do not exist in
- * LibraKeeper — `hero`, `features`, `cta`, `quests`, `settings`, `pages` — and
+ * LibraKeeper - `hero`, `features`, `cta`, `quests`, `settings`, `pages` - and
  * crashed at build time with "Cannot set properties of undefined").
  */
 function deepMergeStrings(target: Record<string, unknown>, source: Record<string, unknown>): void {
@@ -43,7 +43,7 @@ export function createLegacyTranslations(legacy: LegacyTranslationStrings): Tran
     const canonKey = resolve(legacyKey);
     // Only merge into namespaces that actually exist in LibraKeeper's canonical
     // structure. QuestHunt leftovers (landing, quests, settings, success, …) are
-    // skipped — they fall back to English until a proper per-locale migration.
+    // skipped - they fall back to English until a proper per-locale migration.
     if (!(canonKey in target)) continue;
     deepMergeStrings(target[canonKey] as Record<string, unknown>, legacyVal as Record<string, unknown>);
   }

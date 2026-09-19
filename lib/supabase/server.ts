@@ -36,7 +36,7 @@ export const createServerClient = cache(async () => {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Server components can't set cookies — middleware handles refresh
+            // Server components can't set cookies - middleware handles refresh
           }
         },
       },

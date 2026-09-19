@@ -1,6 +1,6 @@
 # Platform Architecture Comparative Analysis
 
-> Supabase vs Convex vs SpacetimeDB vs Neo4j — analyzed across QuestHunt, StoryForge, and LibraKeeper.
+> Supabase vs Convex vs SpacetimeDB vs Neo4j - analyzed across QuestHunt, StoryForge, and LibraKeeper.
 > Migration effort is de-prioritized: recommendations are based on technical merit for each project's specific requirements.
 > Last updated: 2026-05-15
 
@@ -10,10 +10,10 @@
 
 | Platform        | QH                                 | SF                                                           | LK                                                     | Summary |
 | --------------- | ---------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------ | ------- |
-| **Supabase**    | ✅ **Optimal** — PostGIS mandatory | ✅ **Optimal** — Prisma for deep relational data             | ✅ **Optimal** — Simple model, open source, all-in-one |
+| **Supabase**    | ✅ **Optimal** - PostGIS mandatory | ✅ **Optimal** - Prisma for deep relational data             | ✅ **Optimal** - Simple model, open source, all-in-one |
 | **Convex**      | ❌ No geospatial                   | 🟡 Strong for co-authoring (reactive)                        | 🟡 Simpler DX, but vendor lock-in                      |
 | **SpacetimeDB** | ❌ No PostGIS                      | ❌ Not a content platform                                    | ❌ Overkill for library management                     |
-| **Neo4j**       | ❌ No PostGIS                      | 🟡 Great for character/plot graphs — but needs separate auth | ❌ No graph relationships to model                     |
+| **Neo4j**       | ❌ No PostGIS                      | 🟡 Great for character/plot graphs - but needs separate auth | ❌ No graph relationships to model                     |
 
 **Key takeaway:** Supabase is the only platform viable across all three projects. The alternatives each have niche strengths but fatal flaws for at least one project. For QH, PostGIS is the non-negotiable requirement that eliminates all alternatives. For SF, Neo4j's graph model is genuinely appealing for story-world data. For LK, simplicity and open-source independence favor Supabase over Convex.
 
@@ -23,7 +23,7 @@
 
 ### 1.1 Supabase
 
-**What is it?** Supabase is an open-source Firebase alternative built on PostgreSQL. It provides a managed database with built-in authentication, file storage, edge functions, and realtime subscriptions — all accessed through a unified SDK.
+**What is it?** Supabase is an open-source Firebase alternative built on PostgreSQL. It provides a managed database with built-in authentication, file storage, edge functions, and realtime subscriptions - all accessed through a unified SDK.
 
 **Core components:**
 
@@ -34,7 +34,7 @@
 | **Storage**                  | File storage with access rules tied to auth                                  | Firebase Storage                                        |
 | **Realtime**                 | WebSocket-based subscriptions to database changes (INSERT/UPDATE/DELETE)     | Firebase Realtime Database                              |
 | **Edge Functions**           | Serverless functions running Deno at the edge                                | Firebase Cloud Functions                                |
-| **Row Level Security (RLS)** | Database-enforced access rules using the authenticated user's identity       | No direct Firebase equivalent — this is Postgres-native |
+| **Row Level Security (RLS)** | Database-enforced access rules using the authenticated user's identity       | No direct Firebase equivalent - this is Postgres-native |
 
 **How data flows:**
 
@@ -59,7 +59,7 @@ Browser/App
 - PostgreSQL ecosystem (Prisma, Drizzle, raw SQL, 100+ extensions)
 - PostGIS for geospatial queries (critical for GPS-based apps)
 - Row Level Security enforces access at the database engine level
-- Open source — can self-host if needed
+- Open source - can self-host if needed
 - Massive community and documentation
 - Free tier is generous (500MB database, 2 projects, 50MB storage)
 
@@ -69,13 +69,13 @@ Browser/App
 - Connection pooling needed for serverless (PgBouncer via pooler URL)
 - RLS policies must be written in SQL (learning curve)
 - Cold starts on Edge Functions
-- Can't use Prisma with RLS (Prisma bypasses RLS — see Section 5)
+- Can't use Prisma with RLS (Prisma bypasses RLS - see Section 5)
 
 ---
 
 ### 1.2 Convex
 
-**What is it?** Convex is a full-stack serverless platform where your database schema, server functions, and realtime subscriptions are all defined in TypeScript. There is no separate database server to manage, no ORM, and no migration files — you write TypeScript and Convex handles the rest.
+**What is it?** Convex is a full-stack serverless platform where your database schema, server functions, and realtime subscriptions are all defined in TypeScript. There is no separate database server to manage, no ORM, and no migration files - you write TypeScript and Convex handles the rest.
 
 **Core components:**
 
@@ -83,7 +83,7 @@ Browser/App
 | ---------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------- |
 | **Database**     | Custom document-relational engine (not PostgreSQL)                          | No SQL. Schema defined in TS with `defineTable()`.                  |
 | **Functions**    | Serverless mutations, queries, and actions (JS/TS)                          | Functions are ACID by default. No separate "edge function" concept. |
-| **Realtime**     | **Automatic** — every query subscribes to its data and re-renders on change | Supabase requires explicit channel setup. Convex is automatic.      |
+| **Realtime**     | **Automatic** - every query subscribes to its data and re-renders on change | Supabase requires explicit channel setup. Convex is automatic.      |
 | **Auth**         | Built-in via Auth.js or custom                                              | Similar to Supabase, but no hosted auth UI.                         |
 | **File Storage** | Built-in file storage with automatic caching                                | Similar to Supabase Storage.                                        |
 | **Scheduling**   | Built-in cron jobs and delayed execution                                    | Supabase uses pg_cron or Edge Function cron triggers.               |
@@ -105,7 +105,7 @@ Browser/App
     │                                              ├─ Writes to database
     │                                              └─ Triggers all affected queries to re-run
     │
-    └─ All re-renders are automatic — no refetch logic needed
+    └─ All re-renders are automatic - no refetch logic needed
 ```
 
 **Key strengths:**
@@ -121,7 +121,7 @@ Browser/App
 
 - **Vendor lock-in.** Closed source. Data can be exported but you can't run Convex yourself. If Convex shuts down or changes pricing, migration is a full rewrite.
 - **No PostgreSQL.** No PostGIS, no pgvector, no Prisma, no SQL ecosystem. You get what Convex provides.
-- **No geospatial support.** Coordinates are just numbers — no spatial indexes, no proximity queries.
+- **No geospatial support.** Coordinates are just numbers - no spatial indexes, no proximity queries.
 - **Smaller ecosystem.** Fewer tutorials, community packages, and StackOverflow answers.
 - **Pricing can be opaque.** Charged by function calls + data storage + bandwidth.
 
@@ -138,7 +138,7 @@ Browser/App
 | **Database**     | Custom relational engine with Rust-defined tables                         |
 | **Modules**      | Rust code compiled to WASM that runs inside the database                  |
 | **Realtime**     | Built-in multiplayer state sync with client prediction                    |
-| **Transactions** | Deterministic ordering — all clients see the same state in the same order |
+| **Transactions** | Deterministic ordering - all clients see the same state in the same order |
 | **Time Travel**  | Can query database state at any point in history                          |
 
 **Key strengths:**
@@ -175,7 +175,7 @@ Browser/App
 
 **Key strengths:**
 
-- **Native graph traversal.** "Find all characters connected to Character A through shared locations, events, or relationships" is a single Cypher query — in SQL this would be multiple recursive JOINs.
+- **Native graph traversal.** "Find all characters connected to Character A through shared locations, events, or relationships" is a single Cypher query - in SQL this would be multiple recursive JOINs.
 - **Relationship-first data model.** Connections are first-class citizens, not implicit in foreign keys.
 - **Cypher query language** is intuitive for path-finding: `MATCH path = (a)-[*1..3]-(b) RETURN path` finds all nodes connected within 3 hops.
 - **AuraDB** is the managed cloud version (comparable to Supabase's managed Postgres).
@@ -224,7 +224,7 @@ Browser/App
 
 ## 3. Vercel Compatibility
 
-All four platforms can connect to Vercel-hosted Next.js apps — but the integration depth varies.
+All four platforms can connect to Vercel-hosted Next.js apps - but the integration depth varies.
 
 ### 3.1 Supabase + Vercel
 
@@ -260,7 +260,7 @@ Next.js on Vercel
 | `convex` npm package   | Client Components, Server Components | `useQuery()`, `useMutation()` in client; `fetchQuery()` in server  |
 | Convex Client Provider | Root layout                          | Wraps app with `ConvexClientProvider`                              |
 | `ConvexHttpClient`     | API routes, Server Components        | Server-side queries without WebSocket                              |
-| Vercel deploy          | `npx convex deploy`                  | Separate from Vercel build — deploy function changes independently |
+| Vercel deploy          | `npx convex deploy`                  | Separate from Vercel build - deploy function changes independently |
 | Environment            | `CONVEX_DEPLOYMENT` env var          | Points Next.js to the correct Convex deployment (prod/preview)     |
 
 **Architecture flow:**
@@ -287,7 +287,7 @@ Next.js on Vercel                    Convex Cloud
 | ------------------------- | ----------------- | ----------------------------------------------------- |
 | Custom HTTP API           | API routes        | You'd build a REST/WebSocket bridge in your API route |
 | WebSocket directly        | Client Components | Connect to SpacetimeDB from the browser               |
-| No middleware integration | —                 | Auth must be entirely custom                          |
+| No middleware integration | -                 | Auth must be entirely custom                          |
 
 **Architecture flow:**
 
@@ -308,7 +308,7 @@ Next.js on Vercel                    Your Server / SpacetimeDB Cloud
 | ------------------ | ----------------------------- | -------------------------------------------------------- |
 | `neo4j-driver`     | API routes, Server Components | Direct Cypher queries                                    |
 | `@neo4j/graphql`   | API routes                    | Auto-generates GraphQL API from Neo4j schema             |
-| No client-side SDK | —                             | Must proxy through API routes (don't expose credentials) |
+| No client-side SDK | -                             | Must proxy through API routes (don't expose credentials) |
 | AuraDB connection  | API routes                    | Connect via bolt:// or neo4j+s:// protocol               |
 
 **Architecture flow:**
@@ -324,7 +324,7 @@ Next.js on Vercel                    Neo4j AuraDB
         ◄── structured results ────────── │
 ```
 
-**Important:** Neo4j AuraDB runs independently (not on Vercel). It's always-on, no cold starts. The `neo4j-driver` is a lightweight TCP driver, not an HTTP API — it opens a persistent connection pool, which works well in serverless if you cache the driver instance.
+**Important:** Neo4j AuraDB runs independently (not on Vercel). It's always-on, no cold starts. The `neo4j-driver` is a lightweight TCP driver, not an HTTP API - it opens a persistent connection pool, which works well in serverless if you cache the driver instance.
 
 ---
 
@@ -341,7 +341,7 @@ Prisma is an ORM (Object-Relational Mapper) for TypeScript/JavaScript. It genera
 
 **The Prisma + Supabase RLS tradeoff:**
 
-When Prisma connects to Supabase via the pg adapter, it authenticates as the database user specified in the connection string. This means RLS policies — which rely on `auth.uid()` to identify the current user — are **completely bypassed**. The database sees all Prisma queries as coming from the database user, not from the authenticated end user.
+When Prisma connects to Supabase via the pg adapter, it authenticates as the database user specified in the connection string. This means RLS policies - which rely on `auth.uid()` to identify the current user - are **completely bypassed**. The database sees all Prisma queries as coming from the database user, not from the authenticated end user.
 
 This is not a bug. It's a consequence of the architecture:
 
@@ -367,7 +367,7 @@ This is not a bug. It's a consequence of the architecture:
 
 ### 5.1 Does Supabase offer automatic reactivity?
 
-**No — Supabase Realtime is explicit, not automatic.** But it IS built-in and powerful.
+**No - Supabase Realtime is explicit, not automatic.** But it IS built-in and powerful.
 
 **How Supabase Realtime works:**
 
@@ -378,7 +378,7 @@ Under the hood, Supabase Realtime uses PostgreSQL's `LISTEN`/`NOTIFY` mechanism 
 3. Supabase Realtime picks up the NOTIFY and pushes the change to subscribed clients via WebSocket
 4. You handle the change in your client code (update state, invalidate cache, show toast)
 
-**Code example — "another author adds a character" (StoryForge):**
+**Code example - "another author adds a character" (StoryForge):**
 
 ```typescript
 // components/project/character-list.tsx
@@ -468,7 +468,7 @@ export function CharacterList({ projectId }: { projectId: string }) {
 }
 ```
 
-**Code example — "someone borrows an item" (LibraKeeper):**
+**Code example - "someone borrows an item" (LibraKeeper):**
 
 ```typescript
 // hooks/use-item-subscription.ts
@@ -540,7 +540,7 @@ export function useItemSubscription(itemId: string) {
 
 ### 5.2 How Convex handles the same scenarios
 
-**"Another author adds a character" — zero additional code:**
+**"Another author adds a character" - zero additional code:**
 
 ```typescript
 // components/project/character-list.tsx
@@ -550,7 +550,7 @@ import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 
 export function CharacterList({ projectId }: { projectId: string }) {
-  // This query automatically re-runs whenever characters change —
+  // This query automatically re-runs whenever characters change -
   // no channel setup, no invalidation, no useEffect
   const characters = useQuery(api.characters.listByProject, { projectId })
 
@@ -566,7 +566,7 @@ export function CharacterList({ projectId }: { projectId: string }) {
 
 The Convex client maintains a persistent WebSocket connection. When any mutation touches the `characters` table, the query automatically re-executes and pushes updated results to all subscribed clients. **No polling. No manual subscriptions. No cache invalidation.**
 
-**"Someone borrows an item" — equally automatic:**
+**"Someone borrows an item" - equally automatic:**
 
 ```typescript
 "use client"
@@ -592,7 +592,7 @@ export function ItemDetail({ itemId }: { itemId: string }) {
 | Aspect                | Supabase Realtime                                     | Convex Reactivity                                                  |
 | --------------------- | ----------------------------------------------------- | ------------------------------------------------------------------ |
 | **Setup**             | Explicit channel + event handlers + cleanup           | Zero setup. `useQuery()` auto-subscribes.                          |
-| **Granularity**       | Per-table, per-event, with filters                    | Per-query — any data the query touches triggers re-run             |
+| **Granularity**       | Per-table, per-event, with filters                    | Per-query - any data the query touches triggers re-run             |
 | **Cache integration** | Must manually integrate with React Query/SWR          | Built-in. Convex is its own state manager.                         |
 | **Network**           | WebSocket (via Supabase client)                       | WebSocket (via Convex client)                                      |
 | **Offline**           | Not supported                                         | Built-in optimistic updates; mutation queue survives disconnection |
@@ -653,7 +653,7 @@ QH uses PostGIS for:
 | Supabase    |             ✅ PostGIS native              | **Only viable option**                         |
 | Convex      |              ❌ No geospatial              | Eliminated immediately                         |
 | SpacetimeDB |              ❌ No geospatial              | Eliminated immediately                         |
-| Neo4j       | ❌ Point distance only (not PostGIS-level) | Eliminated — no ST_DWithin, no spatial indexes |
+| Neo4j       | ❌ Point distance only (not PostGIS-level) | Eliminated - no ST_DWithin, no spatial indexes |
 
 **QH Conclusion:** Supabase is the ONLY option. PostGIS is irreplaceable. The question is not "which platform" but "how to optimize the existing Supabase architecture."
 
@@ -685,7 +685,7 @@ QH uses PostGIS for:
 └──────────┘  CREATED_IN   └──────────┘  SET_IN       └──────────┘
 ```
 
-This is a property graph. Characters know each other, appear at locations during events, locations host events, events involve characters — every entity is interconnected.
+This is a property graph. Characters know each other, appear at locations during events, locations host events, events involve characters - every entity is interconnected.
 
 **Platform analysis (migration effort de-prioritized):**
 
@@ -693,11 +693,11 @@ This is a property graph. Characters know each other, appear at locations during
 | --------------------- | ---------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | **Supabase + Prisma** | Prisma handles deep relational queries. Auth + Storage + DB in one vendor. Working today.                  | No native graph traversal. Character relationships need explicit JOINs or recursive CTEs. Realtime requires explicit channel setup. | ✅ **Optimal pragmatic choice.** Prisma's deep includes match SF's relational data.                         |
 | **Supabase + Neo4j**  | Hybrid: Supabase for auth/storage/content, Neo4j for character/plot graphs. Best-in-class for each domain. | Two databases to manage. No Prisma for graph data. Must sync user identity between systems. Complex architecture.                   | 🟡 **Optimal technical choice for graph features.** Overkill unless character relationship graphs are core. |
-| **Convex**            | Auto-reactive co-authoring. Zero realtime setup. No migrations. Simpler DX than Supabase.                  | No Prisma. Must rewrite all queries. Closed source. No deep relational queries — more manual joins.                                 | 🟡 **Strong for collaboration features.** Best if real-time co-authoring becomes a priority.                |
+| **Convex**            | Auto-reactive co-authoring. Zero realtime setup. No migrations. Simpler DX than Supabase.                  | No Prisma. Must rewrite all queries. Closed source. No deep relational queries - more manual joins.                                 | 🟡 **Strong for collaboration features.** Best if real-time co-authoring becomes a priority.                |
 | **SpacetimeDB**       | None                                                                                                       | Not a content platform. No rich-text support. No auth. Rust-only.                                                                   | ❌ Not applicable.                                                                                          |
 | **Neo4j only**        | Perfect for character/plot relationship graphs. Native path traversal.                                     | No auth. No storage. No realtime. Must combine with other services.                                                                 | ❌ Not viable alone. Must be hybrid.                                                                        |
 
-**Neo4j for SF — concrete example of what becomes easier:**
+**Neo4j for SF - concrete example of what becomes easier:**
 
 ```cypher
 // "Find all characters connected to Frodo through shared locations or events, up to 3 hops"
@@ -709,7 +709,7 @@ ORDER BY distance
 
 In SQL (with Prisma or Supabase SDK), this would require recursive Common Table Expressions (CTEs) or multiple round-trips. In Cypher, it's a single query.
 
-**SF Recommendation — two-tier:**
+**SF Recommendation - two-tier:**
 
 | Priority                       | Platform                                     | When to use                                                                                                                                               |
 | ------------------------------ | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -765,8 +765,8 @@ This is a standard relational model. No graph-like interconnectedness. Items don
 | **Vendor independence** | Open source, can self-host, standard Postgres    | Closed source, proprietary DB           | Supabase |
 | **Setup complexity**    | Docker, Prisma, migrations, pg adapter           | `npx convex dev` → running              | Convex   |
 | **Long-term risk**      | Low (Postgres is forever)                        | Medium (Convex-specific, can't migrate) | Supabase |
-| **Free tier fit**       | 500MB DB — sufficient for personal library       | 1GB data — sufficient                   | Tie      |
-| **Learning value**      | Teaches SQL, Postgres, RLS — transferable skills | Teaches Convex — non-transferable       | Supabase |
+| **Free tier fit**       | 500MB DB - sufficient for personal library       | 1GB data - sufficient                   | Tie      |
+| **Learning value**      | Teaches SQL, Postgres, RLS - transferable skills | Teaches Convex - non-transferable       | Supabase |
 
 **LK Conclusion:** Supabase wins for LK on vendor independence and data model fit. Convex's auto-reactivity is appealing but doesn't outweigh the platform risk for a project that should be durable and ownable. The current Phase 2a architecture (Prisma + Supabase Auth + app-level guards) is the right foundation.
 
@@ -816,21 +816,21 @@ VG has the most genuinely graph-like data of any Nebula Forge project:
 
 | Platform                    | Strengths for VG                                                                                                                                                                                                                                                                                                                    | Weaknesses for VG                                                                                                                                                                         | Overall                                                                                                                                                 |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Supabase SDK (current)**  | Already working. Supabase Auth + Storage + Realtime integrated. 60+ SQL migrations. RLS on all tables. SWR + IndexedDB caching working well.                                                                                                                                                                                        | No ORM — all queries are manual Supabase SDK calls. Complex nested queries (profile + relationships + artworks) require multiple round-trips. No graph-native queries.                    | ✅ **Pragmatic choice.** Working and well-integrated.                                                                                                   |
+| **Supabase SDK (current)**  | Already working. Supabase Auth + Storage + Realtime integrated. 60+ SQL migrations. RLS on all tables. SWR + IndexedDB caching working well.                                                                                                                                                                                        | No ORM - all queries are manual Supabase SDK calls. Complex nested queries (profile + relationships + artworks) require multiple round-trips. No graph-native queries.                    | ✅ **Pragmatic choice.** Working and well-integrated.                                                                                                   |
 | **Supabase + Neo4j hybrid** | Neo4j is purpose-built for VG's social graph. "Find all profiles connected to this profile through relationship type Dom within 3 hops" is a single Cypher query. The 3D galaxy visualization could query Neo4j directly for graph data. Custom relationship types with line styles map naturally to Neo4j relationship properties. | Must sync user identity between Supabase Auth and Neo4j. Two databases to maintain. Artists showcase, marketplace, and toy reviews stay on Supabase.                                      | 🟡 **Strong technical fit for the graph layer.** The 3D social graph + custom relationships are VG's most unique feature. Neo4j makes them first-class. |
-| **Convex**                  | Auto-reactive chat (DMs, rooms) and activity feeds. No manual SWR cache management. Real-time updates for new posts, comments, notifications. Simpler DX than Supabase SDK for complex queries.                                                                                                                                     | No ORM — still manual queries. 40+ tables to migrate. Closed source — content policy risk for an adult platform. No Supabase Auth (would need Auth.js).                                   | 🟡 **Good for real-time features.** But the adult content nature raises platform risk concerns with a proprietary host.                                 |
-| **Supabase + Prisma**       | Prisma's `include` would reduce round-trips for nested queries (profile + relationships + artworks + posts). Type-safe client. Migration management via Prisma Migrate.                                                                                                                                                             | Must rewrite all 60+ SQL migration queries as Prisma schema. Significant effort. Prisma bypasses RLS — need app-level guards. SWR + IndexedDB caching system is independent and can stay. | 🟡 **Adds type safety and query ergonomics.** Not worth the migration cost given 60+ existing SQL migrations, but valuable if starting fresh.           |
+| **Convex**                  | Auto-reactive chat (DMs, rooms) and activity feeds. No manual SWR cache management. Real-time updates for new posts, comments, notifications. Simpler DX than Supabase SDK for complex queries.                                                                                                                                     | No ORM - still manual queries. 40+ tables to migrate. Closed source - content policy risk for an adult platform. No Supabase Auth (would need Auth.js).                                   | 🟡 **Good for real-time features.** But the adult content nature raises platform risk concerns with a proprietary host.                                 |
+| **Supabase + Prisma**       | Prisma's `include` would reduce round-trips for nested queries (profile + relationships + artworks + posts). Type-safe client. Migration management via Prisma Migrate.                                                                                                                                                             | Must rewrite all 60+ SQL migration queries as Prisma schema. Significant effort. Prisma bypasses RLS - need app-level guards. SWR + IndexedDB caching system is independent and can stay. | 🟡 **Adds type safety and query ergonomics.** Not worth the migration cost given 60+ existing SQL migrations, but valuable if starting fresh.           |
 | **SpacetimeDB**             | Multiplayer chat/rooms would benefit from deterministic sync.                                                                                                                                                                                                                                                                       | Not a game. No auth. No storage. No web framework integration.                                                                                                                            | ❌ Not applicable.                                                                                                                                      |
 
 **VG's unique platform considerations:**
 
-1. **Adult content policy risk:** VG hosts NSFW content. This makes **vendor lock-in with closed-source platforms (Convex) particularly risky** — a policy change could shut down the app. Supabase is open source and self-hostable, providing an escape hatch if the managed service changes policies. Neo4j Community Edition is also open source (GPL).
+1. **Adult content policy risk:** VG hosts NSFW content. This makes **vendor lock-in with closed-source platforms (Convex) particularly risky** - a policy change could shut down the app. Supabase is open source and self-hostable, providing an escape hatch if the managed service changes policies. Neo4j Community Edition is also open source (GPL).
 
 2. **Social graph is the core differentiator:** The custom relationship system (Dom/Sub, Partner, mutual consent flows) and 3D galaxy visualization are what make VG unique. Neo4j handles this natively. Supabase handles it with JOINs. The question is whether the graph complexity justifies a second database.
 
 3. **No ORM, no Redis:** VG uses raw Supabase SDK (like QH), PostgreSQL-based rate limiting (no Redis), and SWR instead of TanStack Query. Adding Redis would improve rate limiting and caching. Adding Prisma would add type safety but at high migration cost.
 
-**VG's Neo4j potential — concrete example:**
+**VG's Neo4j potential - concrete example:**
 
 ```cypher
 // "Find all profiles in a Dom/Sub relationship with this user, showing the relationship type and line style"
@@ -842,10 +842,10 @@ ORDER BY rel.display_order
 
 In Supabase SDK, this requires querying `custom_relationship_types`, `user_relationships`, and `friendships` separately, then merging in JavaScript.
 
-**VG Code Example — "Get a profile with relationships, artworks, and groups":**
+**VG Code Example - "Get a profile with relationships, artworks, and groups":**
 
 ```typescript
-// Supabase SDK (current VG approach — 4 round-trips)
+// Supabase SDK (current VG approach - 4 round-trips)
 const { data: profile } = await supabase.from("profiles").select("*").eq("id", id).single();
 const { data: relationships } = await supabase
   .from("user_relationships")
@@ -916,7 +916,7 @@ Any project → Convex.
 
 ### 7.3 From Supabase → Supabase + Neo4j (Hybrid)
 
-StoryForge only — add Neo4j alongside Supabase.
+StoryForge only - add Neo4j alongside Supabase.
 
 | Step                                                    | Effort               | Risk                            |
 | ------------------------------------------------------- | -------------------- | ------------------------------- |
@@ -930,7 +930,7 @@ StoryForge only — add Neo4j alongside Supabase.
 
 ---
 
-## 8. Concrete Code Examples — Same Operation Across Platforms
+## 8. Concrete Code Examples - Same Operation Across Platforms
 
 ### Example: "Get an item with its tags, active loans, and comments"
 
@@ -1029,7 +1029,7 @@ export const getById = query({
   },
 });
 
-// Client — auto-reactive, auto-typed
+// Client - auto-reactive, auto-typed
 const item = useQuery(api.items.getById, { itemId });
 ```
 
@@ -1084,9 +1084,9 @@ For LK's query complexity, Prisma is the most concise and type-safe. Convex is c
 | Rank | Platform     | Rationale                                         |
 | :--: | ------------ | ------------------------------------------------- |
 |  1   | **Supabase** | PostGIS is non-negotiable. No alternative exists. |
-|  —   | Convex       | Eliminated: no geospatial.                        |
-|  —   | SpacetimeDB  | Eliminated: no geospatial.                        |
-|  —   | Neo4j        | Eliminated: no PostGIS-equivalent geospatial.     |
+|  -   | Convex       | Eliminated: no geospatial.                        |
+|  -   | SpacetimeDB  | Eliminated: no geospatial.                        |
+|  -   | Neo4j        | Eliminated: no PostGIS-equivalent geospatial.     |
 
 #### StoryForge (SF)
 
@@ -1095,7 +1095,7 @@ For LK's query complexity, Prisma is the most concise and type-safe. Convex is c
 |  1   | **Supabase + Prisma**       | **Pragmatic best choice.** Working today. Prisma handles deep relational queries perfectly. Auth + Storage + DB in one vendor.                                                                                  |
 |  2   | **Supabase + Neo4j hybrid** | **Technical best choice for graph features.** When character relationships, plot connections, and story-world visualization become core. Keep Supabase for auth/storage/content. Add Neo4j for the graph layer. |
 |  3   | **Convex**                  | **Best choice if real-time co-authoring is the priority.** Auto-reactivity makes collaborative editing seamless. But: no Prisma, closed source, migration cost.                                                 |
-|  —   | SpacetimeDB                 | Not applicable.                                                                                                                                                                                                 |
+|  -   | SpacetimeDB                 | Not applicable.                                                                                                                                                                                                 |
 
 #### LibraKeeper (LK)
 
@@ -1104,8 +1104,8 @@ For LK's query complexity, Prisma is the most concise and type-safe. Convex is c
 |  1   | **Supabase + Prisma** | **Best all-around.** Already working. Open source. Type-safe queries. Auth + DB + Storage in one. Appropriate scale. Transferable skills (Postgres, SQL).                       |
 |  2   | **Supabase SDK**      | **If RLS enforcement at DB level is valued above query ergonomics.** Simpler stack (no Prisma). Better security posture. But query code is more verbose.                        |
 |  3   | **Convex**            | **If DX simplicity is the top priority and vendor lock-in is acceptable.** Less code, auto-reactivity, no migrations. But proprietary, can't self-host, no standard SQL export. |
-|  —   | Neo4j                 | No graph relationships to model. Using Neo4j for LK would add complexity with zero benefit.                                                                                     |
-|  —   | SpacetimeDB           | Not applicable.                                                                                                                                                                 |
+|  -   | Neo4j                 | No graph relationships to model. Using Neo4j for LK would add complexity with zero benefit.                                                                                     |
+|  -   | SpacetimeDB           | Not applicable.                                                                                                                                                                 |
 
 #### VelvetGalaxy (VG)
 
@@ -1115,7 +1115,7 @@ For LK's query complexity, Prisma is the most concise and type-safe. Convex is c
 |  2   | **Supabase + Neo4j hybrid** | **Technical best choice for the social graph.** The custom relationship system (Dom/Sub, Partner, mutual consent) and 3D galaxy visualization are inherently graph problems. Neo4j handles them natively. Keep Supabase for auth, storage, marketplace, toy reviews, artists. |
 |  3   | **Supabase + Prisma**       | **If query ergonomics and type safety become priorities.** Prisma's `include` would reduce round-trips for nested social queries. But 60+ SQL migrations to convert. Not urgent.                                                                                              |
 |  4   | **Convex**                  | **If real-time features are the top priority.** Auto-reactive chat, notifications, and activity feeds. But adult content raises platform risk on a proprietary host.                                                                                                          |
-|  —   | SpacetimeDB                 | Not applicable.                                                                                                                                                                                                                                                               |
+|  -   | SpacetimeDB                 | Not applicable.                                                                                                                                                                                                                                                               |
 
 ### Recommended architecture for each project
 

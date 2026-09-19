@@ -1,4 +1,4 @@
-// lib/labels.ts — Shared item type labels (eliminates 4x duplication)
+// lib/labels.ts - Shared item type labels (eliminates 4x duplication)
 // Used by: items/new, items/[id]/edit, items/[id], dashboard
 
 export const TYPE_LABELS: Record<string, string> = {

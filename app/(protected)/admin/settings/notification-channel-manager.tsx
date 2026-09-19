@@ -42,7 +42,7 @@ async function fetchChannelConfig(): Promise<NotificationChannelConfig> {
 
 export function NotificationChannelManager() {
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
   const [config, setConfig] = useState<NotificationChannelConfig>({
     pushEnabled: false,
     emailEnabled: true,

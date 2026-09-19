@@ -19,7 +19,7 @@ export async function getRateLimitOverrides(): Promise<Map<string, RateLimitOver
   const overrides = new Map<string, RateLimitOverride>();
 
   try {
-    // Read from AppSettings — overrides stored as JSON in settings
+    // Read from AppSettings - overrides stored as JSON in settings
     const settings = await prisma.appSettings.findMany({
       where: {
         key: { startsWith: "rate_limit_override:" },

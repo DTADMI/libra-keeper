@@ -1,4 +1,4 @@
-# Libra Keeper — Modularity Assessment
+# Libra Keeper - Modularity Assessment
 
 **Date**: 2026-05-29
 **Status**: Financial application; clean, compact codebase. Good modularity.
@@ -8,11 +8,11 @@
 ### Strengths
 - **No monoliths**: Zero files over 25KB
 - **Organized components** (30 files, 5 dirs):
-  - `components/ui/` — shadcn/ui wrappers (18 components)
-  - `components/items/` — Barcode scanner
-  - `components/providers/` — Query + app providers
-  - `components/pwa/` — Service worker + install prompt
-  - `components/activity/` — Activity feed
+  - `components/ui/` - shadcn/ui wrappers (18 components)
+  - `components/items/` - Barcode scanner
+  - `components/providers/` - Query + app providers
+  - `components/pwa/` - Service worker + install prompt
+  - `components/activity/` - Activity feed
 - **Root-level components**: Search bar, gallery, ISBN lookup, error boundary, notification bell
 - **Clean imports**: Components import from lib/ and ui/, no circular dependencies
 
@@ -23,19 +23,19 @@
 
 ### Strengths
 - **Clean lib/ structure** (23 files across 5 dirs):
-  - `lib/adapters/` — Storage, email adapters (interface pattern)
-  - `lib/security/` — CSRF, rate-limit, rate-limit-overrides, protection
-  - `lib/notifications/` — Dispatch service
-  - `lib/supabase/` — Client, server, admin, middleware, provider
-  - `lib/__tests__/` — Unit tests for lib modules
+  - `lib/adapters/` - Storage, email adapters (interface pattern)
+  - `lib/security/` - CSRF, rate-limit, rate-limit-overrides, protection
+  - `lib/notifications/` - Dispatch service
+  - `lib/supabase/` - Client, server, admin, middleware, provider
+  - `lib/__tests__/` - Unit tests for lib modules
 - **Adapter pattern**: `lib/adapters/storage.ts` and `lib/adapters/email.ts` use interface-based design
 - **Environment config**: `lib/env.ts` centralized env validation
 - **Feature flags**: Properly isolated
 - **Logger**: `lib/logger.ts` dedicated logging
 
 ### Concerns
-- **`lib/utils.ts`** — Same concern as all projects; watch for bloat
-- Tests inside `lib/__tests__/` rather than `tests/` or co-located — works but non-standard vs other NF projects
+- **`lib/utils.ts`** - Same concern as all projects; watch for bloat
+- Tests inside `lib/__tests__/` rather than `tests/` or co-located - works but non-standard vs other NF projects
 
 ## 3. Cross-Project Reuse Potential
 
@@ -60,7 +60,7 @@
 
 ## 5. Performance Impact
 
-- Small bundle footprint — no large components
+- Small bundle footprint - no large components
 - shadcn/ui tree-shakeable imports
 - PWA components for offline capability
 

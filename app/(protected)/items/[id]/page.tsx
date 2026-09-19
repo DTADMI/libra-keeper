@@ -244,7 +244,7 @@ export default async function ItemDetailsPage({ params }: { params: Promise<{ id
                         {loan.returnCondition && (
                           <p className="text-xs text-muted-foreground">
                             Condition: {loan.returnCondition}
-                            {loan.returnNotes && ` — ${loan.returnNotes}`}
+                            {loan.returnNotes && ` - ${loan.returnNotes}`}
                           </p>
                         )}
                       </div>

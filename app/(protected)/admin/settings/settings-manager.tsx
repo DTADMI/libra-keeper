@@ -21,7 +21,7 @@ interface Setting {
 
 export function SettingsManager() {
   const { t } = useI18n();
-  // tc (Common) merged — use t("Common.key")
+  // tc (Common) merged - use t("Common.key")
   const { data: settings = [], isLoading } = useAdminSettings();
   const updateSetting = useUpdateSetting();
 

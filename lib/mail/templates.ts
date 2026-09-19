@@ -1,4 +1,4 @@
-// lib/mail/templates.ts — Email templates for LibraKeeper
+// lib/mail/templates.ts - Email templates for LibraKeeper
 // Uses plain HTML with inline styles for maximum email client compatibility.
 
 const domain = process.env.NEXT_PUBLIC_APP_URL ?? "https://librakeeper.app";
@@ -115,7 +115,7 @@ export function welcomeTemplate(params: {
   const subject = "Welcome to LibraKeeper!";
   const content = `
     <p>Hello ${escape(params.userName)},</p>
-    <p>Welcome to <strong>LibraKeeper</strong> — your personal library management tool.</p>
+    <p>Welcome to <strong>LibraKeeper</strong> - your personal library management tool.</p>
     <p>Start by adding items to your collection, tracking loans, and organizing your library.</p>
     ${button("Go to Dashboard", `${domain}/dashboard`)}
   `;

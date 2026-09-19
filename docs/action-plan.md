@@ -1,4 +1,4 @@
-# Action Plan — Libra Keeper
+# Action Plan - Libra Keeper
 
 **Last Updated**: 2026-08-20
 
@@ -21,7 +21,7 @@
 | 3 | Prisma ORM with 19 models, pg adapter on Supabase | ✅ Done |
 | 4 | Supabase Auth with @supabase/ssr | ✅ Done |
 | 5 | Feature flags (13 flags, Redis-backed) | ✅ Done |
-| 6 | i18n with default fr (EN/FR) — next-intl | ✅ Done |
+| 6 | i18n with default fr (EN/FR) - next-intl | ✅ Done |
 | 7 | Encoding reference and fix scripts | ✅ Done |
 | 8 | Pre-commit hooks (lint, typecheck, test, supabase-security, build) | ✅ Done |
 | 9 | PPR enabled (experimental.ppr: 'incremental') | ✅ Done |
@@ -44,7 +44,7 @@
 | 10 | Full-text search (PostgreSQL tsvector) | ✅ Done |
 | 11 | Admin dashboard with feature flag toggles | ✅ Done |
 
-## Phase 3: Remaining Gaps (3 items — minor)
+## Phase 3: Remaining Gaps (3 items - minor)
 
 | # | Gap | Priority | Status |
 |---|-----|----------|--------|

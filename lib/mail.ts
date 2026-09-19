@@ -1,4 +1,4 @@
-// src/lib/mail.ts — Email helpers using vendor adapter
+// src/lib/mail.ts - Email helpers using vendor adapter
 import { emailClient } from "@/lib/adapters/email";
 import {
   loanRequestTemplate,

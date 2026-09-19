@@ -7,8 +7,8 @@ Last updated: 2026-05-15
 
 ## Recent Updates
 
-- **[NEW]** 2026-05-15 — Architecture assessment completed. Identified 10 gaps vs quest-hunt-web reference. Phases 1-4 drafted.
-- **[NEW]** 2026-06-18 — Comprehensive gap audit + remediation. 25 gaps identified, critical SQL migration issues resolved, RLS hardened, app-level fixes applied.
+- **[NEW]** 2026-05-15 - Architecture assessment completed. Identified 10 gaps vs quest-hunt-web reference. Phases 1-4 drafted.
+- **[NEW]** 2026-06-18 - Comprehensive gap audit + remediation. 25 gaps identified, critical SQL migration issues resolved, RLS hardened, app-level fixes applied.
 
 ---
 
@@ -31,7 +31,7 @@ Last updated: 2026-05-15
 | # | Issue | Fix |
 |---|-------|-----|
 | 14 | No `React.cache()` on Prisma client | Added `cache()` wrapper in `lib/db.ts` |
-| 16 | Two competing rate-limit implementations | Consolidated — both use same sliding window algorithm; protection.ts delegates to Redis slab (PG supported via rate-limit.ts) |
+| 16 | Two competing rate-limit implementations | Consolidated - both use same sliding window algorithm; protection.ts delegates to Redis slab (PG supported via rate-limit.ts) |
 | 17 | Missing X-RateLimit-Reset in protection.ts | Added header for both 429 and success responses |
 | 20 | Dead Redis scan code in rate-limit-overrides | Removed dead code, simplified to DB-only + per-key Redis cache |
 | 21 | Deprecated X-XSS-Protection header | Removed from `next.config.ts` |
@@ -67,9 +67,9 @@ Last updated: 2026-05-15
 
 ### Priority
 
-- 🔴 HIGH — Blocks production readiness or introduces security vulnerability
-- 🟡 MEDIUM — Important but not blocking
-- 🟢 LOW — Nice-to-have, polish, or future
+- 🔴 HIGH - Blocks production readiness or introduces security vulnerability
+- 🟡 MEDIUM - Important but not blocking
+- 🟢 LOW - Nice-to-have, polish, or future
 
 ### Status
 
@@ -90,13 +90,13 @@ Last updated: 2026-05-15
 | -------- | -------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | 🔴       | Provision Supabase staging + production projects                                       | ⛔ BLOCKED | Requires Supabase account creation. See `docs/supabase-postgres-migration-plan.md`. Keep Prisma + NextAuth, only change `DATABASE_URL`. |
 | 🔴       | Provision Upstash Redis (prod/preview)                                                 | ⛔ BLOCKED | Requires Upstash account. Used for caching, rate limiting, feature flags, session store.                                                |
-| 🔴       | Create `lib/redis.ts` — multi-tier Redis adapter (Upstash / ioredis / memory fallback) | 🔜 UP NEXT | Port pattern from QH `lib/redis.ts`. `RedisClient` interface, auto-selection by env. Payload guardrails, chunked storage.               |
-| 🔴       | Create `lib/security/rate-limit.ts` — sliding window via Redis ZSETs                   | 🔜 UP NEXT | Copy QH's pattern. Predefined limits for auth/signup/API/admin/guest. Route wrapper `withRateLimit()`. Fails-open.                      |
+| 🔴       | Create `lib/redis.ts` - multi-tier Redis adapter (Upstash / ioredis / memory fallback) | 🔜 UP NEXT | Port pattern from QH `lib/redis.ts`. `RedisClient` interface, auto-selection by env. Payload guardrails, chunked storage.               |
+| 🔴       | Create `lib/security/rate-limit.ts` - sliding window via Redis ZSETs                   | 🔜 UP NEXT | Copy QH's pattern. Predefined limits for auth/signup/API/admin/guest. Route wrapper `withRateLimit()`. Fails-open.                      |
 | 🔴       | Apply rate limiting to all API routes                                                  | 🔜 UP NEXT | Auth endpoints: 10/60s. Signup: 5/300s. API default: 100/60s. Admin: 200/60s.                                                           |
-| 🔴       | Create `lib/security/rate-limit-overrides.ts` — admin-managed per-scope overrides      | 🗂️ BACKLOG | DB-backed overrides with Redis cache. Admin UI deferred to Phase 2.                                                                     |
+| 🔴       | Create `lib/security/rate-limit-overrides.ts` - admin-managed per-scope overrides      | 🗂️ BACKLOG | DB-backed overrides with Redis cache. Admin UI deferred to Phase 2.                                                                     |
 | 🟡       | Install and configure TanStack React Query provider                                    | 🔜 UP NEXT | `@tanstack/react-query` + devtools. staleTime: 30s, gcTime: 5min, refetchOnWindowFocus: false. QueryClientProvider in layout.           |
 | 🟡       | Create `hooks/use-session.tsx` with React Query (replace current `useSession`)         | 🔜 UP NEXT | Wrap `useSession` from next-auth in React Query for caching and refetch.                                                                |
-| 🔴       | Create `lib/security/csrf.ts` — CSRF token generation + validation                     | 🗂️ BACKLOG | Used for mutation endpoints. Cookie-based double-submit pattern.                                                                        |
+| 🔴       | Create `lib/security/csrf.ts` - CSRF token generation + validation                     | 🗂️ BACKLOG | Used for mutation endpoints. Cookie-based double-submit pattern.                                                                        |
 | 🟡       | Add CSP headers in `next.config.ts`                                                    | 🗂️ BACKLOG | script-src, connect-src, frame-src, worker-src. Match QH pattern.                                                                       |
 | 🔴       | Update `.env.example` with all new env vars (Upstash, Supabase)                        | 🔜 UP NEXT | `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `REDIS_URL`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, etc.                                          |
 | 🟡       | Update CI/CD to handle new services                                                    | 🗂️ BACKLOG | Build-time Redis fallback, Supabase connection checks in CI.                                                                            |
@@ -110,7 +110,7 @@ Last updated: 2026-05-15
 | Priority | Item                                                                           | Status       | Notes                                                                                                        |
 | -------- | ------------------------------------------------------------------------------ | ------------ | ------------------------------------------------------------------------------------------------------------ |
 | 🟡       | Create `components/providers/query-provider.tsx`                               | ✅ COMPLETED | Dedicated provider wrapper. Devtools in dev mode.                                                            |
-| 🟡       | Create `hooks/use-feature-flags.tsx` — React Context + SWR client consumption  | ✅ COMPLETED | `FeatureFlagsProvider`, `useFeatureFlag(id)`, `<FeatureGate>` component. Match QH pattern.                   |
+| 🟡       | Create `hooks/use-feature-flags.tsx` - React Context + SWR client consumption  | ✅ COMPLETED | `FeatureFlagsProvider`, `useFeatureFlag(id)`, `<FeatureGate>` component. Match QH pattern.                   |
 | 🟡       | Add `@tanstack/react-query-devtools` in dev mode                               | ✅ COMPLETED | Conditional import in query-provider.                                                                        |
 | 🟡       | Add `swr` dependency for feature flags client-side                             | ✅ COMPLETED | Used by feature flag hooks (matching QH pattern).                                                            |
 | 🟡       | Migrate items CRUD to React Query (queries + mutations)                        | ✅ COMPLETED | `hooks/use-items.ts`. Like toggling with optimistic updates, comments with optimistic prepend.               |
@@ -118,8 +118,8 @@ Last updated: 2026-05-15
 | 🟡       | Migrate messages to React Query                                                | ✅ COMPLETED | `hooks/use-messages.ts`. Conversations + messages with optimistic send. Page migrated.                       |
 | 🟡       | Migrate suggestions + waitlist to React Query                                  | ✅ COMPLETED | `hooks/use-suggestions.ts`. Create suggestion mutation, waitlist join/leave. Page migrated.                  |
 | 🟡       | Migrate activity feed to React Query                                           | ✅ COMPLETED | `hooks/use-activity.ts`. 30s auto-refetch. Component migrated.                                               |
-| 🟡       | Enhanced feature flags — add types: percentage, user_list                      | ✅ COMPLETED | `lib/feature-flags.ts`. 12 default flags. `evaluateFlag()` for percentage + user_list. Redis+DB persistence. |
-| 🟡       | Create `hooks/use-admin-queries.ts` — admin CRUD hooks with optimistic updates | ✅ COMPLETED | `hooks/use-admin.ts`. Users, flags, settings, export hooks.                                                  |
+| 🟡       | Enhanced feature flags - add types: percentage, user_list                      | ✅ COMPLETED | `lib/feature-flags.ts`. 12 default flags. `evaluateFlag()` for percentage + user_list. Redis+DB persistence. |
+| 🟡       | Create `hooks/use-admin-queries.ts` - admin CRUD hooks with optimistic updates | ✅ COMPLETED | `hooks/use-admin.ts`. Users, flags, settings, export hooks.                                                  |
 | 🟡       | Migrate admin pages to React Query                                             | 🗂️ BACKLOG   | Admin pages are server components. React Query hooks ready for when they become client-side.                 |
 | 🟢       | Add loading skeleton components for all data-loaded pages                      | ✅ COMPLETED | `components/ui/skeleton.tsx`                                                                                 |
 | 🟢       | Add error boundary components for data-fetching errors                         | ✅ COMPLETED | `components/error-boundary.tsx`                                                                              |
@@ -138,11 +138,11 @@ Last updated: 2026-05-15
 | -------- | --------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------ |
 | 🔴       | Add `import "server-only"` guard to `lib/db.ts`                       | ✅ COMPLETED | Prevents Prisma client from being bundled into client components. Match SF pattern.                          |
 | 🔴       | Create `supabase/migrations/` directory structure                     | ✅ COMPLETED | Follow SF's dual-migration pattern: Prisma Migrate for schema, Supabase SQL for RLS/triggers.                |
-| 🔴       | Create initial Supabase SQL migration — schema mirroring Prisma       | ✅ COMPLETED | `001_create_tables.sql` with idempotent `CREATE TABLE IF NOT EXISTS`.                                        |
+| 🔴       | Create initial Supabase SQL migration - schema mirroring Prisma       | ✅ COMPLETED | `001_create_tables.sql` with idempotent `CREATE TABLE IF NOT EXISTS`.                                        |
 | 🔴       | Add RLS policies on all tables                                        | ✅ COMPLETED | Enable RLS. Policies: "Users can only see their own data", "Admins can see all". Binary access model.        |
 | 🔴       | Add `set_updated_at()` trigger function                               | ✅ COMPLETED | Auto-update `updated_at` columns.                                                                            |
 | 🔴       | Create `handle_new_user()` trigger for `public.profiles` sync         | ✅ COMPLETED | Auto-create profile row when `auth.users` row is created.                                                    |
-| 🟡       | Create `docs/architecture-security.md` — dual-layer authorization doc | ✅ COMPLETED | Document app-level guards + RLS defense-in-depth pattern. Mirror SF's doc.                                   |
+| 🟡       | Create `docs/architecture-security.md` - dual-layer authorization doc | ✅ COMPLETED | Document app-level guards + RLS defense-in-depth pattern. Mirror SF's doc.                                   |
 | 🟡       | Add Supabase Realtime subscriptions for activity feed                 | 🗂️ BACKLOG | Automatically update UI when loans/comments change. See platform comparison doc Section 5 for code examples. |
 | 🟡       | Create `scripts/` migration tooling (apply, validate, report)         | 🗂️ BACKLOG | Match QH's `apply-migrations.mjs` pattern for multi-environment migration.                                   |
 
@@ -156,11 +156,11 @@ Last updated: 2026-05-15
 | -------- | --------------------------------------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | 🟡       | Add Vercel cron jobs for email reminders + cleanup              | ✅ COMPLETED | `vercel.json` crons config. Daily 9AM email reminders for due/overdue loans. Weekly Sunday cleanup of expired sessions. `CRON_SECRET` env var. |
 | 🟡       | Configure CSP headers in `next.config.ts`                       | ✅ COMPLETED | Comprehensive CSP: script-src, connect-src, frame-src, worker-src, img-src. Added in Phase 1.                                                  |
-| 🟡       | Create vendor adapters — `lib/adapters/email.ts`                | ✅ COMPLETED | Interface-based adapter. Resend implementation + mock for tests. Added in Phase 1.                                                             |
-| 🟡       | Create vendor adapters — `lib/adapters/storage.ts`              | ✅ COMPLETED | Supabase Storage adapter (public + private buckets). Mock for tests. Added in Phase 1.                                                         |
+| 🟡       | Create vendor adapters - `lib/adapters/email.ts`                | ✅ COMPLETED | Interface-based adapter. Resend implementation + mock for tests. Added in Phase 1.                                                             |
+| 🟡       | Create vendor adapters - `lib/adapters/storage.ts`              | ✅ COMPLETED | Supabase Storage adapter (public + private buckets). Mock for tests. Added in Phase 1.                                                         |
 | 🟡       | Add CSRF protection to mutation endpoints                       | ✅ COMPLETED | Double-submit cookie pattern. `lib/security/csrf.ts`. Added in Phase 1.                                                                        |
-| 🟡       | Expand i18n — add French locale (FR)                            | ✅ COMPLETED | `src/i18n/messages/fr.json` with 120+ translated keys. Quebec French norms. `next-intl.config.ts` updated.                                     |
-| 🟡       | Expand i18n — translate all UI strings (currently ~3 keys)      | ✅ COMPLETED | `en.json` expanded from 3 keys to 120+ keys covering all pages.                                                                                |
+| 🟡       | Expand i18n - add French locale (FR)                            | ✅ COMPLETED | `src/i18n/messages/fr.json` with 120+ translated keys. Quebec French norms. `next-intl.config.ts` updated.                                     |
+| 🟡       | Expand i18n - translate all UI strings (currently ~3 keys)      | ✅ COMPLETED | `en.json` expanded from 3 keys to 120+ keys covering all pages.                                                                                |
 | 🟡       | Supabase Realtime subscriptions for activity feed + loan status | ✅ COMPLETED | `hooks/use-realtime.ts`. Channel subscriptions for items (loans, comments, likes) and global activity feed.                                    |
 | 🟢       | Screen reader optimization                                      | ✅ COMPLETED | ARIA labels on auth pages, form fields, search bar. `aria-required`, `aria-busy`, `role="searchbox"`, `aria-expanded`.                         |
 | 🟢       | High contrast theme variant                                     | ✅ COMPLETED | CSS custom variant `.high-contrast` with both light and dark modes. High-contrast color tokens.                                                |
@@ -187,7 +187,7 @@ Last updated: 2026-05-15
 | 🟢       | Webhook support for external services         | 🗂️ BACKLOG   | Outgoing webhooks for item add, loan status change.                                                                                                                                      |
 | 🟢       | Automated email reminders (scheduled)         | 🗂️ BACKLOG   | Cron-triggered due date / overdue emails.                                                                                                                                                |
 | 🟢       | Reports and analytics dashboard               | 🗂️ BACKLOG   | Borrowing trends, popular items, collection statistics.                                                                                                                                  |
-| 🟢       | Monetization — premium features, donations    | 🗂️ BACKLOG   | Stripe integration. Premium: advanced analytics, priority support.                                                                                                                       |
+| 🟢       | Monetization - premium features, donations    | 🗂️ BACKLOG   | Stripe integration. Premium: advanced analytics, priority support.                                                                                                                       |
 | 🟢       | Custom fields for items (flexible metadata)   | 🗂️ BACKLOG   | Admin-defined custom fields per item type. Dynamic form generation.                                                                                                                      |
 
 ---
@@ -211,9 +211,9 @@ Last updated: 2026-05-15
 | Item                                       | Decision     | Rationale                                                                                                                                                                                                                                                             |
 | ------------------------------------------ | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Migrate from Prisma to direct Supabase SDK | ❌ REJECTED  | **Revised after SF analysis.** LK's data model (2-level nesting, 11 models) matches SF's Prisma pattern, not QH's flat SDK pattern. Prisma stays. RLS added as defense-in-depth via SQL migrations. See `docs/platform-architecture-comparison.md` for full analysis. |
-| Migrate from NextAuth to Supabase Auth     | ✅ COMPLETED | Phase 2a. Supabase Auth provides built-in email verification, password reset, magic links, and RLS integration — all previously missing.                                                                                                                              |
+| Migrate from NextAuth to Supabase Auth     | ✅ COMPLETED | Phase 2a. Supabase Auth provides built-in email verification, password reset, magic links, and RLS integration - all previously missing.                                                                                                                              |
 | Use Convex instead of Supabase             | ❌ REJECTED  | Convex's auto-reactivity is appealing but vendor lock-in (closed source, proprietary DB) is unacceptable for a personal/hobby project where data portability matters. See `docs/platform-architecture-comparison.md`.                                                 |
-| Use Neo4j                                  | ❌ REJECTED  | No graph relationships in LK's data model. Items don't interconnect — they're independently cataloged. Neo4j would add complexity with zero benefit.                                                                                                                  |
+| Use Neo4j                                  | ❌ REJECTED  | No graph relationships in LK's data model. Items don't interconnect - they're independently cataloged. Neo4j would add complexity with zero benefit.                                                                                                                  |
 | Adopt PostGIS / MapLibre / Three.js        | ❌ REJECTED  | Irrelevant to library management domain.                                                                                                                                                                                                                              |
 | Move to monorepo / microservices           | ❌ REJECTED  | Monolith is simpler and sufficient for LK's scale.                                                                                                                                                                                                                    |
 | Abandon PWA in favor of React Native only  | ❌ REJECTED  | PWA supplements (not replaces) native app. Both can coexist.                                                                                                                                                                                                          |
@@ -224,12 +224,12 @@ Last updated: 2026-05-15
 
 | Phase                               | Progress | Blockers                                                                                                               |
 | ----------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Phase 1 — Security & Infrastructure | ✅ 100%  | None (Supabase + Upstash provisioning for production)                                                                  |
-| Phase 2a — Supabase Auth Migration  | ✅ 100%  | None                                                                                                                   |
-| Phase 2 — State Management & UX     | ✅ 95%   | Admin pages are server components (React Query hooks ready)                                                            |
-| Phase 2b — RLS Defense-in-Depth     | ✅ 100%  | None (SQL migrations + RLS policies written)                                                                           |
-| Phase 3 — Hardening & Polish        | ✅ 95%   | Sentry remaining                                                                                                       |
-| Phase 4 — Future                    | 🟡 40%   | Full-text search, ISBN lookup, ARIA, high contrast done. Bulk import, calendar sync, webhooks, monetization remaining. |
+| Phase 1 - Security & Infrastructure | ✅ 100%  | None (Supabase + Upstash provisioning for production)                                                                  |
+| Phase 2a - Supabase Auth Migration  | ✅ 100%  | None                                                                                                                   |
+| Phase 2 - State Management & UX     | ✅ 95%   | Admin pages are server components (React Query hooks ready)                                                            |
+| Phase 2b - RLS Defense-in-Depth     | ✅ 100%  | None (SQL migrations + RLS policies written)                                                                           |
+| Phase 3 - Hardening & Polish        | ✅ 95%   | Sentry remaining                                                                                                       |
+| Phase 4 - Future                    | 🟡 40%   | Full-text search, ISBN lookup, ARIA, high contrast done. Bulk import, calendar sync, webhooks, monetization remaining. |
 | Supabase DB Migration               | 🟡 50%   | Account provisioning + connection string rotation                                                                      |
 
 ---
@@ -239,7 +239,7 @@ Last updated: 2026-05-15
 ## 2026-05-28 Implementation Status
 
 ### Architecture
-- i18n: `next-intl` pattern (different from cross-project Context pattern — migration recommended)
+- i18n: `next-intl` pattern (different from cross-project Context pattern - migration recommended)
 - Default locale: effectively `en` (first in locales array, no explicit defaultLocale set)
 - Redis adapter: multi-tier (Upstash / ioredis / memory fallback) matching QH pattern
 - Rate limiting: sliding window via Redis ZSETs, predefined limits for auth/signup/API/admin
@@ -278,7 +278,7 @@ Last updated: 2026-05-15
 - Percentage and user_list flag types added
 
 ### i18n Issues (see `docs/technical/i18n-status.md`)
-- Default locale is effectively `en` — should be `fr` with explicit `defaultLocale`
+- Default locale is effectively `en` - should be `fr` with explicit `defaultLocale`
 - Uses `next-intl` instead of cross-project Context pattern
 - Quebec French conventions partially adopted (good "connexion"/"courriel", some "email"/"password" in FR)
 

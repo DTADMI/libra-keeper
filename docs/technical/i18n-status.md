@@ -1,4 +1,4 @@
-# LibraKeeper — i18n Status Audit
+# LibraKeeper - i18n Status Audit
 
 **Audit Date**: 2026-06-18
 
@@ -40,7 +40,7 @@
 
 ## Missing Keys / Issues
 
-- Uses `next-intl` instead of the cross-project Context pattern (low priority — next-intl is a valid alternative)
+- Uses `next-intl` instead of the cross-project Context pattern (low priority - next-intl is a valid alternative)
 - Consider migration to React Context pattern for cross-project consistency
 
 ## Assessment

@@ -8,7 +8,7 @@ jest.mock("next/headers", () => ({
   cookies: jest.fn(),
 }));
 
-// Do NOT mock next/server — csrf.ts uses new NextResponse which needs the real class
+// Do NOT mock next/server - csrf.ts uses new NextResponse which needs the real class
 
 describe("csrf", () => {
   let mockCookieStore: { set: jest.Mock; get: jest.Mock };

@@ -1,4 +1,4 @@
-# AGENTS.md — Libra Keeper
+# AGENTS.md - Libra Keeper
 
 ## Purpose
 
@@ -72,7 +72,7 @@ pitfall classes.
 - Do not remove or overwrite user changes in a dirty worktree unless explicitly asked.
 - Avoid editing generated output or `.next/`.
 - Keep new features behind feature flags, controllable from the admin dashboard.
-- **Never use `--no-verify`, `--no-gpg-sign`, or any hook-skipping flag on git commits or pushes.** The pre-commit hook runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm check:supabase-security`, and `pnpm build`. These must pass before every commit. If a hook takes too long, increase the tool timeout — do not bypass the hook.
+- **Never use `--no-verify`, `--no-gpg-sign`, or any hook-skipping flag on git commits or pushes.** The pre-commit hook runs `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm check:supabase-security`, and `pnpm build`. These must pass before every commit. If a hook takes too long, increase the tool timeout - do not bypass the hook.
 
 ### Product, UX, And Content
 

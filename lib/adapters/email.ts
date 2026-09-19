@@ -1,4 +1,4 @@
-// lib/adapters/email.ts — Vendor-isolated email adapter
+// lib/adapters/email.ts - Vendor-isolated email adapter
 //
 // Abstracts Resend behind a local interface for testability
 // and vendor independence.
