@@ -21,7 +21,7 @@
       "unrs-resolver"
     ]
   },
-  "packageManager": "pnpm@11.5.0",
+  "packageManager": "pnpm@12.8.1",
   "scripts": {
     "typecheck": "pnpm exec prisma generate && tsc --noEmit",
     "dev": "next dev --webpack",
@@ -149,6 +149,6 @@
   },
   "engines": {
     "node": ">=24.0.0",
-    "pnpm": ">=11.5.0"
+    "pnpm": ">=12.8.1"
   }
 }
