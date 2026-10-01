@@ -67,5 +67,26 @@
 
 | Requirement | Current | Target |
 |-------------|---------|--------|
-| Node.js | >=24.0.0 | 26.3.0 |
-| pnpm | 11.5.0 | 11.5.0 |
+| Node.js | 26.10.0 (`.nvmrc`/`.node-version`) | 26.10.0 |
+| pnpm | 12.8.1 (`packageManager`) | 12.8.1 |
+
+---
+
+## Backlog - features manquantes / pertinentes (recherche 2026-09-30)
+
+Priorite : P1 (fort impact), P2 (utile), P3 (confort). Effort : S/M/L.
+
+| # | Feature | Pourquoi | Prio | Effort | Statut |
+|---|---------|----------|------|--------|--------|
+| B1 | Rate limiting + cache Redis | Ecrit dans `platform-architecture-comparison.md` comme piece manquante ; protege les routes API et reduit la charge Postgres | P1 | M | ⏳ a faire |
+| B2 | Notifications d'echeance (courriel/push) | Un emprunt qui arrive a echeance est le cas d'usage central ; aujourd'hui purement passif | P1 | M | ⏳ a faire |
+| B3 | Scan ISBN / code-barres a l'ajout | Reduit la saisie manuelle d'un livre a une photo ; gros gain UX | P2 | M | ⏳ a faire |
+| B4 | Recherche plein texte + tags/collections | Retrouver un livre dans une grande bibliotheque | P2 | M | ⏳ a faire |
+| B5 | Historique des prets et statistiques | Savoir qui a emprunte quoi et quand ; base pour des recommandations | P2 | S | ⏳ a faire |
+| B6 | Import CSV (Goodreads, export maison) | Migration depuis un tableur existant | P2 | S | ⏳ a faire |
+| B7 | Couvertures via Open Library API | Enrichissement automatique des fiches | P3 | S | ⏳ a faire |
+| B8 | Sauvegarde / restauration (export JSON) | Un outil local doit pouvoir etre sauvegarde et deplace | P2 | S | ⏳ a faire |
+| B9 | PWA / consultation hors ligne | Consulter sa bibliotheque sans reseau | P3 | M | ⏳ a faire |
+| B10 | Migration i18n vers le pattern Context NF | Trace dans la Phase 3 ; coherence multi-projets | P3 | L | ⏳ planifie |
+
+Note : B10 necessite une decision produit (next-intl fonctionne) ; ne pas migrer sans raison forte.
