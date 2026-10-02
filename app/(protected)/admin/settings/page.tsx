@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { FeatureFlagManager } from "./feature-flag-manager";
+import { BackupRestore } from "./backup-restore";
 import { NotificationChannelManager } from "./notification-channel-manager";
 import { SettingsManager } from "./settings-manager";
 
@@ -44,6 +45,7 @@ export default function AdminSettingsPage() {
             </Button>
           </CardContent>
         </Card>
+        <BackupRestore />
       </div>
     </div>
   );
