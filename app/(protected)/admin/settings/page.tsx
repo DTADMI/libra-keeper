@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 
 import { FeatureFlagManager } from "./feature-flag-manager";
 import { BackupRestore } from "./backup-restore";
+import { CsvImport } from "./csv-import";
 import { NotificationChannelManager } from "./notification-channel-manager";
 import { SettingsManager } from "./settings-manager";
 
@@ -46,6 +47,7 @@ export default function AdminSettingsPage() {
           </CardContent>
         </Card>
         <BackupRestore />
+        <CsvImport />
       </div>
     </div>
   );
