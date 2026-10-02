@@ -7,6 +7,8 @@ const withPWA =
         dest: "public",
         register: false,
         disable: process.env.NODE_ENV !== "production",
+        // Repli explicite : une navigation hors ligne sert la page /offline.
+        fallbacks: { document: "/offline" },
       })
     : (config: NextConfig) => config;
 const withNextIntl = (config: NextConfig) => config;

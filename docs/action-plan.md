@@ -86,7 +86,7 @@ Priorite : P1 (fort impact), P2 (utile), P3 (confort). Effort : S/M/L.
 | B6 | Import CSV (Goodreads, export maison) | Migration depuis un tableur existant | P2 | S | ✅ fait 2026-10-02 : lib/libra-csv.ts + carte d'import CSV dans les reglages admin (creation par lot) |
 | B7 | Couvertures via Open Library API | Enrichissement automatique des fiches | P3 | S | ✅ fait 2026-10-02 : `lib/open-library.ts`, couverture deduite de l'ISBN a la creation (unitaire et lot) |
 | B8 | Sauvegarde / restauration (export JSON) | Un outil local doit pouvoir etre sauvegarde et deplace | P2 | S | ✅ fait 2026-09-30 (`lib/backup.ts`, `app/api/admin/import`) ; 2026-10-02 : volet UI de **restauration** ajoute (`admin/settings/backup-restore.tsx`) apres l'export JSON/CSV deja present |
-| B9 | PWA / consultation hors ligne | Consulter sa bibliotheque sans reseau | P3 | M | ⏳ a faire |
+| B9 | PWA / consultation hors ligne | Consulter sa bibliotheque sans reseau | P3 | M | ✅ fait 2026-10-02 : next-pwa (workbox) + page /offline + enregistrement du SW deja presents ; repli document vers /offline ajoute et test-gardien |
 | B10 | Migration i18n vers le pattern Context NF | Trace dans la Phase 3 ; coherence multi-projets | P3 | L | ⏳ planifie |
 
 Note : B10 necessite une decision produit (next-intl fonctionne) ; ne pas migrer sans raison forte.
