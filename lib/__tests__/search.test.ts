@@ -1,4 +1,4 @@
-import { looksLikeIsbn, searchTsConfig } from "../search";
+import { looksLikeIsbn, parseTagsParam, searchTsConfig } from "../search";
 
 describe("looksLikeIsbn", () => {
   it("reconnait les ISBN-13 et ISBN-10", () => {
@@ -24,5 +24,17 @@ describe("searchTsConfig", () => {
   it("utilise la configuration francaise pour le reste", () => {
     expect(searchTsConfig("Le Petit Prince")).toBe("french");
     expect(searchTsConfig("  dune  ")).toBe("french");
+  });
+});
+
+describe("parseTagsParam", () => {
+  it("normalise, minuscule et deduplique", () => {
+    expect(parseTagsParam("SF, aventure ,SF")).toEqual(["sf", "aventure"]);
+  });
+
+  it("retourne un tableau vide sans valeur", () => {
+    expect(parseTagsParam(null)).toEqual([]);
+    expect(parseTagsParam("")).toEqual([]);
+    expect(parseTagsParam("  ,  ")).toEqual([]);
   });
 });

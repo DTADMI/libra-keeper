@@ -23,3 +23,13 @@ export function looksLikeIsbn(query: string): boolean {
 export function searchTsConfig(query: string): SearchConfig {
   return looksLikeIsbn(query.trim()) ? "simple" : "french";
 }
+
+/** Normalise le parametre `tags` (liste separee par des virgules). */
+export function parseTagsParam(raw: string | null | undefined): string[] {
+  if (!raw) return [];
+  const tags = raw
+    .split(",")
+    .map((tag) => tag.trim().toLowerCase())
+    .filter((tag) => tag.length > 0);
+  return [...new Set(tags)];
+}

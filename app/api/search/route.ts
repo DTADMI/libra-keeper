@@ -3,12 +3,14 @@ import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
-import { searchTsConfig } from "@/lib/search";
+import { parseTagsParam, searchTsConfig } from "@/lib/search";
 import { withProtection } from "@/lib/security/protection";
 
 async function _GET(req: Request) {
   const url = new URL(req.url);
   const q = url.searchParams.get("q")?.trim() ?? "";
+  const tags = parseTagsParam(url.searchParams.get("tags"));
+  const collection = url.searchParams.get("collection")?.trim() || null;
 
   if (q.length < 2) {
     return NextResponse.json([]);
@@ -41,10 +43,14 @@ async function _GET(req: Request) {
         (SELECT COUNT(*) FROM "Comment" c WHERE c."itemId" = i.id)::int AS comments_count
       FROM "Item" i
       WHERE i.search_vector @@ websearch_to_tsquery($2::regconfig, $1)
+        AND ($3::text[] IS NULL OR i.id IN (SELECT it."A" FROM "_ItemTags" it JOIN "Tag" t ON t.id = it."B" WHERE t.name = ANY($3::text[])))
+        AND ($4::text IS NULL OR i."collectionId" = $4)
       ORDER BY rank DESC
       LIMIT 20`,
       q,
       searchTsConfig(q),
+      tags.length > 0 ? tags : null,
+      collection,
     );
 
     const items = results.map((r) => ({
