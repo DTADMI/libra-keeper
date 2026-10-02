@@ -9,6 +9,7 @@ import { useAdminLoans } from "@/hooks/use-loans";
 import { useSession } from "@/hooks/use-session";
 
 import { RequestActionButtons } from "./request-action-buttons";
+import { LoanStatsCard } from "./loan-stats-card";
 
 export default function AdminRequestsPage() {
   const { t } = useI18n();
@@ -26,6 +27,8 @@ export default function AdminRequestsPage() {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">{t("Admin.requests")}</h1>
+
+      {!isLoading && !error && loans.length > 0 && <LoanStatsCard loans={loans} />}
 
       {isLoading && (
         <div className="space-y-4">

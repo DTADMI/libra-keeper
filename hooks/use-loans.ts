@@ -24,6 +24,10 @@ interface AdminLoan {
   userId: string
   status: string
   createdAt: string
+  requestedAt?: string | null
+  approvedAt?: string | null
+  dueAt?: string | null
+  returnedAt?: string | null
   item: { title: string }
   user: { name: string | null; email: string }
 }

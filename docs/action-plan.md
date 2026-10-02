@@ -82,7 +82,7 @@ Priorite : P1 (fort impact), P2 (utile), P3 (confort). Effort : S/M/L.
 | B2 | Notifications d'echeance (courriel/push) | Un emprunt qui arrive a echeance est le cas d'usage central ; aujourd'hui purement passif | P1 | M | ⏳ a faire |
 | B3 | Scan ISBN / code-barres a l'ajout | Reduit la saisie manuelle d'un livre a une photo ; gros gain UX | P2 | M | ⏳ a faire |
 | B4 | Recherche plein texte + tags/collections | Retrouver un livre dans une grande bibliotheque | P2 | M | ⏳ a faire |
-| B5 | Historique des prets et statistiques | Savoir qui a emprunte quoi et quand ; base pour des recommandations | P2 | S | ⏳ a faire |
+| B5 | Historique des prets et statistiques | Savoir qui a emprunte quoi et quand ; base pour des recommandations | P2 | S | ✅ fait 2026-10-02 : `lib/loan-stats.ts` (comptes, retards, duree moyenne, classements) + carte de statistiques sur la page admin des demandes |
 | B6 | Import CSV (Goodreads, export maison) | Migration depuis un tableur existant | P2 | S | ⏳ a faire |
 | B7 | Couvertures via Open Library API | Enrichissement automatique des fiches | P3 | S | ⏳ a faire |
 | B8 | Sauvegarde / restauration (export JSON) | Un outil local doit pouvoir etre sauvegarde et deplace | P2 | S | ✅ fait 2026-09-30 (`lib/backup.ts`, `app/api/admin/import`) ; 2026-10-02 : volet UI de **restauration** ajoute (`admin/settings/backup-restore.tsx`) apres l'export JSON/CSV deja present |
