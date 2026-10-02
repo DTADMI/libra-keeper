@@ -8,6 +8,7 @@ import { emailClient } from "@/lib/adapters/email";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
 import { dueReminderTemplate, overdueReminderTemplate } from "@/lib/mail/templates";
+import { planLoanReminders } from "@/lib/loan-reminders";
 import { withProtection } from "@/lib/security/protection";
 
 async function _GET(req: Request) {
@@ -20,70 +21,62 @@ async function _GET(req: Request) {
   const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
 
   try {
-    const upcomingLoans = await prisma.loan.findMany({
+    const loans = await prisma.loan.findMany({
       where: {
-        status: "APPROVED",
-        dueAt: {
-          lte: tomorrow,
-          gt: now,
-        },
+        OR: [
+          { status: "APPROVED", dueAt: { lte: tomorrow, gt: now } },
+          { status: "OVERDUE" },
+        ],
       },
       include: { item: true, user: true },
     });
 
-    const overdueLoans = await prisma.loan.findMany({
-      where: {
-        status: "OVERDUE",
-      },
-      include: { item: true, user: true },
-    });
+    const reminders = planLoanReminders(
+      loans.map((loan) => ({
+        status: loan.status,
+        dueAt: loan.dueAt,
+        item: loan.item,
+        user: loan.user,
+      })),
+      now,
+      24,
+    );
 
     const results: string[] = [];
+    let upcoming = 0;
+    let overdue = 0;
 
-    for (const loan of upcomingLoans) {
-      if (loan.user.email && loan.user.name && loan.dueAt) {
-        const daysRemaining = Math.ceil(
-          (loan.dueAt.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
-        );
-        const { subject, html } = dueReminderTemplate({
-          userName: loan.user.name,
-          itemTitle: loan.item.title,
-          dueDate: loan.dueAt.toLocaleDateString("en-CA"),
-          daysRemaining,
-        });
-        await emailClient.send({
-          to: loan.user.email,
-          subject,
-          html,
-        });
-        results.push(`Reminder sent to ${loan.user.email} for "${loan.item.title}"`);
-      }
-    }
+    for (const reminder of reminders) {
+      const dueDate = reminder.dueAt.toLocaleDateString("en-CA");
+      const template =
+        reminder.kind === "overdue"
+          ? overdueReminderTemplate({
+              userName: reminder.userName,
+              itemTitle: reminder.itemTitle,
+              dueDate,
+              daysOverdue: reminder.days,
+            })
+          : dueReminderTemplate({
+              userName: reminder.userName,
+              itemTitle: reminder.itemTitle,
+              dueDate,
+              daysRemaining: reminder.days,
+            });
 
-    for (const loan of overdueLoans) {
-      if (loan.user.email && loan.user.name && loan.dueAt) {
-        const daysOverdue = Math.ceil(
-          (now.getTime() - loan.dueAt.getTime()) / (1000 * 60 * 60 * 24),
-        );
-        const { subject, html } = overdueReminderTemplate({
-          userName: loan.user.name,
-          itemTitle: loan.item.title,
-          dueDate: loan.dueAt.toLocaleDateString("en-CA"),
-          daysOverdue,
-        });
-        await emailClient.send({
-          to: loan.user.email,
-          subject,
-          html,
-        });
-        results.push(`Overdue notice sent to ${loan.user.email} for "${loan.item.title}"`);
+      await emailClient.send({ to: reminder.userEmail, subject: template.subject, html: template.html });
+      if (reminder.kind === "overdue") {
+        overdue += 1;
+        results.push(`Overdue notice sent to ${reminder.userEmail} for "${reminder.itemTitle}"`);
+      } else {
+        upcoming += 1;
+        results.push(`Reminder sent to ${reminder.userEmail} for "${reminder.itemTitle}"`);
       }
     }
 
     return NextResponse.json({
       success: true,
-      upcomingReminders: upcomingLoans.length,
-      overdueNotices: overdueLoans.length,
+      upcomingReminders: upcoming,
+      overdueNotices: overdue,
       total: results.length,
     });
   } catch (error) {

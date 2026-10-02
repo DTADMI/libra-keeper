@@ -79,7 +79,7 @@ Priorite : P1 (fort impact), P2 (utile), P3 (confort). Effort : S/M/L.
 | # | Feature | Pourquoi | Prio | Effort | Statut |
 |---|---------|----------|------|--------|--------|
 | B1 | Rate limiting + cache Redis | Ecrit dans `platform-architecture-comparison.md` comme piece manquante ; protege les routes API et reduit la charge Postgres | P1 | M | ⏳ a faire |
-| B2 | Notifications d'echeance (courriel/push) | Un emprunt qui arrive a echeance est le cas d'usage central ; aujourd'hui purement passif | P1 | M | ⏳ a faire |
+| B2 | Notifications d'echeance (courriel/push) | Un emprunt qui arrive a echeance est le cas d'usage central ; aujourd'hui purement passif | P1 | M | ✅ fait 2026-10-02 : le cron email-reminders (courriel J-1 + retards) est refactore sur lib/loan-reminders.ts, helper pur couvert par 5 tests ; le push reste disponible via le dispatcher si configure |
 | B3 | Scan ISBN / code-barres a l'ajout | Reduit la saisie manuelle d'un livre a une photo ; gros gain UX | P2 | M | ⏳ a faire |
 | B4 | Recherche plein texte + tags/collections | Retrouver un livre dans une grande bibliotheque | P2 | M | ⏳ a faire |
 | B5 | Historique des prets et statistiques | Savoir qui a emprunte quoi et quand ; base pour des recommandations | P2 | S | ✅ fait 2026-10-02 : `lib/loan-stats.ts` (comptes, retards, duree moyenne, classements) + carte de statistiques sur la page admin des demandes |
