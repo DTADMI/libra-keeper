@@ -486,6 +486,11 @@ const fr: Translations = {
     "lookupPlaceholder": "Entrez l'ISBN...",
     "searchLabel": "Rechercher un livre par ISBN",
     "searchButton": "Rechercher l'ISBN",
+    "scan": "Scanner le code-barres",
+    "scanStop": "Arrêter le scan",
+    "scanning": "Lecture d'un code-barres",
+    "scanUnsupported": "La lecture de code-barres n'est pas disponible dans ce navigateur.",
+    "scanError": "Impossible de démarrer la caméra.",
     "notFound": "Aucun livre trouvé pour cet ISBN",
     "found": "Trouvé : {{title}}",
     "lookupFailed": "Échec de la recherche ISBN. Essayez d'entrer les détails manuellement."

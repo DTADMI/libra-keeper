@@ -486,6 +486,11 @@ const en: Translations = {
     "lookupPlaceholder": "Enter ISBN...",
     "searchLabel": "Look up book by ISBN",
     "searchButton": "Search ISBN",
+    "scan": "Scan barcode",
+    "scanStop": "Stop scanning",
+    "scanning": "Scanning a barcode",
+    "scanUnsupported": "Barcode scanning is not available in this browser.",
+    "scanError": "Could not start the camera.",
     "notFound": "No book found for this ISBN",
     "found": "Found: {{title}}",
     "lookupFailed": "Failed to look up ISBN. Try entering details manually."
