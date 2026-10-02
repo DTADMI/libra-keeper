@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { searchTsConfig } from "@/lib/search";
 import { withProtection } from "@/lib/security/protection";
 
 async function _GET(req: Request) {
@@ -34,15 +35,16 @@ async function _GET(req: Request) {
         i."type"::text,
         i."author",
         i."coverImage",
-        ts_rank(i.search_vector, websearch_to_tsquery('english', $1))::float8 AS rank,
-        ts_headline('english', i.title, websearch_to_tsquery('english', $1), 'StartSel=<mark>, StopSel=</mark>, MaxWords=50, MinWords=10') AS headline,
+        ts_rank(i.search_vector, websearch_to_tsquery($2::regconfig, $1))::float8 AS rank,
+        ts_headline($2::regconfig, i.title, websearch_to_tsquery($2::regconfig, $1), 'StartSel=<mark>, StopSel=</mark>, MaxWords=50, MinWords=10') AS headline,
         (SELECT COUNT(*) FROM "Like" l WHERE l."itemId" = i.id)::int AS likes_count,
         (SELECT COUNT(*) FROM "Comment" c WHERE c."itemId" = i.id)::int AS comments_count
       FROM "Item" i
-      WHERE i.search_vector @@ websearch_to_tsquery('english', $1)
+      WHERE i.search_vector @@ websearch_to_tsquery($2::regconfig, $1)
       ORDER BY rank DESC
       LIMIT 20`,
       q,
+      searchTsConfig(q),
     );
 
     const items = results.map((r) => ({
