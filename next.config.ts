@@ -13,6 +13,7 @@ const withNextIntl = (config: NextConfig) => config;
 
 const nextConfig: NextConfig = withNextIntl(
   withPWA({
+  agentRules: false,
     output: "standalone",
     outputFileTracingRoot: __dirname,
     poweredByHeader: false,
