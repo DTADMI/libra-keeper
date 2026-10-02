@@ -78,7 +78,7 @@ Priorite : P1 (fort impact), P2 (utile), P3 (confort). Effort : S/M/L.
 
 | # | Feature | Pourquoi | Prio | Effort | Statut |
 |---|---------|----------|------|--------|--------|
-| B1 | Rate limiting + cache Redis | Ecrit dans `platform-architecture-comparison.md` comme piece manquante ; protege les routes API et reduit la charge Postgres | P1 | M | ⏳ a faire |
+| B1 | Rate limiting + cache Redis | Ecrit dans `platform-architecture-comparison.md` comme piece manquante ; protege les routes API et reduit la charge Postgres | P1 | M | ✅ verifie 2026-10-02 : adaptateur Redis multi-niveaux (Upstash/ioredis/memoire) + rate limit par sorted set dans lib/security/protection.ts et cache L1 dans lib/pg-cache.ts, couverts par lib/__tests__/rate-limit.test.ts et protection.test.ts |
 | B2 | Notifications d'echeance (courriel/push) | Un emprunt qui arrive a echeance est le cas d'usage central ; aujourd'hui purement passif | P1 | M | ✅ fait 2026-10-02 : le cron email-reminders (courriel J-1 + retards) est refactore sur lib/loan-reminders.ts, helper pur couvert par 5 tests ; le push reste disponible via le dispatcher si configure |
 | B3 | Scan ISBN / code-barres a l'ajout | Reduit la saisie manuelle d'un livre a une photo ; gros gain UX | P2 | M | ✅ fait 2026-10-02 : scan par BarcodeDetector (lib/barcode.ts + bouton dans le composant ISBN), repli manuel si l'API ou la camera est indisponible, 5 tests |
 | B4 | Recherche plein texte + tags/collections | Retrouver un livre dans une grande bibliotheque | P2 | M | 🔵 partiel 2026-10-02 : la requete utilisait la configuration english alors que le vecteur est french (migration 008), donc les mots francais ne matchaient pas -> configuration alignee (ISBN en simple), helper teste ; filtre par tags/collections reste |
@@ -87,6 +87,6 @@ Priorite : P1 (fort impact), P2 (utile), P3 (confort). Effort : S/M/L.
 | B7 | Couvertures via Open Library API | Enrichissement automatique des fiches | P3 | S | ✅ fait 2026-10-02 : `lib/open-library.ts`, couverture deduite de l'ISBN a la creation (unitaire et lot) |
 | B8 | Sauvegarde / restauration (export JSON) | Un outil local doit pouvoir etre sauvegarde et deplace | P2 | S | ✅ fait 2026-09-30 (`lib/backup.ts`, `app/api/admin/import`) ; 2026-10-02 : volet UI de **restauration** ajoute (`admin/settings/backup-restore.tsx`) apres l'export JSON/CSV deja present |
 | B9 | PWA / consultation hors ligne | Consulter sa bibliotheque sans reseau | P3 | M | ✅ fait 2026-10-02 : next-pwa (workbox) + page /offline + enregistrement du SW deja presents ; repli document vers /offline ajoute et test-gardien |
-| B10 | Migration i18n vers le pattern Context NF | Trace dans la Phase 3 ; coherence multi-projets | P3 | L | ⏳ planifie |
+| B10 | Migration i18n vers le pattern Context NF | Trace dans la Phase 3 ; coherence multi-projets | P3 | L | ✅ verifie 2026-10-02 : lib/i18n (config, provider, server, translations en/fr + locales) est bien le pattern Context NF ; la migration next-intl est faite (Phase 3) |
 
 Note : B10 necessite une decision produit (next-intl fonctionne) ; ne pas migrer sans raison forte.
