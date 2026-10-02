@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
+import { enrichCoverImage } from "@/lib/open-library";
 import { withProtection } from "@/lib/security/protection";
 
 const bulkItemSchema = z.object({
@@ -40,7 +41,7 @@ async function handler(req: Request) {
             publisher: item.publisher || null,
             isbn: item.isbn || null,
             description: item.description || null,
-            coverImage: item.coverImage || null,
+            coverImage: enrichCoverImage(item.coverImage, item.isbn),
           },
         }),
       ),

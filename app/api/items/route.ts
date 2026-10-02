@@ -5,6 +5,7 @@ import { z } from "zod";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { logger } from "@/lib/logger";
+import { enrichCoverImage } from "@/lib/open-library";
 import { withProtection } from "@/lib/security/protection";
 const itemSchema = z.object({
   title: z.string().min(1),
@@ -34,6 +35,9 @@ async function _POST(req: Request) {
     const body = itemSchema.parse(json);
 
     const { tags, metadata, collectionId, ...itemData } = body;
+    // Enrichissement B7 : si aucune couverture n'est fournie, la deduire de l'ISBN
+    // via Open Library (URL stable, sans appel reseau cote serveur).
+    itemData.coverImage = enrichCoverImage(itemData.coverImage, itemData.isbn);
 
     logger.info(`Creating new item: ${body.title}`);
 
