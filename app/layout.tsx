@@ -15,9 +15,44 @@ import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-regis
 
 const inter = Inter({ subsets: ["latin"] });
 
+const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://librakeeper.app").replace(/\/+$/, "");
+
+/** Donnees structurees Schema.org : identifient l'editeur et le site pour les moteurs. */
+const STRUCTURED_DATA = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${appUrl}/#organization`,
+      name: "Nebula Forge Digital Studio",
+      url: appUrl,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${appUrl}/#website`,
+      url: appUrl,
+      name: "LibraKeeper",
+      inLanguage: ["en-CA", "fr-CA"],
+      publisher: { "@id": `${appUrl}/#organization` },
+    },
+  ],
+};
+
 export const metadata = {
+  metadataBase: new URL(appUrl),
   title: "LibraKeeper - Your Personal Library Manager",
   description: "Manage your personal library and track borrowed items",
+  alternates: {
+    canonical: "/",
+    languages: { "en-CA": "/", "fr-CA": "/", "x-default": "/" },
+  },
+  openGraph: {
+    type: "website" as const,
+    siteName: "LibraKeeper",
+    title: "LibraKeeper - Your Personal Library Manager",
+    description: "Manage your personal library and track borrowed items",
+    url: appUrl,
+  },
   manifest: "/manifest.json",
 };
 
@@ -36,6 +71,10 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang={lang} suppressHydrationWarning>
       <body className={inter.className}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(STRUCTURED_DATA) }}
+        />
         <ServiceWorkerRegistration />
         <PWAInstallPrompt />
         <I18nServerProvider>
