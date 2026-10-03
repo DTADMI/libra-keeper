@@ -59,6 +59,8 @@ export function CsvImport() {
           ref={inputRef}
           type="file"
           accept="text/csv,.csv"
+          aria-label={t("Admin.chooseCsvFile")}
+          title={t("Admin.chooseCsvFile")}
           className="hidden"
           onChange={(event) => {
             const file = event.target.files?.[0];

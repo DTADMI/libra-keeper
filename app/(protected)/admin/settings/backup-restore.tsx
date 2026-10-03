@@ -77,6 +77,8 @@ export function BackupRestore() {
           ref={inputRef}
           type="file"
           accept="application/json,.json"
+          aria-label={t("Admin.chooseBackupFile")}
+          title={t("Admin.chooseBackupFile")}
           className="hidden"
           onChange={(event) => {
             const file = event.target.files?.[0];

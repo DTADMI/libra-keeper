@@ -213,6 +213,8 @@ export function BulkImport() {
               <input
                 type="file"
                 accept=".csv,.tsv,.txt"
+                aria-label={t("Items.dragDrop")}
+                title={t("Items.dragDrop")}
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 onChange={(e) => {
                   const f = e.target.files?.[0];

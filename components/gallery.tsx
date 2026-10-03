@@ -52,6 +52,8 @@ export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
           <Button
             variant="ghost"
             size="icon"
+            aria-label={t("common.buttons.close")}
+            title={t("common.buttons.close")}
             className="absolute top-2 right-2 bg-black/50 text-white hover:bg-black/70"
             onClick={() => setActiveIndex(null)}
           >
@@ -62,6 +64,8 @@ export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label={t("common.buttons.previous")}
+                title={t("common.buttons.previous")}
                 className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
                 onClick={() => setActiveIndex((idx - 1 + images.length) % images.length)}
               >
@@ -70,6 +74,8 @@ export function ItemGallery({ itemId, isAdmin }: ItemGalleryProps) {
               <Button
                 variant="ghost"
                 size="icon"
+                aria-label={t("common.buttons.next")}
+                title={t("common.buttons.next")}
                 className="absolute right-12 top-1/2 -translate-y-1/2 bg-black/50 text-white hover:bg-black/70"
                 onClick={() => setActiveIndex((idx + 1) % images.length)}
               >
