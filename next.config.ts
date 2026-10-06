@@ -59,6 +59,9 @@ const nextConfig: NextConfig = withNextIntl(
         {
           source: "/(.*)",
           headers: [
+            { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+            { key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(self), payment=(self)" },
+            { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
             {
               key: "Content-Security-Policy",
               value: [
@@ -71,6 +74,9 @@ const nextConfig: NextConfig = withNextIntl(
                 "frame-src 'self'",
                 "worker-src 'self' blob:",
                 "manifest-src 'self'",
+                "object-src 'none'",
+                "base-uri 'self'",
+                "frame-ancestors 'self'",
               ].join("; "),
             },
             { key: "X-Content-Type-Options", value: "nosniff" },
