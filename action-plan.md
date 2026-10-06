@@ -55,7 +55,7 @@ Last updated: 2026-05-15
 | 18 | Limited `generateStaticParams` usage | Medium effort, defer to Phase 4 polish |
 | 19 | `next-pwa` v5 with Next.js 16 | Evaluate `@serwist/next` migration when PWA becomes active |
 | 23 | Action plan undercounts gaps | This update addresses it |
-| 28 | `setup_app_user.sql` at repo root | Legacy file, pending migration to `supabase/migrations/` |
+| 28 | ~~`setup_app_user.sql` at repo root~~ | ✅ **2026-10-06** : fichier **supprime**. Il etait corrompu (dollar-quoting casse) et creait un role `libra_app` avec un **mot de passe vide**. Il n'aurait pas du devenir une migration versionnee : une migration est rejouee partout, donc un mot de passe y serait fige dans l'historique. Son travail est deja fait correctement par `docker/init-db.sh`, qui exige `DB_APP_PASSWORD` et echoue sans lui. |
 | 29 | Cron routes use GET | Vercel Cron supports both GET and POST; acceptable for now |
 | 30 | No CSP violation reporting endpoint | Low priority, add when CSP enforcement tightens |
 | 31 | `staleTimes.static: 300` vs `revalidate: 3600` | Minor discrepancy, default revalidate overrides staleTime for static pages |
