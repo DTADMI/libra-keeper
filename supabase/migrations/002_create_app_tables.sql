@@ -1,3 +1,6 @@
+-- rollback: not-reversible - cree les tables de coeur (items, loans, messages, likes, comments...).
+--   Un rollback qui les supprimerait detruirait toute la bibliotheque et l'historique ;
+--   la vraie procedure de retour arriere est une restauration de sauvegarde, pas un DROP.
 ﻿-- 002_create_app_tables.sql
 -- All application tables with RLS policies.
 -- Binary access model: USER (own data), ADMIN (all data).

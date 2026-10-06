@@ -1,3 +1,6 @@
+-- rollback: not-reversible - cree la table profiles et les declencheurs d'authentification.
+--   Un rollback qui supprimerait profiles detruirait toutes les donnees de compte ;
+--   la vraie procedure de retour arriere est une restauration de sauvegarde, pas un DROP.
 -- 001_create_user_triggers.sql
 -- Synced with auth.users: auto-creates public.profiles on signup.
 -- RLS: users can read their own profile; admins can read all.

@@ -144,7 +144,7 @@ Last updated: 2026-05-15
 | 🔴       | Create `handle_new_user()` trigger for `public.profiles` sync         | ✅ COMPLETED | Auto-create profile row when `auth.users` row is created.                                                    |
 | 🟡       | Create `docs/architecture-security.md` - dual-layer authorization doc | ✅ COMPLETED | Document app-level guards + RLS defense-in-depth pattern. Mirror SF's doc.                                   |
 | 🟡       | Add Supabase Realtime subscriptions for activity feed                 | 🗂️ BACKLOG | Automatically update UI when loans/comments change. See platform comparison doc Section 5 for code examples. |
-| 🟡       | Create `scripts/` migration tooling (apply, validate, report)         | 🗂️ BACKLOG | Match QH's `apply-migrations.mjs` pattern for multi-environment migration.                                   |
+| ✅       | Create `scripts/` migration tooling (apply, validate, report)         | 2026-10-06 | Match QH's `apply-migrations.mjs` pattern for multi-environment migration.                                   |
 
 ---
 

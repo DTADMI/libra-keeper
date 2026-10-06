@@ -62,6 +62,14 @@ fi
 # ── 1. Lint ─
 run_check "lint" "pnpm lint --cache"
 
+# ── 1bis. Migrations reversibles ─────────────
+# Chaque migration doit avoir sa paire rollout/rollback, ou une justification ecrite
+# (`-- rollback: not-reversible - <raison>`). Une migration sans retour arriere ne se
+# decouvre qu'au moment ou il faut revenir en arriere, c'est-a-dire trop tard.
+if [ -f "scripts/migrate.mjs" ]; then
+  run_check "migrations" "node scripts/migrate.mjs validate"
+fi
+
 # ── 2. Typecheck ─────────────────────────────
 run_check "typecheck" "pnpm typecheck"
 
