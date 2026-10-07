@@ -1,3 +1,9 @@
+export const metadata = {
+  title: "Dashboard",
+  description: "Private surface (Dashboard).",
+  robots: { index: false, follow: false },
+};
+
 import Link from "next/link";
 
 import { ActivityFeed } from "@/components/activity/activity-feed";

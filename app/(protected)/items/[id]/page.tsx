@@ -1,3 +1,9 @@
+export const metadata = {
+  title: "Items",
+  description: "Private surface (Items).",
+  robots: { index: false, follow: false },
+};
+
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";

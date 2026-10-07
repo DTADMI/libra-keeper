@@ -1,3 +1,9 @@
+export const metadata = {
+  title: "Items - Edit",
+  description: "Private surface (Items - Edit).",
+  robots: { index: false, follow: false },
+};
+
 import { notFound, redirect } from "next/navigation";
 
 import { getServerAuth } from "@/lib/auth-utils";
