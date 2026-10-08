@@ -49,7 +49,7 @@
 | # | Gap | Priority | Status |
 |---|-----|----------|--------|
 | 1 | Cross-project i18n Context pattern migration (currently using next-intl) | Low | 🟡 Planned |
-| 2 | Testing coverage expansion (current: 18 feature flags, basic unit coverage) | Medium | 🟡 Planned |
+| 2 | Testing coverage expansion (current: 18 feature flags, basic unit coverage) | Medium | 🔵 En cours - 2026-10-08 : `lib/auth-utils.ts` (module d'autorisation, seul module de securite sans test) couvert par 8 tests (session anonyme, role depuis `profiles`, repli USER, requireAuth/requireAdmin). Suite : 21 fichiers, 115 tests. Restent sans test : `api-client`, `labels`, `logger`, `pg-cache`, `pg-listener`. |
 | 3 | Performance optimization doc audit | Low | 🟡 Planned |
 
 ## Standard Docs Status
