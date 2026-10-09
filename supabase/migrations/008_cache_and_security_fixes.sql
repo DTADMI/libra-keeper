@@ -4,7 +4,7 @@
 -- All operations are idempotent.
 
 -- =============================================================================
--- check_rate_limit — PostgreSQL sliding-window rate limiter
+-- check_rate_limit - PostgreSQL sliding-window rate limiter
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS public.rate_limits (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -76,7 +76,7 @@ BEGIN
 END $$;
 
 -- =============================================================================
--- app_cache — PostgreSQL L2 cache tier
+-- app_cache - PostgreSQL L2 cache tier
 -- =============================================================================
 CREATE TABLE IF NOT EXISTS public.app_cache (
   key TEXT PRIMARY KEY,
@@ -93,7 +93,7 @@ CREATE POLICY "Service role can manage cache" ON public.app_cache
 CREATE INDEX IF NOT EXISTS idx_app_cache_expires ON public.app_cache (expires_at);
 
 -- =============================================================================
--- RLS Policy Hardening — Fix overly-permissive policies
+-- RLS Policy Hardening - Fix overly-permissive policies
 -- =============================================================================
 
 -- items: restrict public read to authenticated-only
