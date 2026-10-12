@@ -1,3 +1,8 @@
+---
+name: ram-optimization
+description: RAM usage optimization strategies for Electron, Node.js, and browser-based applications. Use when reducing memory footprint, tuning garbage collection, or diagnosing high RAM consumption.
+---
+
 # RAM Optimization - Règle Transversale NF
 
 **Owner:** Nebula Forge Digital Studio  

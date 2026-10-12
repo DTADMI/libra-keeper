@@ -1,3 +1,8 @@
+---
+name: type-inference-vs-annotation
+description: Guidelines for when to use TypeScript type inference vs explicit type annotations. Annotate at module boundaries, infer internally. Use for code reviews and new TypeScript code.
+---
+
 # Typage par Inférence vs Interface - Règle Transversale NF
 
 **Owner:** Nebula Forge Digital Studio  

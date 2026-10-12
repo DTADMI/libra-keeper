@@ -1,3 +1,8 @@
+---
+name: no-explicit-any
+description: Ban TypeScript `any` type by default across all NF projects. Use `unknown` with type guards, generics, or Zod validation instead. Provides exception mechanism for legitimate cases.
+---
+
 # No Explicit `any` - Règle Transversale NF
 
 **Owner:** Nebula Forge Digital Studio  

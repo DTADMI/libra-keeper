@@ -1,3 +1,8 @@
+---
+name: memory-optimization
+description: Systematic memory optimization for Node.js and browser applications. Use when profiling heap usage, diagnosing leaks, or optimizing memory-intensive workloads.
+---
+
 # Memory Optimization - Règle Transversale NF
 
 **Owner:** Nebula Forge Digital Studio  
