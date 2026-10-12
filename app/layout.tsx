@@ -1,3 +1,6 @@
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
 // src/app/layout.tsx
 import "./globals.css";
 

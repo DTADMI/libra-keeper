@@ -1,3 +1,6 @@
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
 // src/app/(protected)/layout.tsx
 import { redirect } from "next/navigation";
 

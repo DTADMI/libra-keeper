@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { getServerTranslations } from "@/lib/i18n/server";
 
-export const revalidate = 3600;
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
+// [PPR] neutralise (incompatible cacheComponents) : export const revalidate = 3600;
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

@@ -1,3 +1,6 @@
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
 // src/app/page.tsx
 import { redirect } from "next/navigation";
 
@@ -11,4 +14,4 @@ export default function RootPage() {
   redirect(`/${defaultLocale}`);
 }
 
-export const dynamic = "force-dynamic";
+// [PPR] neutralise (incompatible cacheComponents) : export const dynamic = "force-dynamic";

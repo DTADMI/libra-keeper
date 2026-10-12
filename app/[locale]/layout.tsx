@@ -1,3 +1,6 @@
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
 // src/app/[locale]/layout.tsx
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -53,4 +56,4 @@ export default async function LocaleLayout({
   );
 }
 
-export const dynamicParams = false;
+// [PPR] neutralise (incompatible cacheComponents) : export const dynamicParams = false;

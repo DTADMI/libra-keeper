@@ -1,3 +1,6 @@
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
 export const metadata = {
   title: "Items - Edit",
   description: "Private surface (Items - Edit).",

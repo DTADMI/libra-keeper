@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { getServerTranslations } from "@/lib/i18n/server";
 
+// [PPR] route bloquante par defaut ; conversion incrementale
+export const instant = false;
+
 export default async function NotFound() {
   const { t } = await getServerTranslations();
 

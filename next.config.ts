@@ -15,6 +15,8 @@ const withNextIntl = (config: NextConfig) => config;
 
 const nextConfig: NextConfig = withNextIntl(
   withPWA({
+  // Cache Components (PPR en Next 16) : coquille statique + contenu dynamique diffuse.
+  cacheComponents: true,
   agentRules: false,
     output: "standalone",
     outputFileTracingRoot: __dirname,
