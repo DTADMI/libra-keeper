@@ -50,7 +50,7 @@
 |---|-----|----------|--------|
 | 1 | Cross-project i18n Context pattern migration (currently using next-intl) | Low | 🟡 Planned |
 | 2 | Testing coverage expansion (current: 18 feature flags, basic unit coverage) | Medium | 🔵 En cours - 2026-10-08 : `lib/auth-utils.ts` (module d'autorisation, seul module de securite sans test) couvert par 8 tests (session anonyme, role depuis `profiles`, repli USER, requireAuth/requireAdmin). Suite : 27 fichiers, 155 tests. 2026-10-08 (suite) : `labels` (invariant : chaque type d'item a une entree dans les cinq tables), `api-client` (fetch simule), `pg-listener` (etat, double demarrage, arret, echec d'abonnement, rappels), `logger` (singleton, silence du debug en production), `pg-cache` (replis Redis et PostgreSQL), `feature-flags-pg` (repli FAUX sur erreur, cache invalide par une ecriture). Plus aucun module testable sans test ; `db`, `mail`, `redis` et `utils` sont exclus de la couverture par la configuration Jest. |
-| 3 | Performance optimization doc audit | Low | 🟡 Planned |
+| 3 | Performance optimization doc audit | Low | ✅ Done 2026-10-16 : audit contre le code. Corrige : la table SSR decrivait des exports ISR/force-dynamic **neutralises** par `cacheComponents` (PPR) ; le cache des drapeaux est un `Map` en processus de 2 s, pas Redis 30 s ; `experimental.staleTimes` (30/300 s) documente ; index GIN nomme (`idx_items_search_vector`) ; pool Prisma = defaut node-postgres (max 10, non configure) ; pagination (defaut 50, plafond 100, messages 50). |
 
 ## Standard Docs Status
 
