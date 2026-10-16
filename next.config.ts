@@ -11,84 +11,87 @@ const withPWA =
         fallbacks: { document: "/offline" },
       })
     : (config: NextConfig) => config;
-const withNextIntl = (config: NextConfig) => config;
 
-const nextConfig: NextConfig = withNextIntl(
-  withPWA({
+const nextConfig: NextConfig = withPWA({
   // Cache Components (PPR en Next 16) : coquille statique + contenu dynamique diffuse.
   cacheComponents: true,
   agentRules: false,
-    output: "standalone",
-    outputFileTracingRoot: __dirname,
-    poweredByHeader: false,
-    compress: true,
-    productionBrowserSourceMaps: false,
-    experimental: {
-      staleTimes: {
-        dynamic: 30,
-        static: 300,
+  output: "standalone",
+  outputFileTracingRoot: __dirname,
+  poweredByHeader: false,
+  compress: true,
+  productionBrowserSourceMaps: false,
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 300,
+    },
+    optimizePackageImports: [
+      "lucide-react",
+      "date-fns",
+      "@radix-ui/react-accordion",
+      "@radix-ui/react-alert-dialog",
+      "@radix-ui/react-avatar",
+      "@radix-ui/react-checkbox",
+      "@radix-ui/react-collapsible",
+      "@radix-ui/react-context-menu",
+      "@radix-ui/react-dialog",
+      "@radix-ui/react-dropdown-menu",
+      "@radix-ui/react-label",
+      "@radix-ui/react-menubar",
+      "@radix-ui/react-navigation-menu",
+      "@radix-ui/react-popover",
+      "@radix-ui/react-radio-group",
+      "@radix-ui/react-scroll-area",
+      "@radix-ui/react-select",
+      "@radix-ui/react-separator",
+      "@radix-ui/react-slider",
+      "@radix-ui/react-slot",
+      "@radix-ui/react-switch",
+      "@radix-ui/react-tabs",
+      "@radix-ui/react-toast",
+      "@radix-ui/react-toggle",
+      "@radix-ui/react-tooltip",
+    ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
+          {
+            key: "Permissions-Policy",
+            value: "camera=(self), microphone=(self), geolocation=(self), payment=(self)",
+          },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          {
+            key: "Content-Security-Policy",
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://*.supabase.co https://*.googleusercontent.com",
+              "font-src 'self'",
+              "connect-src 'self' https://*.upstash.io https://*.supabase.co https://api.resend.com",
+              "frame-src 'self'",
+              "worker-src 'self' blob:",
+              "manifest-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "frame-ancestors 'self'",
+            ].join("; "),
+          },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "DENY" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
       },
-      optimizePackageImports: [
-        "lucide-react",
-        "date-fns",
-        "@radix-ui/react-accordion",
-        "@radix-ui/react-alert-dialog",
-        "@radix-ui/react-avatar",
-        "@radix-ui/react-checkbox",
-        "@radix-ui/react-collapsible",
-        "@radix-ui/react-context-menu",
-        "@radix-ui/react-dialog",
-        "@radix-ui/react-dropdown-menu",
-        "@radix-ui/react-label",
-        "@radix-ui/react-menubar",
-        "@radix-ui/react-navigation-menu",
-        "@radix-ui/react-popover",
-        "@radix-ui/react-radio-group",
-        "@radix-ui/react-scroll-area",
-        "@radix-ui/react-select",
-        "@radix-ui/react-separator",
-        "@radix-ui/react-slider",
-        "@radix-ui/react-slot",
-        "@radix-ui/react-switch",
-        "@radix-ui/react-tabs",
-        "@radix-ui/react-toast",
-        "@radix-ui/react-toggle",
-        "@radix-ui/react-tooltip",
-      ],
-    },
-    async headers() {
-      return [
-        {
-          source: "/(.*)",
-          headers: [
-            { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
-            { key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(self), payment=(self)" },
-            { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-            {
-              key: "Content-Security-Policy",
-              value: [
-                "default-src 'self'",
-                "script-src 'self' 'unsafe-inline'",
-                "style-src 'self' 'unsafe-inline'",
-                "img-src 'self' data: blob: https://*.supabase.co https://*.googleusercontent.com",
-                "font-src 'self'",
-                "connect-src 'self' https://*.upstash.io https://*.supabase.co https://api.resend.com",
-                "frame-src 'self'",
-                "worker-src 'self' blob:",
-                "manifest-src 'self'",
-                "object-src 'none'",
-                "base-uri 'self'",
-                "frame-ancestors 'self'",
-              ].join("; "),
-            },
-            { key: "X-Content-Type-Options", value: "nosniff" },
-            { key: "X-Frame-Options", value: "DENY" },
-            { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          ],
-        },
-      ];
-    },
-  }),
-);
+    ];
+  },
+});
 
 export default nextConfig;
