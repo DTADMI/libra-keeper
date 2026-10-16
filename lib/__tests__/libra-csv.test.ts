@@ -1,4 +1,4 @@
-import { parseItemsCsv, splitCsvLine } from "../libra-csv";
+import { escapeCsvCell, parseItemsCsv, splitCsvLine, toCsv } from "../libra-csv";
 
 describe("splitCsvLine", () => {
   it("gere les guillemets et les virgules internes", () => {
@@ -46,5 +46,23 @@ describe("parseItemsCsv", () => {
     const items = parseItemsCsv(csv);
     expect(items[0]?.title).toBe("Livre");
     expect(items[0]?.isbn).toBeUndefined();
+  });
+});
+
+describe("escapeCsvCell / toCsv", () => {
+  it("echappe les virgules, guillemets et sauts de ligne", () => {
+    expect(escapeCsvCell("a,b")).toBe('"a,b"');
+    expect(escapeCsvCell('a"b')).toBe('"a""b"');
+    expect(escapeCsvCell("a\nb")).toBe('"a\nb"');
+  });
+
+  it("neutralise une formule sans casser un nombre negatif", () => {
+    expect(escapeCsvCell("=cmd()")).toBe("'=cmd()");
+    expect(escapeCsvCell("@SUM(A1)")).toBe("'@SUM(A1)");
+    expect(escapeCsvCell(-45)).toBe("-45");
+  });
+
+  it("serialise un entete et des lignes", () => {
+    expect(toCsv(["a", "b"], [[1, "x,y"]])).toBe('a,b\n1,"x,y"');
   });
 });

@@ -114,3 +114,27 @@ export function parseItemsCsv(text: string): ParsedItem[] {
 
   return items;
 }
+
+// ── Ecriture CSV (export admin) ──────────────────────────────────────────────
+// L'export admin inserait les valeurs telles quelles (guillemets doubles a la
+// main, aucune neutralisation) : un titre ou un auteur commencant par =, + ou @
+// s'execute a l'ouverture dans un tableur (OWASP CSV injection), et une valeur
+// contenant une virgule cassait la ligne. L'echappement vit ici, a cote du parseur.
+
+/** Neutralise une formule, puis echappe la cellule (guillemets doubles). */
+export function escapeCsvCell(value: unknown): string {
+  const cell = value === null || value === undefined ? "" : String(value);
+  const neutral =
+    /^[=+\-@\t\r]/.test(cell) && !/^[+-]?\d+([.,]\d+)?$/.test(cell) ? "'" + cell : cell;
+  return /[",\n\r]/.test(neutral) ? `"${neutral.replace(/"/g, '""')}"` : neutral;
+}
+
+/** En-tete + lignes CSV, chaque cellule echappee par escapeCsvCell. */
+export function toCsv(
+  headers: readonly string[],
+  rows: ReadonlyArray<ReadonlyArray<unknown>>,
+): string {
+  const lines = [headers.map(escapeCsvCell).join(",")];
+  for (const row of rows) lines.push(row.map(escapeCsvCell).join(","));
+  return lines.join("\n");
+}

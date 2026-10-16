@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { getServerAuth } from "@/lib/auth-utils";
 import { prisma } from "@/lib/db";
 import { withProtection } from "@/lib/security/protection";
+import { toCsv } from "@/lib/libra-csv";
 
 async function _GET(req: Request) {
   try {
@@ -23,16 +24,16 @@ async function _GET(req: Request) {
       const headers = ["id", "title", "author", "type", "status", "isbn", "publisher", "createdAt"];
       const rows = items.map((item) => [
         item.id,
-        `"${item.title.replace(/"/g, '""')}"`,
-        `"${(item.author || "").replace(/"/g, '""')}"`,
+        item.title,
+        item.author || "",
         item.type,
         item.status,
         item.isbn || "",
-        `"${(item.publisher || "").replace(/"/g, '""')}"`,
+        item.publisher || "",
         item.createdAt.toISOString(),
       ]);
 
-      const csvContent = [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+      const csvContent = toCsv(headers, rows);
 
       return new NextResponse(csvContent, {
         headers: {
